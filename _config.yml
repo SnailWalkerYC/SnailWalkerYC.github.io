@@ -86,12 +86,12 @@ author:
   weibo_verifier:  ## e.g. b3593ceb Your weibo-show widget verifier ,if you use weibo-show it is needed.
   tsina:      ## e.g. 2176287895  Your weibo ID,It will be used in share button.
   douban:     ## e.g. wuchong1014 or your id for https://www.douban.com/people/wuchong1014
-  zhihu:      https://www.zhihu.com/people/chen-yu-41-29-73 ## e.g. jark  for http://www.zhihu.com/people/jark
+  zhihu:      chen-yu-41-29-73 ## e.g. jark  for http://www.zhihu.com/people/jark
   email:      chenyu.sysu@foxmail.com ## e.g. imjark@gmail.com
   twitter:    ## e.g. jarkwu for https://twitter.com/jarkwu
-  github:     https://github.com/SnailWalkerYC ## e.g. wuchong for https://github.com/wuchong
+  github:     SnailWalkerYC ## e.g. wuchong for https://github.com/wuchong
   facebook:   ## e.g. imjark for https://facebook.com/imjark
-  linkedin:   https://cn.linkedin.com/in/yu-chen-aa6404b8 ## e.g. wuchong1014 for https://www.linkedin.com/in/wuchong1014
+  linkedin:   yu-chen-aa6404b8 ## e.g. wuchong1014 for https://www.linkedin.com/in/wuchong1014
   google_plus:    ## e.g. "111190881341800841449" for https://plus.google.com/u/0/111190881341800841449, the "" is needed!
   stackoverflow:  ## e.g. 3222790 for http://stackoverflow.com/users/3222790/jark
 ## if you set them, the corresponding  share button will show on the footer
