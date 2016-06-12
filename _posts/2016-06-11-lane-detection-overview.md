@@ -6,7 +6,7 @@ tags:
 - boundary
 - road terrain
 - lane mark
-categories: Lane Detection
+categories: LaneDetection
 description: This is an overview of lane detection project.
 ---
 
