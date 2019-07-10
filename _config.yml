@@ -1,159 +1,111 @@
-# This is the default format. 
-# For more see: http://jekyllrb.com/docs/permalinks/
-permalink: /:categories/:year/:month/:day/:title 
+#
+# 这个文档包含了本博客的设定信息，你可以编辑它来个性化自己的博客，
+#
 
-exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-rouge: pygments
+# 你的博客名称，请用你想要的博客名替换“LOFFER”，以下修改都可类似处理
+# 注意，“name: LOFFER”，冒号后面的空格不可以省略。
+# 井号后面的文字是说明文档，不会被程序读取。
+name: LOFFER
+# 描述/签名
+description: 一个可以fork的博客
 
-assets: /assets
-baseurl: 
+#
+# 下面的设定都是可选的
+#
 
-# pagination
-paginate: 20
+# 你的博客logo图片URL，建议尺寸不超过300px × 300px
+avatar: https://raw.githubusercontent.com/FromEndWorld/LOFFER/master/images/logo.png
 
-# Markdown Processors
-###
-markdown: redcarpet
-redcarpet:
-  extensions:
-    - hard_wrap
-    - no_intra_emphasis
-    - autolink
-    - strikethrough
-    - tables
-    - lax_spacing
-    - with_toc_data
-    
-
-title : Snail_Walker Yu Chen
-tagline: To See the Bigger World and Experience It~~
-
-defaults:
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      type: "post"
-
-##### Menu
-menu:
-  Home: /
-  Archives: /archives
-  About: /about
-## you can create `tags` and `categories` folders in `../source`.
-## And create a `index.md` file in each of them.
-## set `front-matter`as
-## layout: tags (or categories)
-## title: tags (or categories)
-## ---
-
-#### Widgets
-widgets: 
-- category
-- tag
-- links
-- douban
-- rss
-## provide seven widgets:category,tag,rss,archive,tagcloud,links,weibo,douban
+# 你的favicon（出现在浏览器tab上）图片URL，建议使用较小(64px × 64px)的图片
+favicon: https://raw.githubusercontent.com/FromEndWorld/LOFFER/master/images/favicon.png
 
 
-#### RSS 
-rss: /atom.xml ## RSS address.
+# 菜单中的按钮
+navigation:
+  - name: 首页
+    url: /
+  - name: 关于
+    url: /about
+  - name: 归档
+    url: /archive
+  - name: 标签
+    url: /tags
 
-#### Image
-imglogo:
-  enable: true             ## display image logo true/false.
-  src: img/logo.png        ## `.svg` and `.png` are recommended,please put image into the theme folder `/jacman/source/img`.
-favicon: img/favicon.ico   ## size:32px*32px,`.ico` is recommended,please put image into the theme folder `/jacman/source/img`.     
-apple_icon: img/jacman.jpg ## size:114px*114px,please put image into the theme folder `/jacman/source/img`.
-author_img: img/author.jpg ## size:220px*220px.display author avatar picture.if don't want to display,please don't set this.
-banner_img: img/banner.jpg ## size:1920px*200px+. Banner Picture
+# 每页的文章数
+paginate: 8
 
-#### index post is expanding or not 
-index:
-  expand: true           ## default is unexpanding,so you can only see the short description of each post.
-  excerpt_link: Read More  
+# 你的社交网络链接，它们会作为图标出现在你的网站页脚中，可选填写
+footer-links: 
+  weibo: frommidworld #请输入你的微博个性域名 https://www.weibo.com/<thispart>
+  behance: # https://www.behance.net/<>
+  dribbble: # https://dribbble.com/<>
+  email: fromendworld@outlook.com 
+  facebook: #https://www.facebook.com/<>
+  flickr: #https://www.flickr.com/<>
+  github: FromEndWorld/loffer #https://github.com/<>
+  instagram: #https://instagram.com/<>
+  linkedin: #https://www.linkedin.com/in/<>
+  pinterest: #https://www.pinterest.com/<>
+  rss: #随便填点啥RSS就能用了
+  stackoverflow: # http://stackoverflow.com/<>
+  tumblr: # https://<username>.tumblr.com
+  twitter: # https://www.twitter.com/<your_twitter_username> 
+  youtube: # channel/<your_long_string> or user/<user-name>
 
-close_aside: false  #close sidebar in post page if true
-mathjax: false      #enable mathjax if true
+# 站点页脚的文字
+footer-text: Copyright (c) 2019 来自中世界
 
-#### Author information
-author:
-  name: Yu Chen      ## e.g. wuchong Author name
-  intro_line1:  "Hello ,I'm Yu Chen, a graduate in Electrical & Computing Engineering, Carnegie Mellon University."    ## your introduction on the bottom of the page
-  intro_line2:  "This is my blog. Thanks for reading"  ## the 2nd line
-  weibo:      ## e.g. wuchong1014 or 2176287895 for http://weibo.com/2176287895
-  weibo_verifier:  ## e.g. b3593ceb Your weibo-show widget verifier ,if you use weibo-show it is needed.
-  tsina:      ## e.g. 2176287895  Your weibo ID,It will be used in share button.
-  douban:     ## e.g. wuchong1014 or your id for https://www.douban.com/people/wuchong1014
-  zhihu:      chen-yu-41-29-73 ## e.g. jark  for http://www.zhihu.com/people/jark
-  email:      chenyu.sysu@foxmail.com ## e.g. imjark@gmail.com
-  twitter:    ## e.g. jarkwu for https://twitter.com/jarkwu
-  github:     SnailWalkerYC ## e.g. wuchong for https://github.com/wuchong
-  facebook:   ## e.g. imjark for https://facebook.com/imjark
-  linkedin:   yu-chen-aa6404b8 ## e.g. wuchong1014 for https://www.linkedin.com/in/wuchong1014
-  google_plus:    ## e.g. "111190881341800841449" for https://plus.google.com/u/0/111190881341800841449, the "" is needed!
-  stackoverflow:  ## e.g. 3222790 for http://stackoverflow.com/users/3222790/jark
-## if you set them, the corresponding  share button will show on the footer
+# 输入Disqus shortname，即可添加评论区，细节可阅读文档。
+disqus: loffer #shortname
 
-#### Toc
-toc:
-  article: true   ## show contents in article.
-  aside: true     ## show contents in aside.
-## you can set both of the value to true of neither of them.
-## if you don't want display contents in a specified post,you can modify `front-matter` and add `toc: false`.
-
-#### Links
-links:
-  MY CSDN BLOG: http://blog.csdn.net/c602273091
-  Paul Ren: http://paulweihan.github.io/
-
-
-#### Comment
-duoshuo_shortname:    ## e.g. wuchong   your duoshuo short name.
-disqus_shortname:     ## e.g. wuchong   your disqus short name.
-
-#### Share button
-jiathis:
-  enable: false ## if you use jiathis as your share tool,the built-in share tool won't be display.
-  id:    ## e.g. 1889330 your jiathis ID. 
-  tsina: ## e.g. 2176287895 Your weibo id,It will be used in share button.
-
-#### Analytics
+# 输入Google Analytics web tracking code
 google_analytics:
-  enable: false
-  id:        ## e.g. UA-46321946-2 your google analytics ID.
-  site:      ## e.g. wuchong.me your google analytics site or set the value as auto.
-## You MUST upgrade to Universal Analytics first!
-## https://developers.google.com/analytics/devguides/collection/upgrade/?hl=zh_CN
-baidu_tongji:
-  enable: false
-  sitecode:  ## e.g. e6d1f421bbc9962127a50488f9ed37d1 your baidu tongji site code
-cnzz_tongji:
-  enable: false
-  siteid:    ## e.g. 1253575964 your cnzz tongji site id
 
-#### Miscellaneous
-fancybox: true        ## if you use gallery post or want use fancybox please set the value to true.
-totop: true           ## if you want to scroll to top in every post set the value to true
+# 输入你的网站域名（如果你没有添加自己的域名，而是直接用GitHub pages分配的域名的话可以省略）
+url: 
+
+# 添加你的博客的二级域名，一般来说是你的repository名
+# 如果你的博客的URL是：(http://yourusername.github.io/repository-name)
+# 那么就写成 "/repository-name"
+baseurl: /LOFFER
 
 
-#### Custom Search
-google_cse: 
-  enable: false
-  cx: 018294693190868310296:abnhpuysycw  ## e.g. 018294693190868310296:abnhpuysycw your Custom Search ID.
-## https://www.google.com/cse/ 
-## To enable the custom search You must create a "search" folder in '/source' and a "index.md" file
-## set the 'front-matter' as
-## layout: search 
-## title: search
-## ---
-baidu_search:     ## http://zn.baidu.com/
-  enable: false
-  id:   ## e.g. "783281470518440642"  for your baidu search id
-  site: ##http://zhannei.baidu.com/cse/search  ## your can change to your site instead of the default site
-  
-tinysou_search:     ## http://tinysou.com/
-  enable: false
-  id:  ## e.g. "4ac092ad8d749fdc6293" for your tiny search id
+#
+# !! 以下所有设置都不需要更改 !!
+#
+
+permalink: /:title/
+paginate_path: /page:num/
+
+# The release of Jekyll Now that you're using
+version: v1.2.0
+
+# Jekyll 3 now only supports Kramdown for Markdown
+kramdown:
+  # Use GitHub flavored markdown, including triple backtick fenced code blocks
+  input: GFM
+  # Jekyll 3 and GitHub Pages now only support rouge for syntax highlighting
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    # Use existing pygments syntax highlighting css
+    css_class: 'highlight'
+
+# Set the Sass partials directory, as we're using @imports
+sass:
+  style: :expanded # You might prefer to minify using :compressed
+
+# Use the following plug-ins
+plugins:
+  - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
+  - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
+  - jekyll-paginate
+
+# Exclude these files from your production _site
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - CNAME
+
+excerpt_separator: ---
