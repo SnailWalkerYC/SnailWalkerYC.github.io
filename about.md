@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-这是一个关于页面，请编辑about.md以介绍你的博客。
+I am an autonomous driving software engineer in a startup named[Black Sesame Technologies, Inc](http://bst.ai/)(raised more than $100M, I am former 30 employees in US base). 
