@@ -60,8 +60,59 @@ Search engine is to satisfy the information need (with query) with a corpus of d
 - Description: convert documents tokens into index term. 
 - Steps: format parsing(parse different page format into canonical format), then using NLP lexical analyzer transforms into index terms. Finally, the index terms will be indexed structure data. 
 - Know controlled vocabulary. On the contrary, there is free text indexing. Using an uncontrolled vocabulary, and may miss sth. In Google, the full text indexing is used. The methods like tokens, stopwords, morphological processing is used in full text indexing. There are also urls, title, body and inlinks.  
+- Document can be structured into fields(divide the document into different domain). Divede the webpage into different field, then combining them together(Like Lucene). So there is more operator like #WAND and #WSUM for ranking. So the retrieval methods vector spaces, Okapi BM25F, Indtri can work well. Field is independet. 
+- Hierarchical documents structrue: XML. Indri support elements retrieval. 
 
 ## Best Match Method 
 
-## 
+- Vector space retrieval model: 
+  - consine similarity: the dot product of two document vectors divide the multiple of two documents vector norm2. Only term frequency is considered, but the term weight, document term weight, lenght normalization is not included. 
+  - vector space model: Inc.Itc. Invrse document frequency(idf), df: number of documents
+  - ![lncltc1](../images/lncltc1.png)
+  - ![lncltc2](../images/lncltc2.png)
+  - Lucene: two stages-> Boolean query first hen rank the documents. The above qtf can be page rank weight. 
+  - ![lucene](../images/lucene.png)
+  - Okapi BM25: consider document length. Support unstructured queries.
+  - ![bm25](../images/bm25.png)
+  - language model: n gram model 
+  - query likelihood: p(d | q) equal p(q | d) p(d) equal  p(q | d). 
+  - ![finalquery](../images/finalquery.png)
+  - KL-Divergence:
+  - ![kldiver](../images/kldiver.png) 
+  - Compare with Likelihood: 
+  - ![comparewithlikelihood](../images/comparewithlikelihood.png)
+  - Indri: statistical language models with Bayesian inference networks. There is WAND and WSUM in indri.
+  - ![indri](../images/indri.png)
+  - Support following operator:
+  - ![indriope](../images/indriope.png)
+
+
+
+##Indexing 
+
+- To build the search engine, the architecture looks like below:
+- ![index1](../images/index1.png)
+
+## Pseudo Document Retrieval 
+
+- unsupervised learning method, make query more similar to relative documents. 
+- Okapi relevance feedback: (the term is assigned with new weight)
+- ![feedback](../images/feedback.png)
+- Indri pseudo relevance feedback:
+- ![indripesudo](../images/indripesudo.png)
+- calculate score for every term then choose top m terms. 
+- ![pseudointrid2](../images/pseudointrid2.png)
+- Conclusion: select n top documents; then select top m terms based on tf.idf or similar. Form new queries and retrieve documents.
+
+## LeToR and CNN Ranking 
+
+## Authority 
+
+## Spam Webpage Filter 
+
+
+
+## Diversity
+
+ 
 
