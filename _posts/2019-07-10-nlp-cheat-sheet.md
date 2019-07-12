@@ -8,8 +8,6 @@ tags: [search]
 comments: true
 ---
 
-# Search Engine Cheat Sheet 
-
 
 
 All following knowledge is conclusion from [Jamie Callan](https://boston.lti.cs.cmu.edu/classes/11-642/). By the way, he is the most friendly and helpful professor I have met. 
@@ -92,6 +90,15 @@ Search engine is to satisfy the information need (with query) with a corpus of d
 
 - To build the search engine, the architecture looks like below:
 - ![index1](../images/index1.png)
+- Inverted list optimizations: skip lists. 
+- Forward indexes: know one document what terms appears. With form docid->[iterms id]->[location]
+- In Indri, we can get the forward indexes from **indri::index** or **QueryEnvironment class**. There will include fields, stems and positions. 
+- Documents structure: explicit markup(html); multiple repersentation(fileds); annotations(NER). Store in separate vocabularies. Parse documents as trees. 
+- Indri index: manifest(metadata); statistics; term dictiionary; inverted lists; compressed collection. A sequence of documents. 
+- Lucene indexs: segments; segment info(segment info, field names, stored field values, dictionary, frequency data, proximity data, term vector and etc).
+- Index update: divide static/dynamic components.
+- Delete documents: create deleted lists. When deleted lists becomes large, use garbage collect.
+- Web search index: using **distributed indexes**. Partitioned index like shards. Many copies are used replication(improve parallelism and fault tolerance). The partition index assignments can be random assignment and source based assignment. **Tiered Indexes** uses two tiers for web search. Tier 1 first, then tier 2 next. Pages ranks are used to rank documents for which tier. The map-reduce framework can be used here. Caching popular results and inverted lists. Score can be qtf/dtf.
 
 ## Pseudo Document Retrieval 
 
@@ -106,13 +113,41 @@ Search engine is to satisfy the information need (with query) with a corpus of d
 
 ## LeToR and CNN Ranking 
 
+- Training data can be binay assessment, document score, preference of two documents, rankings. 
+- Pointwise: {rel, irrel}, is -1 or +1. Or relevance levels. {4,3,2,1,0}. The classifier can only judge the relevance level, not the ranking. 
+- Pairwise: input two documents (di, dj), produce the preference of these two documents. 
+- Listwise: train with a list of documents and produce ranking. The optimization score can be the ranking probability. Training data is not easy. 
+- In CNN ranking, there are representation-based and interaction-based. Each text can be expressed as word2vec like DSSM,C-DSSM. Then neural network. Interaction based will produce pattern match between two text like cosine similarity. (DRMM)
+- DSSM:
+- ![dssm](../images/dssm.png)
+- DRMM: 
+- ![drmm](../images/drmm.png)
+
 ## Authority 
+
+- Pagerank: random walk algorithms for web page follow or choose another in the datasets(teleportation). It can regard as voting algorithms. 
+- ![pagerank](../images/pagerank.png)
+- Pesudo code:
+- ![pagerank2](../images/pagerank2.png)
+- Topic-sensitive pageRank(TSPR): the teleportation probability is not random. Every page is assigned to one page. The query term can be reweight to different topic, then sum them up.
+- T-Fresh: when new pages added. For old pages, there is a decay exponentially. 
+- HITS: hyperlink-induced topic search. Two important web pages, like hub(contain other good contents) and authority(a page that has good content). 
+- ![hub](../images/hub.png)
 
 ## Spam Webpage Filter 
 
-
+- Web spam: web pages designed to deceive or manipulate search engines. Deliver misleading content to crawler(web servers deliver different content to differnt request; redirect page); manipulate authority metrics(PageRank); manipulate content based ranking of the page. 
+- Content: URL features(stealing a domain name or the domain name that expired recently, domain packing, URL length, top level domain, IP address). Content based feature(number of words; number of words in page title, average lenght of words, manifactired web pages)  
 
 ## Diversity
 
- 
+- Short query will have multiple definition. But if we just follow the document ranking, we may get nothing we want. So the retrieval results should have diversity to improve the recall. 
+- To diversity, interpretation of the origin query. Different tasks for each interpretation. 
+- Diversity metrics: precision-IA@k. Consider different intents. 
+- Implicit Diversity methods: MMR. Choose the documents is not relevant to previous choosed documents. 
+- ![mmr1](../images/mmr1.png)
+- ![mmr2](../images/mmr2.png)
+- For similarity comparing, the KL divergence can be used. 
+- Explicit Methods: expand the query from different meaning. So there are suggested queries and related queries. 
+- Explicit xQuAD, PM-2, DSP Approx.
 
