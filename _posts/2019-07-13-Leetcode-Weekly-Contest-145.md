@@ -1,4 +1,12 @@
-## Leetcode Weekly Contest 145
+---
+layout: post
+title: Leetcode Weekly Contest 145
+date: 2019-07-13
+Author: 来自中世界
+categories: [technology]
+tags: [leetcode]
+comments: true
+---
 
 ### 1122. Relative Sort Array
 
