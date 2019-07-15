@@ -8,11 +8,11 @@ I am an autonomous driving software engineer in a startup named [Black Sesame Te
 
 
 
-I like writing blogs and . 
+I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chiese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
 
 
 
-### Projects
+### Projects Show
 
 
 
@@ -20,7 +20,9 @@ I like writing blogs and .
 
 
 
-For more details, you can see my resume from [here]()
+### CV
+
+For more details, you can see my resume from [here](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI__YuChen.pdf). 
 
 
 
