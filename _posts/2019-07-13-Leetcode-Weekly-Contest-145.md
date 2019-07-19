@@ -182,7 +182,7 @@ public:
 };
 ```
 
-### 1124. Longest Well-Performing Interval
+### 1124. Longest Well-Performing Interval 
 
 We are given `hours`, a list of the number of hours worked per day for a given employee.
 
@@ -243,6 +243,87 @@ public:
 
 
 
- 
+### Smallest Sufficient Team
+
+Hard
+
+In a project, you have a list of required skills `req_skills`, and a list of `people`.  The i-th person `people[i]` contains a list of skills that person has.
+
+Consider a *sufficient team*: a set of people such that for every required skill in `req_skills`, there is at least one person in the team who has that skill.  We can represent these teams by the index of each person: for example, `team = [0, 1, 3]`represents the people with skills `people[0]`, `people[1]`, and `people[3]`.
+
+Return **any** sufficient team of the smallest possible size, represented by the index of each person.
+
+You may return the answer in any order.  It is guaranteed an answer exists.
+
+**Example 1:**
+
+```
+Input: req_skills = ["java","nodejs","reactjs"], people = [["java"],["nodejs"],["nodejs","reactjs"]]
+Output: [0,2]
+```
+
+**Example 2:**
+
+```
+Input: req_skills = ["algorithms","math","java","reactjs","csharp","aws"], people = [["algorithms","math","java"],["algorithms","math","reactjs"],["java","csharp","aws"],["reactjs","csharp"],["csharp","math"],["aws","java"]]
+Output: [1,2]
+```
+
+**Constraints:**
+
+- `1 <= req_skills.length <= 16`
+- `1 <= people.length <= 60`
+- `1 <= people[i].length, req_skills[i].length, people[i][j].length <= 16`
+- Elements of `req_skills` and `people[i]` are (respectively) distinct.
+- `req_skills[i][j], people[i][j][k]` are lowercase English letters.
+- It is guaranteed a sufficient team exists.
+
+ **Solution**: using one map to map from skill to int for better represent the skills. Then go through every people, there is another unordered_map with (skill_mask, people_vector). Finanlly, return the full skill mask repsonding peopel vector. 
+
+**Code:**
+
+```
+class Solution {
+public:
+    vector<int> smallestSufficientTeam(
+        vector<string>& req_skills, 
+        vector<vector<string>>& people) 
+    {
+        unordered_map<string, int> skill_map;
+        unordered_map<int, vector<int>> cur_rec;
+        cur_rec[0] = {};
+
+        int skill_size = req_skills.size();
+        cur_rec.reserve(1 << skill_size);
+        for (int idx = 0; idx < req_skills.size(); ++idx) {
+            skill_map[req_skills[idx]] = idx;
+        }    
+
+        int num_people = people.size();
+        for (int idx = 0; idx < num_people; ++idx) {
+            // get current people skill mask
+            int cur_skill = 0;
+            auto cur_people = people[idx];
+            for (auto skill: cur_people) {
+                cur_skill |= 1 << skill_map[skill];
+            }
+
+            for (auto cur_mask = cur_rec.begin(); 
+                      cur_mask != cur_rec.end(); ++cur_mask) {
+                auto combo_mask = cur_mask->first | cur_skill;
+                if (cur_rec.find(combo_mask) == cur_rec.end() ||
+                  cur_rec[combo_mask].size() > cur_rec[cur_mask->first].size() + 1) {
+                    cur_rec[combo_mask] = cur_mask->second;
+                    cur_rec[combo_mask].push_back(idx);
+                }    
+            }
+        }
+
+        return cur_rec[(1 << skill_size) - 1];
+    }
+};
+```
+
+
 
  
