@@ -24,7 +24,7 @@ I like joining different compititions including programing compititions, hardwar
 
 ### CV
 
-For more details, you can see my resume from [here](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI__YuChen.pdf). 
+For more details, you can see my resume from [here](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf). 
 
 
 
