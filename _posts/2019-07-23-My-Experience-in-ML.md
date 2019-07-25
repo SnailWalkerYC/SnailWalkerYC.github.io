@@ -1,6 +1,6 @@
 ---
 layout: post
-title: My Experience in NLP
+title: My Experience in ML
 date: 2019-07-10
 Author: 来自中世界
 categories: [technology]
