@@ -8,3 +8,5 @@ tags: [nlp]
 comments: true
 ---
 
+This course is taught [Alan Black](http://www.cs.cmu.edu/~awb/) by from [here](http://demo.clab.cs.cmu.edu/NLP/). He is an excellent professor.  
+
