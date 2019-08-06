@@ -12,7 +12,7 @@ I used to intern in [Machine Intelligence Lab, Alibaba](https://damo.alibaba.com
 
 I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chiese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
 
-I like joining different compititions including programing compititions, hardware compititions, robot compititions and even creative compititions. The following are some compitions with reward: 
+I like joining different competitions including programing competitions, hardware competitions, robot competitions and even creative competitions. The following are some competions with reward: 
 
 ### Projects Show
 
