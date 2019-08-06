@@ -59,7 +59,9 @@ In the paper, there are some basic knowledge needed to know to understand the ne
 - How rigid flow came from:
 - What's the input of the ResFlowNet?
 - How to train the whole network? How to use it in the total BP? No, this paper divided the sub-network and train respectively, finetune is not working after sub-network training. So I am thinking the paper talked about multi-task will add constrains is not right. The image size is 128x416. The training epochs for the first stage is 30 epochs, and 200 epochs for the second stage. Running time for depth 15 ms, optical 45 ms, pose 4 ms.The optimizer is Adam in this network. But to be honest, I think RMSProp optimizer is better.
-- Is inverse warping differentiable?
+- Is inverse warping differentiable? See UCB depth estimation above.
+
+This paper in rigid flow part is the same to UCB depth estimation, and even the depth estimation and pose estimation are the same. So the contribution part is about consistency check, because ResFloeNet is from another paper.
 
 More details of implementation can be seen in [here GeoNet](https://github.com/yzcjtr/GeoNet).
 
