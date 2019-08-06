@@ -1,3 +1,13 @@
+---
+layout: post
+title: Visual Depth Estimation
+date: 2019-08-05
+categories: [technology]
+tags: [cv]
+comments: false
+---
+
+
 #### Depth Estimation Conclusion
 
 In 3D computer vision domain, there is one called depth estimation (depth prediction, depth inference), which will predict the depth of the pixel on images. So with this technique, if we have excellent estimation of the pixel depth, we can get dense 2D matrix depth from surroundings. From this aspect, depth estimation of camera capture can be better than LiDAR. LiDAR depth is a kind of sparse beams of depth. Besides, with the help of depth estimation, if the LiDAR is fused with LiDAR, we can use depth completion to get dense and absolute accurate scale 2D dense depth. With the depth information, we can be benefit on tracking, obstacle detection and further path planning. All in all, depth estimation can be excellent methods added into autonomous driving or ADAS for more safety car. 
@@ -20,10 +30,11 @@ structure and semantics**
 Learning from Monocular Videos**
 - Google Brain series 4: **Depth from Videos in the Wild: Unsupervised Monocular Depth Learning from Unknown Cameras**
 
-The depth estimation can be concluded as the following problem, we have current pixel position $p_t$, and the intrisic matrix K, distance to this pixel (depth) $D_{p_t}(p_t)$. The rigid transformation between current frame $t$ to another frame $s$. So we can find the re-projection of this pixel in frame $s$.
+The depth estimation can be concluded as the following problem, we have current pixel position $ p_t $, and the intrisic matrix K, distance to this pixel (depth) $D_{p_t}(p_t)$. The rigid transformation between current frame $t$ to another frame $s$. So we can find the re-projection of this pixel in frame $s$.
 
-$f(p_t) = K T_{t->s} D_{p_t}(p_t) K^{-1} p_t$
-
+\begin{equation}
+f(p_t) = K T_{t->s} D_{p_t}(p_t) K^{-1} p_t
+\end{equation}
 
 ##### UCL-Depth-Estimation
 
@@ -34,7 +45,11 @@ Disadvantage: occulusion is not considered. So it will be not good when meeting 
 ##### GeoNet
 This paper is from SenseTime research. The contribution of this paper is that there are combined depth estimation, optical flow and ego-motion(pose) estimation framework in unsupervised methodology. From the combinationl task in 3D geometry constrains, the training would be better than single tasks. 
 
-Two stages are used in GeoNet. First stage will get depth prediction and pose estimation, second stage will use the 1st stage results to infer the optical flow. To deal with occlusion problem, consistency check is used, which will only predict the consistent pixel motion. 
+Two stages are used in GeoNet. First stage will get depth prediction and pose estimation, second stage will use the 1st stage results to infer the optical flow. To deal with occlusion problem, consistency check is used, which will only predict the consistent pixel motion. So the first part will focus on the rigid motion, the second state will focus on non-rigid motion. So the first state the DepthNet and PoseNet can be used. These two parts can be fused to rigid motion projection. The second part is a ResFlowNet to learn residuals. To get the training process more robust, consistency is utilized.
+
+To train the rigid structure, the photometric loss and SSIMU loss are utilized. SSIM in some degree can be helpful to eimnate the motion objects. To make the object more distinct, the edge-aware depth smoothness loss is used.
+
+
 
 ##### Google Brain s1 
 
@@ -50,7 +65,7 @@ In supervised learning, we should get the ground truth depth of the pixel. For e
 In supervised depth estimation, the paper [Deep Ordinal Regression Network for Monocular Depth Estimation](http://openaccess.thecvf.com/content_cvpr_2018/html/Fu_Deep_Ordinal_Regression_CVPR_2018_paper.html) got the state-of-art depth estimation accuracy at that time.
 
 #### Basics of depth models
-
+- Inverse warping: the traditional warping will map the input frame to output frame, but this kind of warping will make the output data misalignment or multiple value in one position. Inverse mapping is the inverse process of this, every pixel data in output frame will find its correspondence in input data. In this situation, inverse warping can eliminate the forward warping problem. During the inverse warping process, the interpolation can be use to get more accurate results.  
 
 #### Futher reading 
 In the 3D computer vision domain, there are many sub-domain using the depth estimation for enhancement. I choose two as an example:
