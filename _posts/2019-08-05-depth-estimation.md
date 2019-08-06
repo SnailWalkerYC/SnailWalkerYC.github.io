@@ -52,9 +52,16 @@ Two stages are used in GeoNet. First stage will get depth prediction and pose es
 
 To train the rigid structure, the photometric loss and SSIMU loss are utilized. SSIM in some degree can be helpful to eimnate the motion objects. To make the object more distinct, the edge-aware depth smoothness loss is used.
 
-More details of implementation can be seen in [here GeoNet][].
+In non-rigid part, there is another part called ResFlowNet to predict the non-rigid motion of the video sequence. Then, sum of the rigid flow and non-rigid flow. Finnaly, one consistency is added into the framework to ignore the outlier during training.
 
-[geonet]: https://github.com/yzcjtr/GeoNet "here GeoNet" 
+In the paper, there are some basic knowledge needed to know to understand the network. 
+
+- How rigid flow came from:
+- What's the input of the ResFlowNet?
+- How to train the whole network? How to use it in the total BP? No, this paper divided the sub-network and train respectively, finetune is not working after sub-network training. So I am thinking the paper talked about multi-task will add constrains is not right. The image size is 128x416. The training epochs for the first stage is 30 epochs, and 200 epochs for the second stage. Running time for depth 15 ms, optical 45 ms, pose 4 ms.The optimizer is Adam in this network. But to be honest, I think RMSProp optimizer is better.
+- Is inverse warping differentiable?
+
+More details of implementation can be seen in [here GeoNet](https://github.com/yzcjtr/GeoNet).
 
 
 ##### Google Brain s1 
@@ -72,9 +79,16 @@ In supervised learning, we should get the ground truth depth of the pixel. For e
 
 In supervised depth estimation, the paper [Deep Ordinal Regression Network for Monocular Depth Estimation](http://openaccess.thecvf.com/content_cvpr_2018/html/Fu_Deep_Ordinal_Regression_CVPR_2018_paper.html) got the state-of-art depth estimation accuracy at that time.
 
+***
+
 #### Basics of depth models
 - Inverse warping: the traditional warping will map the input frame to output frame, but this kind of warping will make the output data misalignment or multiple value in one position. Inverse mapping is the inverse process of this, every pixel data in output frame will find its correspondence in input data. In this situation, inverse warping can eliminate the forward warping problem. During the inverse warping process, the interpolation can be use to get more accurate results.  
+- devonconvolution:
+- Multi-scale scheme: 
+
+***
 
 #### Futher reading 
 In the 3D computer vision domain, there are many sub-domain using the depth estimation for enhancement. I choose two as an example:
-- TUM DVSO: [Deep Virtual Stereo Odometry: Leveraging Deep Depth Prediction for Monocular Direct Sparse Odometry](https://arxiv.org/abs/1807.02570) In this paper, the 
+- TUM DVSO: [Deep Virtual Stereo Odometry: Leveraging Deep Depth Prediction for Monocular Direct Sparse Odometry](https://arxiv.org/abs/1807.02570) In this paper, the depth estimation is used to initialize the mono-DSO selected point depth and virtual stereo constrains for outlier filtering.
+- Cornell Pseudo LiDAR: [Pseudo-LiDAR from Visual Depth Estimation: Bridging the Gap in 3D Object Detection for Autonomous Driving](https://arxiv.org/abs/1812.07179). In this paper, the raw image is transformed into depth image, then depth images are used for 3D object detection. 
