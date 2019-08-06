@@ -2,7 +2,7 @@
 layout: post
 title: Natural Language Processing Cheat Sheet
 date: 2019-07-30
-Author: 来自中世界
+Author: Snail Walker
 categories: [technology]
 tags: [nlp]
 comments: true

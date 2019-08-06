@@ -2,7 +2,7 @@
 layout: post
 title: Leetcode Weekly Contest 148
 date: 2019-08-03
-Author: 来自中世界
+Author: Snail Walker
 categories: [technology]
 tags: [leetcode]
 comments: true

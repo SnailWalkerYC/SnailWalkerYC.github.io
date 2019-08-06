@@ -2,7 +2,7 @@
 layout: post
 title: Search Engine Cheat Sheet
 date: 2019-07-10
-Author: 来自中世界
+Author: Snail Walker
 categories: [technology]
 tags: [search]
 comments: true

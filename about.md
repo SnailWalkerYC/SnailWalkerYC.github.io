@@ -32,10 +32,11 @@ I like joining different competitions including programing competitions, hardwar
 - CUDA
 - OpenMP
 - Verilog
+
 #### Domain Knowledge 
 
 - Computer vision: traditional CV; deep pose estimation; depth estimation; visual SLAM, etc. See [here]() for more details. 
-- Machine learning: 
+- Machine learning
 - Natural language processing: search engine, basic nlp algorithms, etc. See [here]() for more details. 
 - Algorithm acceleration: OpenMP, CUDA, FPGA acceleration techniques. See [here]() for more details.
 
@@ -44,7 +45,8 @@ I like joining different competitions including programing competitions, hardwar
 
 For more details, you can see my resume from [here](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf). 
 
-
+### Likes 
+- Listening to music: classical music; rapping
 
   
 
