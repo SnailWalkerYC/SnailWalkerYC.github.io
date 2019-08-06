@@ -20,6 +20,29 @@ structure and semantics**
 Learning from Monocular Videos**
 - Google Brain series 4: **Depth from Videos in the Wild: Unsupervised Monocular Depth Learning from Unknown Cameras**
 
+The depth estimation can be concluded as the following problem, we have current pixel position $p_t$, and the intrisic matrix K, distance to this pixel (depth) $D_{p_t}(p_t)$. The rigid transformation between current frame $t$ to another frame $s$. So we can find the re-projection of this pixel in frame $s$.
+
+$f(p_t) = K T_{t->s} D_{p_t}(p_t) K^{-1} p_t$
+
+
+##### UCL-Depth-Estimation
+
+##### UCB-Zhou Depth Estimation
+
+Disadvantage: occulusion is not considered. So it will be not good when meeting with dynamic scenes. I used the inference model on Tinghui Zhou, I found the inference model can be good in depth estimation of road scenarios. But in some cases, like the moving objects, the edge of the objects are not smooth and a little ambiguous. 
+
+##### GeoNet
+This paper is from SenseTime research. The contribution of this paper is that there are combined depth estimation, optical flow and ego-motion(pose) estimation framework in unsupervised methodology. From the combinationl task in 3D geometry constrains, the training would be better than single tasks. 
+
+Two stages are used in GeoNet. First stage will get depth prediction and pose estimation, second stage will use the 1st stage results to infer the optical flow. To deal with occlusion problem, consistency check is used, which will only predict the consistent pixel motion. 
+
+##### Google Brain s1 
+
+##### Google Brain s2 
+
+##### Google Brain s3 
+
+##### Google Brain s4
 
 #### Supervised Learning
 In supervised learning, we should get the ground truth depth of the pixel. For example, we can use stereo camera to calculate the disparity, then get the depth. we can use higher beams of LiDAR(128) and simple depth completion to get the sbsolute depth of the camera. 
