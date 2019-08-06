@@ -46,7 +46,8 @@ I like joining different competitions including programing competitions, hardwar
 For more details, you can see my resume from [here](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf). 
 
 ### Likes 
-- Listening to music: classical music; rapping
+- Listening to music: classical music; rapping (both old school and trap, prefer old school)
+- Self-driving tour: drive from Bay Area to Yosmite, Lake Tahoe, Los Angelos(through California 1) all by meself. 
 
   
 

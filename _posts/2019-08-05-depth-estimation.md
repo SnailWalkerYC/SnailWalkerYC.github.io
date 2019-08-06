@@ -83,7 +83,8 @@ In supervised depth estimation, the paper [Deep Ordinal Regression Network for M
 
 #### Basics of depth models
 - Inverse warping: the traditional warping will map the input frame to output frame, but this kind of warping will make the output data misalignment or multiple value in one position. Inverse mapping is the inverse process of this, every pixel data in output frame will find its correspondence in input data. In this situation, inverse warping can eliminate the forward warping problem. During the inverse warping process, the interpolation can be use to get more accurate results.  
-- devonconvolution:
+- devonconvolution: convolution will make the feature size smaller, which belongs to the decoder process (make data feature dimension smaller); deconvolution will make the input feature size larger. To see the animation, see [here](https://datascience.stackexchange.com/questions/6107/what-are-deconvolutional-layers). 
+- Upsampling: the deconvolution is a kind of upsmapling, but there is also up-pooling to resume the size of feature map in decoder process. See [here](https://www.oreilly.com/library/view/deep-learning-for/9781788295628/467cf02b-dc52-49c5-9289-b2721f6758da.xhtml) for more details.
 - Multi-scale scheme: 
 
 ***
