@@ -14,6 +14,7 @@ In 3D computer vision domain, there is one called depth estimation (depth predic
 
 In this poster, I will introduce some state-of-art or excellent depth estimation model in the past few years for self-supervised and supervised depth prediction. 
 
+***
 
 #### Self-Supervised Learning
 In seld-supervised depth learning, we can use only the videos from camera for the whole training. But the prediction results are batch noremalized of the output. So the self-supervised depth learning we can get the relative depth in one image, but if we would like to get the absolute depth, we can fuse cameras with radar, LiDAR or similar distance measurement sensor, then multiple current relative depth image with one scale. 
@@ -32,9 +33,11 @@ Learning from Monocular Videos**
 
 The depth estimation can be concluded as the following problem, we have current pixel position $ p_t $, and the intrisic matrix K, distance to this pixel (depth) $D_{p_t}(p_t)$. The rigid transformation between current frame $t$ to another frame $s$. So we can find the re-projection of this pixel in frame $s$.
 
-\begin{equation}
+$$
+\begin{align*}
 f(p_t) = K T_{t->s} D_{p_t}(p_t) K^{-1} p_t
-\end{equation}
+\end{align*}
+$$
 
 ##### UCL-Depth-Estimation
 
@@ -49,6 +52,9 @@ Two stages are used in GeoNet. First stage will get depth prediction and pose es
 
 To train the rigid structure, the photometric loss and SSIMU loss are utilized. SSIM in some degree can be helpful to eimnate the motion objects. To make the object more distinct, the edge-aware depth smoothness loss is used.
 
+More details of implementation can be seen in [here GeoNet][].
+
+[geonet]: https://github.com/yzcjtr/GeoNet "here GeoNet" 
 
 
 ##### Google Brain s1 
@@ -58,6 +64,8 @@ To train the rigid structure, the photometric loss and SSIMU loss are utilized. 
 ##### Google Brain s3 
 
 ##### Google Brain s4
+
+***
 
 #### Supervised Learning
 In supervised learning, we should get the ground truth depth of the pixel. For example, we can use stereo camera to calculate the disparity, then get the depth. we can use higher beams of LiDAR(128) and simple depth completion to get the sbsolute depth of the camera. 
