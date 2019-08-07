@@ -43,7 +43,15 @@ $$
 
 ##### UCB-Zhou Depth Estimation
 
-Disadvantage: occulusion is not considered. So it will be not good when meeting with dynamic scenes. I used the inference model on Tinghui Zhou, I found the inference model can be good in depth estimation of road scenarios. But in some cases, like the moving objects, the edge of the objects are not smooth and a little ambiguous. 
+This method is based on the rigid motion assumption. This is the first monocular unsupervised depth estimation methods. 
+
+To combat the occulusion or motion, there is one comfidence predicted E into the photometric loss. To eliminate E to be zero, the regularization is added into the final loss. In pose estimation, there is unavoidable problem of low feature or featureless area, to deal with this problem, the multi-scale and smoothness loss(SSIM) are introduce to the final loss.
+
+The depth is constrained with 1/(a*sigmoid(x) + b), a is 10, b is 0.1. The input image size is 128x416.
+
+Disadvantage: occulusion is not explicit considered. So it will be not good when meeting with dynamic scenes. I used the inference model on Tinghui Zhou, I found the inference model can be good in depth estimation of road scenarios. But in some cases, like the moving objects, the edge of the objects are not smooth and a little ambiguous. In this paper, the intrinsic is needed. The newest paper from Google Brain has addressed this problem.
+
+The implementation details are [here.](https://github.com/tinghuiz/SfMLearner/blob/master/SfMLearner.py)
 
 ##### GeoNet
 This paper is from SenseTime research. The contribution of this paper is that there are combined depth estimation, optical flow and ego-motion(pose) estimation framework in unsupervised methodology. From the combinationl task in 3D geometry constrains, the training would be better than single tasks. 
