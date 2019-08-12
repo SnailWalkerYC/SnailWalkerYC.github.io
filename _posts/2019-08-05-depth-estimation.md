@@ -41,6 +41,11 @@ $$
 
 ##### UCL-Depth-Estimation
 
+I tried with different kinds of mono sequence depth prediction methods, but the left right consistency is the best with distinct boundary and shape. The loss combining with SSIM and photometric loss, then with disparity smoothness loss and left right disparity consitency. 
+
+The network will predict both left and right images' disparity to get reconstructed the other side image with only the left image. With the predicted disparity, we can get the depth from d = bf/d. So why in this paper, we should use stereo setting, one reason is that we need the disparity as ground truth. The other reason is that it will add more constrains in the nework to combat with artifacts.
+
+
 ##### UCB-Zhou Depth Estimation
 
 This method is based on the rigid motion assumption. This is the first monocular unsupervised depth estimation methods. 
@@ -90,6 +95,10 @@ In supervised learning, we should get the ground truth depth of the pixel. For e
 In supervised depth estimation, the paper [Deep Ordinal Regression Network for Monocular Depth Estimation](http://openaccess.thecvf.com/content_cvpr_2018/html/Fu_Deep_Ordinal_Regression_CVPR_2018_paper.html) got the state-of-art depth estimation accuracy at that time.
 
 ***
+
+The DORN eliminated the unnecessary spacial pooling (pooling will reult in undesiable low-resolution feature maps. The skip connections and multi-scale are used in deconvolution network) The most important thing is the SID.
+
+The output depth is discreted into different intervals, so the output can be a regression problem. 
 
 #### Basics of depth models
 - Inverse warping: the traditional warping will map the input frame to output frame, but this kind of warping will make the output data misalignment or multiple value in one position. Inverse mapping is the inverse process of this, every pixel data in output frame will find its correspondence in input data. In this situation, inverse warping can eliminate the forward warping problem. During the inverse warping process, the interpolation can be use to get more accurate results.  
