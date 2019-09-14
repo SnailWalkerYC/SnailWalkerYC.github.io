@@ -4,7 +4,9 @@ title: About
 permalink: /about/
 ---
 
-I am an autonomous driving software engineer in a startup named [Black Sesame Technologies, Inc](http://bst.ai/)(raised more than $100M, I am former 30 employees in US office). My current mentor is [Guan Wang](https://scholar.google.com/citations?user=N-ErxbcAAAAJ&hl=en). I got my master degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) at [Carnegie Mellon University](https://www.cmu.edu/) in April, 2018. And I got my bachelor degree in [Software Engineering](http://sdcs.sysu.edu.cn/) at [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm) in June, 2016. 
+Currently, I am a senior software engineer(perception) in an autonomous driving company.
+
+I used to be a software engineer(AI) in a startup named [Black Sesame Technologies, Inc](http://bst.ai/)(raised more than $100M, I am former 30 employees in US office). My current mentor is [Guan Wang](https://scholar.google.com/citations?user=N-ErxbcAAAAJ&hl=en). I got my master degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) at [Carnegie Mellon University](https://www.cmu.edu/) in April, 2018. And I got my bachelor degree in [Software Engineering](http://sdcs.sysu.edu.cn/) at [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm) in June, 2016. 
 
 Currently, I am focusing on 3D computer vision including 3D cross-modal visual localization, depth estimation, pose estimation, etc. You can see my recently deep localization paper from [here](http://arxiv.org/abs/1907.07160). For more projects, you can see belowing projects about computer vision, natual language processing and algorithm acceleration.
 
