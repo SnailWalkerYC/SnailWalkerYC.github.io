@@ -4,11 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Currently, I am a senior software engineer(perception) in an autonomous driving company.
+Currently, I am a senior software engineer(perception) in an autonomous driving company in Bay Area.
 
 I used to be a software engineer(AI) in a startup named [Black Sesame Technologies, Inc](http://bst.ai/)(raised more than $100M, I am former 30 employees in US office). My current mentor is [Guan Wang](https://scholar.google.com/citations?user=N-ErxbcAAAAJ&hl=en). I got my master degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) at [Carnegie Mellon University](https://www.cmu.edu/) in April, 2018. And I got my bachelor degree in [Software Engineering](http://sdcs.sysu.edu.cn/) at [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm) in June, 2016. 
 
-Currently, I am focusing on 3D computer vision including 3D cross-modal visual localization, depth estimation, pose estimation, etc. You can see my recently deep localization paper from [here](http://arxiv.org/abs/1907.07160). For more projects, you can see belowing projects about computer vision, natual language processing and algorithm acceleration.
+Currently, my job is more relative to the sensor fusion tracking with LiDAR, cameras and radar. For the sensor parts, I am familiar with these and wrote drivers to fetch with specific requirements and pre-processing these data. For the fusion part, I am trying to fuse different sensors' data to get better tracking objects' direction and velocity.
+
+I used to focusing on 3D computer vision including 3D cross-modal visual localization, depth estimation, pose estimation, etc. You can see my recently deep localization paper from [here](http://arxiv.org/abs/1907.07160). For more projects, you can see belowing projects about computer vision, natual language processing and algorithm acceleration.
 
 I used to intern in [Machine Intelligence Lab, Alibaba](https://damo.alibaba.com/labs/?goto=1) with mentor [Dr. Zhenyu Gu](https://www.linkedin.com/in/zhenyu-gu-9120555) and [Dr. Luo Si](https://www.cs.purdue.edu/homes/lsi/). The intern project is about CNN acceleration and optimization on FPGA. I rewrote the C++ verions ResNet to be suitable, reuseble and modularity in Xilinx FPGA platform. Comparing to general CPU, there is about 5x speedup and 10x power saving. Besides, I had intern experience in Rockchip as a research engineer in error concealment in video decoding. My conclusion paper can be found [here](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/An%20Efficient%20Error%20Concealment%20for%20Whole%20Frame%20Loss%20with%20Violent%20Motion.pdf). I designed and implemented the whole pipeline and got state-of-art visual quality, PSNR and SSIM. During my bachlor degree, I used to be a teaching assistant in discret mathematics, digital circuit design, signal processing and communication principal. 
 
