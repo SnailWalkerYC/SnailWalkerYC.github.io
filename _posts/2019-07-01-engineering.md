@@ -4,7 +4,7 @@ title: Some thoughts about engineering
 date: 2019-07-01
 Author: Snail Walker
 categories: [technology]
-tags: [engineering]
+tags: [tech]
 comments: true
 ---
 

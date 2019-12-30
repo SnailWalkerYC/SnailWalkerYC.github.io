@@ -4,7 +4,7 @@ title: Search Engine Cheat Sheet
 date: 2019-07-10
 Author: Snail Walker
 categories: [technology]
-tags: [search]
+tags: [nlp]
 comments: true
 ---
 

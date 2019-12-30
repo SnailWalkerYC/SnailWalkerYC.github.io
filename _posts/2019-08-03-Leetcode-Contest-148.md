@@ -4,7 +4,7 @@ title: Leetcode Weekly Contest 148
 date: 2019-08-03
 Author: Snail Walker
 categories: [technology]
-tags: [leetcode]
+tags: [coding]
 comments: true
 ---
 
