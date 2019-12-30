@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The Logic Of Failure: Recognizing And Avoiding Error In Complex Situations
+title: The Logic Of Failure Recognizing And Avoiding Error In Complex Situations
 date: 2020-01-01
 categories: [technology]
 tags: [life]
