@@ -4,11 +4,9 @@ title: About
 permalink: /about/
 ---
 
-Currently, I am a senior software engineer(perception) in an autonomous driving company in Bay Area.
+Currently, I am a senior software engineer(perception) in an autonomous driving company in Bay Area. My job is more relative to the sensor fusion tracking with LiDAR, cameras and radar. For the sensor parts, I am familiar with these sensors (multiple cameras, multiple radars & LiDARs) and wrote drivers to fetch with specific requirements and pre-processing these data. For the fusion part, I am trying to fuse different sensors' data to get better tracking objects' direction and velocity.
 
-I used to be a software engineer(AI) in a startup named [Black Sesame Technologies, Inc](http://bst.ai/)(raised more than $100M, I am former 30 employees in US office). My current mentor is [Guan Wang](https://scholar.google.com/citations?user=N-ErxbcAAAAJ&hl=en). I got my master degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) at [Carnegie Mellon University](https://www.cmu.edu/) in April, 2018. And I got my bachelor degree in [Software Engineering](http://sdcs.sysu.edu.cn/) at [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm) in June, 2016. 
-
-Currently, my job is more relative to the sensor fusion tracking with LiDAR, cameras and radar. For the sensor parts, I am familiar with these and wrote drivers to fetch with specific requirements and pre-processing these data. For the fusion part, I am trying to fuse different sensors' data to get better tracking objects' direction and velocity.
+I used to be a software engineer(AI) in a startup named [Black Sesame Technologies, Inc](http://bst.ai/)(raised more than $100M, I am former 30 employees in US office). My previous mentor is [Guan Wang](https://scholar.google.com/citations?user=N-ErxbcAAAAJ&hl=en). I got my master degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) at [Carnegie Mellon University](https://www.cmu.edu/) in April, 2018. And I got my bachelor degree in [Software Engineering](http://sdcs.sysu.edu.cn/) at [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm) in June, 2016. 
 
 I used to focusing on 3D computer vision including 3D cross-modal visual localization, depth estimation, pose estimation, etc. You can see my recently deep localization paper from [here](http://arxiv.org/abs/1907.07160). For more projects, you can see belowing projects about computer vision, natual language processing and algorithm acceleration.
 
@@ -16,11 +14,7 @@ I used to intern in [Machine Intelligence Lab, Alibaba](https://damo.alibaba.com
 
 I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chiese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
 
-I like joining different competitions including programing competitions, hardware competitions, robot competitions and even creative competitions. The following are some competions with reward: 
-
-### Projects Show
-
-
+I like joining different competitions including programing competitions, hardware competitions, robot competitions and even creative competitions. 
 
 ### Skill Set
 
