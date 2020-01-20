@@ -3,7 +3,7 @@ layout: post
 title: A brief history of tomorrow
 date: 2020-01-07
 categories: [technology]
-tags: [life]
+tags: [book]
 comments: false
 
 ---

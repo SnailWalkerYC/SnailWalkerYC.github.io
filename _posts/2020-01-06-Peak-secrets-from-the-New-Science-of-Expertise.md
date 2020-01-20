@@ -3,7 +3,7 @@ layout: post
 title: Peak secrets from the New Science of Expertise
 date: 2020-01-06
 categories: [technology]
-tags: [life]
+tags: [book]
 comments: false
 ---
 

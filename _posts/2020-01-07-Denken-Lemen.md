@@ -3,7 +3,7 @@ layout: post
 title: Denken Lemen
 date: 2020-01-07
 categories: [technology]
-tags: [life]
+tags: [book]
 comments: false
 ---
 

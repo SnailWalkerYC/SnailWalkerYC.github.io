@@ -3,7 +3,7 @@ layout: post
 title: ten thousand hours theory of mastery
 date: 2020-01-05
 categories: [technology]
-tags: [life]
+tags: [book]
 comments: false
 ---
 
