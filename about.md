@@ -6,11 +6,11 @@ permalink: /about/
 
 **Biography**
 
-I got my M.S. degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) from [Carnegie Mellon University](https://www.cmu.edu/) and I my B.Eng. degree in [Software Engineering](http://sdcs.sysu.edu.cn/) from [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm). 
+I got my M.S. degree in [Electrical & Computer Engineering](https://www.ece.cmu.edu/) from [Carnegie Mellon University](https://www.cmu.edu/) and I my B.Eng. degree from School of Data and Computer Science, [Sun Yat-sen University](http://www.sysu.edu.cn/2012/en/index.htm)(SYSU).
 
 
 
-Here are my [resume](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf), [Github](https://github.com/SnailWalkerYC) and [LinedIn](https://www.linkedin.com/in/yu-chen-aa6404b8/). By the way, I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chiese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
+Here are my [resume](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf), [Github](https://github.com/SnailWalkerYC) and [LinedIn](https://www.linkedin.com/in/yu-chen-aa6404b8/). By the way, I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chinese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
 
 
 
