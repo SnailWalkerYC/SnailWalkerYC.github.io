@@ -10,7 +10,7 @@ I got my M.S. degree in [Electrical & Computer Engineering](https://www.ece.cmu.
 
 
 
-Here are my [resume](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf), [Github](https://github.com/SnailWalkerYC) and [LinedIn](https://www.linkedin.com/in/yu-chen-aa6404b8/). By the way, I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chinese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
+I am both Hakka(客家人) and Teochew people(潮汕人) (Grandfather from Shantou). Here are my [resume](https://github.com/SnailWalkerYC/SnailWalkerYC.github.io/blob/master/SDE_AI_YuChen.pdf), [Github](https://github.com/SnailWalkerYC) and [LinedIn](https://www.linkedin.com/in/yu-chen-aa6404b8/). By the way, I like writing technology blogs and ranked top 900 in CSDN (CSDN has more than one million Chinese software engineers) with nickname [Snaile_Walker](https://blog.csdn.net/c602273091). In another community Zhihu, I have more than 1000 fans, see [here](https://www.zhihu.com/people/SW-Nothing/activities) for more details.  
 
 
 
