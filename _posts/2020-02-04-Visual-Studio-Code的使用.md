@@ -37,3 +37,13 @@ comments: false
 ```
 Terminal之间的切换：Alt ->; Alt <-; 之后再按Alt
 ```
+
+```
+跳行：ctrl-G
+```
+
+
+
+>  Ref：
+>
+> https://zellwk.com/blog/useful-vscode-keyboard-shortcuts/ 
