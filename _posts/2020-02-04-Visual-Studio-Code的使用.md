@@ -47,3 +47,7 @@ Terminal之间的切换：Alt ->; Alt <-; 之后再按Alt
 >  Ref：
 >
 > https://zellwk.com/blog/useful-vscode-keyboard-shortcuts/ 
+
+
+
+熟练之后便可以大大提高效率~
