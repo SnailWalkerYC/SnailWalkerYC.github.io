@@ -5,7 +5,7 @@ date: 2019-07-13
 Author: Snail Walker
 categories: [technology]
 tags: [coding]
-comments: true
+comments: false
 ---
 
 ### 1122. Relative Sort Array
