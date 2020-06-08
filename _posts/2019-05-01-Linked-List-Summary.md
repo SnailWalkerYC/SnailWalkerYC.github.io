@@ -593,6 +593,7 @@ ListNode* sortList(ListNode* head) {
 ```
 
 - Structure Change
+
 ```c++
 // 426. Convert Binary Search Tree to Sorted Doubly Linked List
 class Solution {
