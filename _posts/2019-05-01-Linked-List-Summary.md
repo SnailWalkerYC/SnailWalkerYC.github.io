@@ -118,7 +118,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 
 - Merge
 
-```C++
+```c++
 // 21. Merge Two Sorted Lists
 ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
   ListNode* dummy_node = new ListNode(0);
@@ -168,6 +168,8 @@ public:
   }
 };
 ```
+
+
 
 - Search
 
