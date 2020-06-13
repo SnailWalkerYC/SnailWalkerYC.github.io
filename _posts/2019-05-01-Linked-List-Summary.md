@@ -3,7 +3,7 @@ layout: post
 title: Linked List Summary
 date: 2019-05-01
 categories: [technology]
-tags: [book]
+tags: [coding]
 comments: false
 ---
 
