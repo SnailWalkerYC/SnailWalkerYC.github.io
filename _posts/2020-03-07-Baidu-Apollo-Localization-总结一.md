@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Baidu Apollo Localization 总结一
+title: Baidu Apollo Localization 总结
 date: 2020-03-07
 categories: [technology]
 tags: [book]
@@ -19,6 +19,13 @@ comments: false
 
   这篇论文主要是提出了RTK-GPS、IMU、LiDAR后融合框架增强定位的可靠性，甚至可以给出不同传感器定位的时候的不确定性（uncertainty）；以及使用intensity map和elevation map进行（x, y, heading）的搜索。
 
-- LiDAR定位
+  传感器融合本质就是对不同信息源的不确定估计的问题。
 
-  使用LiDAR进行定位，会使用到事先生成的intensity map和elevation map，使用的是grid表示方式，每个grid使用一个高斯来同时维护intensity和elevation的均值方差。同时使用elevation和intensity进行匹配，并且有不同的权值，使得LiDAR定位更加稳定。
+- LiDAR定位概述
+
+  使用LiDAR进行定位，会使用到事先生成的intensity map和elevation map，使用的是grid表示方式，每个grid使用一个高斯（GMM）来同时维护地图的intensity和elevation的均值方差。同时使用elevation和intensity进行匹配，并且有不同的权值，使得LiDAR定位更加稳定。
+  
+  - 
+
+
+
