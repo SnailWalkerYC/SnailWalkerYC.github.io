@@ -5,9 +5,9 @@
 # 你的博客名称，请用你想要的博客名替换“LOFFER”，以下修改都可类似处理
 # 注意，“name: LOFFER”，冒号后面的空格不可以省略。
 # 井号后面的文字是说明文档，不会被程序读取。
-name: Yu Chen
+name: No One
 # 描述/签名
-description: Senior Software Engineer(Perception) in Bay Area
+description: To be water.
 
 #
 # 下面的设定都是可选的
@@ -42,12 +42,12 @@ footer-links:
   weibo: #请输入你的微博个性域名 https://www.weibo.com/<thispart>
   behance: # https://www.behance.net/<>
   dribbble: # https://dribbble.com/<>
-  email: yuuc99445@gmail.com
+  email: 123456789@gmail.com
   facebook: #https://www.facebook.com/<>
   flickr: #https://www.flickr.com/<>
-  github: SnailWalkerYC #https://github.com/<>
+  github: NotGithub #https://github.com/<>
   instagram: #https://instagram.com/<>
-  linkedin: yu-chen-aa6404b8/ #https://www.linkedin.com/in/<>
+  linkedin: whathappened/ #https://www.linkedin.com/in/<>
   pinterest: #https://www.pinterest.com/<>
   rss: #随便填点啥RSS就能用了
   stackoverflow: # http://stackoverflow.com/<>
