@@ -19,7 +19,7 @@ int IncreasingPathRecord(const vector<vector<int>>& matrix, const int row, const
                          vector<vector<int>>& matrix_record) {
   if (matrix_record[row][col]) return matrix_record[row][col];
       
-  static constexpr int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};  
+  static constexpr int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };  
   for (int i = 0; i < 4; ++i) {
     const int new_row = dirs[1][i] + row;
     const int new_col = dirs[0][i] + col;
