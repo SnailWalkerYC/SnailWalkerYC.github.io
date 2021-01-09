@@ -1,7 +1,7 @@
 ---
 layout: post
 title: binary indexed tree
-date: 2020-06-02
+date: 2019-06-02
 categories: [technology]
 tags: [tech]
 comments: false
