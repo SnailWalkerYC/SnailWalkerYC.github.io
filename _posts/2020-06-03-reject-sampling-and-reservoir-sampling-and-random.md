@@ -55,3 +55,40 @@ Ref:
  - [Thought](https://blog.csdn.net/u013630349/article/details/47908633)
  - [More generalization](https://leetcode.com/problems/implement-rand10-using-rand7/discuss/150301/Three-line-Java-solution-the-idea-can-be-generalized-to-%22Implement-RandM()-Using-RandN()%22)
 
+ - Reservoir Sampling
+ 
+```c++
+ // 398. Random Pick Index
+ 
+ // Reservoir samping
+vector<int> nums_;
+Solution(vector<int>& nums) {
+  nums_ = nums;
+}
+    
+int pick(int target) {
+  int count = 0;
+  int idx = 0;
+  for (int i = 0; i < nums_.size(); ++i) {
+    if (nums_[i] != target) continue;
+    if (rand() % (++count) == 0) idx = i;  
+  } 
+  return idx;  
+}
+ 
+ // Cache method
+ unordered_map<int, vector<int>> record_;
+    
+Solution(vector<int>& nums) {
+  for (int i = 0; i < nums.size(); ++i) {
+    record_[nums[i]].push_back(i);
+  }
+}
+    
+int pick(int target) {
+  return record_[target][rand() % record_[target].size()]; 
+}
+```
+
+Ref:
+ - [Sampling iluustration](https://zhuanlan.zhihu.com/p/29178293)
