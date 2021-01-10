@@ -88,6 +88,27 @@ Solution(vector<int>& nums) {
 int pick(int target) {
   return record_[target][rand() % record_[target].size()]; 
 }
+
+// 382. Linked List Random Node
+ListNode* head_ = nullptr;
+    
+/** @param head The linked list's head.
+    Note that the head is guaranteed to be not null, so it contains at least one node. */
+Solution(ListNode* head) {
+  head_ = head;  
+}
+    
+/** Returns a random node's value. */
+int getRandom() {
+  int count = 0;
+  int val = head_->val;
+  ListNode* cur = head_;
+  while (cur != nullptr) {
+    if (rand() % (++count) == 0) val = cur->val; 
+    cur = cur->next;  
+  } 
+  return val;  
+}
 ```
 
 Ref:
