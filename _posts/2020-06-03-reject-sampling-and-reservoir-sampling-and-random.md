@@ -111,5 +111,115 @@ int getRandom() {
 }
 ```
 
+ - Random
+ 
+```
+// 528. Random Pick with Weight
+vector<int> accumulate_sum_;    
+
+Solution(vector<int>& weights) {
+  for (const auto w : weights) {
+    accumulate_sum_.push_back(accumulate_sum_.empty()?w : accumulate_sum_.back()+w);
+  }
+  record_ = vector<int>(weights.size(), 0);  
+}
+    
+int pickIndex() {
+  const int random_weight = accumulate_sum_.back() * (static_cast<double>(rand()) / RAND_MAX);
+  const int index = upper_bound(accumulate_sum_.begin(), accumulate_sum_.end(), random_weight) - begin(accumulate_sum_);  
+      
+  return min(index, (int)accumulate_sum_.size());  
+}
+
+// 497. Random Point in Non-overlapping Rectangles
+vector<double> accumulate_sum_;
+vector<vector<int>> rects_;
+    
+double NumPoints(const vector<int>& rect) {
+  return (rect[2] + 1.0 - rect[0]) * (rect[3] + 1.0 - rect[1]);
+}
+    
+Solution(vector<vector<int>>& rects) {
+  rects_ = rects;
+  for (const auto rect : rects) {
+     accumulate_sum_.push_back(NumPoints(rect) + 
+                    (accumulate_sum_.empty()?0:accumulate_sum_.back()));
+  }  
+}
+    
+vector<int> pick() {
+  const double val = static_cast<double>(rand()) / RAND_MAX * accumulate_sum_.back();  
+  const int index = min((int)(rects_.size()-1), 
+                        (int)(lower_bound(accumulate_sum_.begin(), accumulate_sum_.end(),
+                                            val) - begin(accumulate_sum_)));
+  const auto rect = rects_[index];
+  const double width = (rect[2] - rect[0] + 1.0) * (static_cast<double>(rand()) / RAND_MAX);
+  const double height = (rect[3] - rect[1] + 1.0) * (static_cast<double>(rand()) / RAND_MAX);
+  return {rect[0] + min(int(floor(width)), rect[2] - rect[0]), rect[1] + min(int(floor(height)), rect[3] - rect[1])};  
+}
+
+// 710. Random Pick with Blacklist
+unordered_set<int> black_list_;
+vector<int> record_;
+int n_;
+    
+Solution(int N, vector<int>& blacklist) {
+  n_ = N;
+  for (const auto num : blacklist) 
+    black_list_.insert(num);
+  if (black_list_.size() * 2 > n_) {
+    for (int i = 0; i < n_; ++i) {
+      if (black_list_.find(i) == black_list_.end())
+        record_.push_back(i);  
+    }
+  }  
+}
+    
+int pick() {
+  if (!record_.empty()) {
+    const int index = min(floor(static_cast<double>(rand()) / RAND_MAX * record_.size()), record_.size() - 1.0);
+    return record_[index];   
+  } 
+  if (black_list_.empty()) return static_cast<double>(rand()) / RAND_MAX * n_;  
+  auto it = black_list_.begin();
+  int val = *it;  
+  while (black_list_.find(val) != black_list_.end()) {
+    val = floor(static_cast<double>(rand()) / RAND_MAX * n_);
+  }  
+  return val;  
+}
+
+// 519. Random Flip Matrix
+// Fisher–Yates shuffle: generate a random sequnce
+unordered_map<int, int> record_;
+int n_rows_;
+int n_cols_;
+int remain_;
+    
+Solution(int n_rows, int n_cols) {
+  n_rows_ = n_rows;
+  n_cols_ = n_cols;  
+  remain_ = n_rows * n_cols;  
+}
+    
+vector<int> flip() {
+  const int num = min(floor(static_cast<double>(rand()) / RAND_MAX * remain_), remain_ - 1.0);  
+  vector<int> res;
+  if (record_.find(num) != record_.end()) {
+    res.assign({record_[num] / n_cols_, record_[num] % n_cols_});   
+  } else {
+    res.assign({num/n_cols_, num%n_cols_});
+  } 
+  record_[num] = record_.find(remain_ - 1) == record_.end()? remain_-1:record_[remain_-1];   
+  --remain_;
+  return res;  
+}
+    
+void reset() {
+  remain_ = n_rows_ * n_cols_;
+  record_.clear();  
+}
+```
+
 Ref:
  - [Sampling iluustration](https://zhuanlan.zhihu.com/p/29178293)
