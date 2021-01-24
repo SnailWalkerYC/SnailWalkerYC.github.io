@@ -122,6 +122,46 @@ class FrontMiddleBackQueue {
     }
   }
 };
+
+// 1673. Find the Most Competitive Subsequence
+vector<int> mostCompetitive(vector<int>& nums, int k) {
+  deque<int> record;
+  for (int i = 0; i < nums.size(); ++i) {
+    while (!record.empty() && record.back() > nums[i]
+           && record.size() + nums.size() - i > k) {
+      record.pop_back();
+    }
+    record.push_back(nums[i]);
+  }
+  
+  vector<int> ans;
+  for (int i = 0; i < k; ++i) {
+    ans.push_back(record.front());
+    record.pop_front();
+  }
+  return ans;
+}
+
+// 862. Shortest Subarray with Sum at Least K
+  vector<int> acc_sum(A.size()+1, 0);
+  for (int i = 0; i < A.size(); ++i) {
+    acc_sum[i+1] = acc_sum[i] + A[i];
+  }
+  deque<int> record({0});
+  int ans = INT_MAX;    
+  for (int i = 1; i < acc_sum.size(); ++i) {
+    while (!record.empty() && acc_sum[i] - acc_sum[record.front()] >= K) {
+      ans = min(i - record.front(), ans);
+      record.pop_front();
+    }
+    while (!record.empty() && acc_sum[record.back()] >= acc_sum[i]) {
+      record.pop_back();
+    }
+    record.push_back(i);
+  }
+      
+  return ans == INT_MAX?-1:ans;
+}
 ```
 
 
