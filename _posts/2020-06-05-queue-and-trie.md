@@ -13,15 +13,15 @@ comments: false
 
 **queue:**  
 
-- init with list instead of default deque is fast. $queue<int, list<int>>$ is better.
-- Constructor like: $queue<int> que({1,2,3}); list/deque$
+- init with list instead of default deque is fast. queue<int, list<int>>  is better.
+- Constructor like: queue<int> que({1,2,3}); list/deque
 - operation：empty, size, front（non-const reference）, back, push, pop.
 - Non-member: swap, swap two queue.
 
 **deque:**
 
-- Constructor:  $deque<int>(4, 5); 4 个 5；$ $deque<int>(iter.begin(), iter.end())$ 
-- push_front, push_back, insert, pop_front, pop_back, emplace, emplace_front, emplace_back, front, back, begin, end, r(c)begin, clear, at(boundary check), $[]$, resize, erase
+- Constructor:  deque<int>(4, 5); 4 个 5；deque<int>(iter.begin(), iter.end())
+- push_front, push_back, insert, pop_front, pop_back, emplace, emplace_front, emplace_back, front, back, begin, end, r(c)begin, clear, at(boundary check), [], resize, erase
 - Empty, size, swap, max_size, shrink_to_fit(an optimization skill), assign
 - Non-member: swap
 
