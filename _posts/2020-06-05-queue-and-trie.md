@@ -174,5 +174,243 @@ bool isFull() {
   return (front_idx_ - rear_idx_ == 1) || ((rear_idx_ == size_ - 1) && (front_idx_ == 0));      
 }
 };
+
+// 641. Design Circular Deque
+class MyCircularDeque {
+public:
+  
+int size_ = 0;
+int count_ = 0;
+int front_index_ = -1;
+int rear_index_ = -1;  
+vector<int> data_;  
+  
+/** Initialize your data structure here. Set the size of the deque to be k. */
+MyCircularDeque(int k) {
+  size_ = k;      
+  data_.resize(k);
+}
+    
+/** Adds an item at the front of Deque. Return true if the operation is successful. */
+bool insertFront(int value) {
+  if (isFull()) return false;
+  if (isEmpty()) {
+    front_index_ = rear_index_ = 0;
+  }
+  else {
+    front_index_ = (front_index_ - 1 + size_) % size_;
+  } 
+  data_[front_index_] = value;
+  ++count_;
+  return true;
+}
+    
+/** Adds an item at the rear of Deque. Return true if the operation is successful. */
+bool insertLast(int value) {
+  if (isFull()) return false;
+  if (isEmpty()) {
+    rear_index_ = front_index_ = 0; 
+  } else {
+    rear_index_ = (rear_index_ + 1) % size_;
+  }  
+  data_[rear_index_] = value;
+  ++count_;
+  return true;
+}
+    
+/** Deletes an item from the front of Deque. Return true if the operation is successful. */
+bool deleteFront() {
+  if (isEmpty()) return false;
+  front_index_ = (front_index_ + 1) % size_;
+  --count_;
+  return true;
+}
+    
+/** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+bool deleteLast() {
+  if (isEmpty()) return false;
+  rear_index_ = (rear_index_ - 1 + size_) % size_;
+  --count_;
+  return true;
+}
+    
+/** Get the front item from the deque. */
+int getFront() {
+  return isEmpty() ? -1: data_[front_index_];        
+}
+    
+/** Get the last item from the deque. */
+int getRear() {
+  return isEmpty() ? -1: data_[rear_index_];
+}
+    
+/** Checks whether the circular deque is empty or not. */
+bool isEmpty() {
+  return !count_;        
+}
+    
+/** Checks whether the circular deque is full or not. */
+bool isFull() {
+  return count_ == size_;        
+}
+};
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque* obj = new MyCircularDeque(k);
+ * bool param_1 = obj->insertFront(value);
+ * bool param_2 = obj->insertLast(value);
+ * bool param_3 = obj->deleteFront();
+ * bool param_4 = obj->deleteLast();
+ * int param_5 = obj->getFront();
+ * int param_6 = obj->getRear();
+ * bool param_7 = obj->isEmpty();
+ * bool param_8 = obj->isFull();
+ */
+
+// 353. Design Snake Game
+class SnakeGame {
+public:
+/** Initialize your data structure here.
+    @param width - screen width
+    @param height - screen height 
+    @param food - A list of food positions
+    E.g food = [[1,1], [1,0]] means the first food is positioned at [1,1], the second is at [1,0]. */
+  
+deque<pair<int, int>> snake_;
+unordered_map<int, bool> record_;
+  
+int width_ = 0;
+int height_ = 0;
+int food_index_ = 0;
+vector<vector<int>> food_;  
+
+SnakeGame(int width, int height, vector<vector<int>>& food) {
+  width_ = width;
+  height_ = height;
+  food_ = std::move(food);
+  snake_.emplace_back(make_pair(0, 0));
+}
+    
+/** Moves the snake.
+    @param direction - 'U' = Up, 'L' = Left, 'R' = Right, 'D' = Down 
+    @return The game's score after the move. Return -1 if game over. 
+    Game over when snake crosses the screen boundary or bites its body. */
+int move(string direction) {
+  auto tp = snake_.front();
+  
+  if (direction == "U") {
+    --tp.first;   
+  } else if (direction == "D") {
+    ++tp.first;
+  } else if (direction == "L") {
+    --tp.second;
+  } else {
+    ++tp.second;
+  }
+  
+  if (tp.first < 0 || tp.first >= height_ ||
+      tp.second < 0 || tp.second >= width_) {
+    return -1;
+  }
+  
+  snake_.emplace_front(tp);
+  if (food_index_ < food_.size() && (tp.first == food_[food_index_][0]
+      && tp.second == food_[food_index_][1])) {
+    ++food_index_;
+  } else {
+    const auto tmp = snake_.back();
+    record_[tmp.first * width_ + tmp.second] = false;
+    snake_.pop_back();
+    if (record_[tp.first * width_ + tp.second]) {
+      return -1;
+    }
+  }
+  record_[tp.first * width_ + tp.second] = true;
+  
+  return snake_.size() - 1;  
+}
+
+};
+
+/**
+ * Your SnakeGame object will be instantiated and called as such:
+ * SnakeGame* obj = new SnakeGame(width, height, food);
+ * int param_1 = obj->move(direction);
+ */
+```
+
+
+
+# Trie
+
+```c++
+// 208. Implement Trie (Prefix Tree)
+class Trie {
+public:
+
+struct Node {
+  bool is_word = false;
+  Node* child[26] = {nullptr};
+};  
+
+unique_ptr<Node> parent_;
+  
+/** Initialize your data structure here. */
+Trie() {
+  parent_ = unique_ptr<Node>(new Node());      
+}
+    
+/** Inserts a word into the trie. */
+void insert(string word) {
+  Node* cur_node = parent_.get();
+  int count = 0;
+  for (const auto c : word) {
+    if (!cur_node->child[c-'a']) {
+      cur_node->child[c-'a'] = new Node();
+    }
+    ++count;
+    if (count == word.size()) {
+      cur_node->child[c-'a']->is_word = true;
+    }  
+    cur_node = cur_node->child[c-'a'];
+  }
+}
+    
+/** Returns if the word is in the trie. */
+bool search(string word) {
+  Node* cur_node = parent_.get();
+  int count = 0;
+  for (const auto c : word) {
+    if (!cur_node->child[c-'a']) {
+      return false;
+    }
+    ++count;
+    if (count == word.size() && cur_node->child[c-'a']->is_word) return true; 
+    cur_node = cur_node->child[c-'a'];
+  }
+  return false;
+}
+    
+/** Returns if there is any word in the trie that starts with the given prefix. */
+bool startsWith(string prefix) {
+  Node* cur_node = parent_.get();
+  for (const auto c : prefix) {
+    if (!cur_node->child[c-'a']) {
+      return false;
+    }
+    cur_node = cur_node->child[c-'a'];
+  }
+  return true;        
+}
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
 ```
 
