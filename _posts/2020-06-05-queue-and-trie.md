@@ -9,7 +9,7 @@ comments: false
 
 
 
-# queue
+### queue
 
 **queue:**  
 
@@ -342,7 +342,7 @@ int move(string direction) {
 
 
 
-# Trie
+### Trie
 
 ```c++
 // 208. Implement Trie (Prefix Tree)
