@@ -412,5 +412,97 @@ bool startsWith(string prefix) {
  * bool param_2 = obj->search(word);
  * bool param_3 = obj->startsWith(prefix);
  */
+
+// 212. Word Search II
+class Solution {
+
+struct Node {
+  bool is_word = false;
+  Node* child[26] = {nullptr};
+};  
+  
+unique_ptr<Node> parent_ = make_unique<Node>();  
+unordered_set<string> result_set_;
+int m_ = 0;
+int n_ = 0;
+  
+void ConstructTrie(const vector<string>& words) {
+  for (const auto word : words) {
+    Node* cur_node = parent_.get();
+    for (int i = 0; i < word.size(); ++i) {
+      if (!cur_node->child[word[i]-'a']) {
+        cur_node->child[word[i]-'a'] = new Node();
+      }
+      if (i == word.size() - 1) {
+        cur_node->child[word[i]-'a']->is_word = true;
+      } 
+      cur_node = cur_node->child[word[i]-'a'];
+    }
+  }
+}
+
+bool IsEmpltyChild(const Node* head) {
+  for (int i = 0; i < 26; ++i) {
+    if (head->child[i]) return false;
+  }
+  return true;
+}  
+  
+const int dirs[2][4] = {{-1, 0, 1, 0}, {0, 1, 0, -1}};  
+vector<vector<char>> board_;
+  
+void Search(const int row, const int col, Node* cur_node,
+            string cur_str, vector<vector<char>>& visited) {
+  const int cur_idx = visited[row][col] - 'a';
+  Node* child = cur_node->child[cur_idx];
+  if (!child) return;
+  if (child->is_word) result_set_.insert(cur_str);
+  const auto c = visited[row][col];
+  visited[row][col] = '*';
+  
+  for (int i = 0; i < 4; ++i) {
+    const int new_row = row + dirs[0][i];
+    const int new_col = col + dirs[1][i];
+    if (new_row < 0 || new_row >= m_ || new_col < 0 || new_col >= n_) continue;
+    if (visited[new_row][new_col] == '*') continue;
+    if (child->child[visited[new_row][new_col] - 'a']) {
+      Node* node = child->child[visited[new_row][new_col] - 'a'];
+      const string new_str = cur_str + visited[new_row][new_col];
+      if (node != nullptr) {
+        Search(new_row, new_col, child, new_str, visited);
+      }
+    }
+  }
+  
+  visited[row][col] = c;
+  if (IsEmpltyChild(child)) {
+    delete child;
+    cur_node->child[cur_idx] = nullptr;
+  }
+}  
+  
+void SearchInTrie(const int row, const int col) {
+  Node* cur_node = parent_.get();
+  string cur_str(1, board_[row][col]);
+  Search(row, col, cur_node, cur_str, board_);
+}  
+  
+public:
+vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+  ConstructTrie(words);
+  m_ = board.size();
+  n_ = board[0].size();
+  board_ = board;
+  
+  for (int i = 0; i < board.size(); ++i) {
+    for (int j = 0; j < board[0].size(); ++j) {
+      SearchInTrie(i, j);
+    }
+  }
+  
+  return vector<string>(result_set_.begin(), result_set_.end());
+}
+  
+};
 ```
 
