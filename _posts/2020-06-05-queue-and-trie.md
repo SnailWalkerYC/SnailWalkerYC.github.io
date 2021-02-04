@@ -504,5 +504,395 @@ vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
 }
   
 };
+
+// 642. Design Search Autocomplete System
+class AutocompleteSystem {
+ private:
+  struct Node {
+    Node* child[27] = {nullptr};
+    int times = 0;
+  };
+  
+  void Reset(Node* parent) {
+    if (!parent) return;
+    for (int i = 0; i <= 26; ++i) {
+      Reset(parent->child[i]);
+    }
+    
+    delete parent;
+    parent = nullptr;
+  }
+  
+  void BuildTrie(const vector<string>& sentences, const vector<int>& times) {
+    parent_ = make_unique<Node>();
+    for (int i = 0; i < sentences.size(); ++i) {
+      auto* cur = parent_.get();
+      const auto sentence = sentences[i];
+      for (int j = 0; j < sentence.size(); ++j) {
+        if (sentence[j] == ' ') {
+          if (!cur->child[26]) {
+            cur->child[26] = new Node();
+          }
+          cur = cur->child[26];
+        } else {
+          if (!cur->child[sentence[j]-'a']) {
+            cur->child[sentence[j]-'a'] = new Node();
+          }
+          cur = cur->child[sentence[j]-'a'];
+        }
+        if (j == sentence.size() - 1) {
+          cur->times = times[i];
+        }
+      }
+    }
+  }
+  
+  class Comp {
+    public:
+      bool operator()(const pair<string, int>& num1, const pair<string, int>& num2) const {
+        return (num1.second > num2.second) || (num1.second == num2.second &&
+                                              num1.first < num2.first);
+      }
+  };
+  
+  void Search2(Node* root, string his, priority_queue<pair<string, int>, vector<pair<string, int>>, Comp>& que) {
+    if (!root) return;
+    
+    for (int i = 0; i < 26; ++i) {
+      if (root->child[i]) {
+        Search2(root->child[i], his + char('a'+i), que);
+      }
+    }
+    if (root->child[26]) {
+      Search2(root->child[26], his + " ", que);
+    } 
+    if (root->times > 0) {
+      que.push({his, root->times});
+    }
+    
+    if (que.size() > 3) que.pop();
+  }
+  
+  vector<string> Search(const char c) {
+    const int idx = c == ' '?26:c-'a';
+    if (!cur_->child[idx]) {
+      cur_->child[idx] = new Node();
+    }
+    cur_ = cur_->child[idx];
+    priority_queue<pair<string, int>, vector<pair<string, int>>, Comp> que;
+    history_ += c;
+    Search2(cur_, history_, que);
+    
+    vector<string> ans;
+    while (que.size() > 0) {
+      ans.push_back(que.top().first);
+      que.pop();
+    }
+    reverse(begin(ans), end(ans));
+    return ans;
+  }
+  
+  unique_ptr<Node> parent_;
+  Node* cur_ = nullptr;
+  bool start_ = false;
+  string history_ = "";
+  
+ public:
+  AutocompleteSystem(vector<string>& sentences, vector<int>& times) {
+    Reset(parent_.get());
+    BuildTrie(sentences, times);
+    cur_ = parent_.get();
+    history_ = "";
+  }
+    
+  vector<string> input(char c) {
+    if (c == '#') {
+      if (cur_) ++cur_->times;
+      history_ = "";
+      cur_ = parent_.get();
+      return {};
+    }
+    
+    return Search(c);
+  }
+};
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
+
+// 472. Concatenated Words
+class Solution {
+  struct Node {
+    bool is_word = false;
+    Node* child[26] = {nullptr};
+  };
+  
+  void BuildTrie(const vector<string>& words) {
+    parent_ = make_unique<Node>();
+    for (const auto& word : words) {
+      auto* cur = parent_.get();
+      for (int i = 0; i < word.size(); ++i) {
+        if (!cur->child[word[i]-'a']) {
+          cur->child[word[i]-'a'] = new Node();
+        }
+        cur = cur->child[word[i]-'a'];
+      }
+      cur->is_word = true;
+    }
+  }
+  
+  bool Find(const string word) {
+    auto* cur = parent_.get();
+    for (const auto c : word) {
+      if (!cur->child[c-'a']) return false;
+      cur = cur->child[c-'a'];
+    }
+    return cur->is_word;
+  }
+  
+  unique_ptr<Node> parent_;
+ public:
+  vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+    BuildTrie(words);
+    vector<string> ans;
+    
+    for (const auto word : words) {
+      if (!word.size()) continue; 
+      const int n = word.size();
+      bool dp[n+1];
+      memset(dp, false, sizeof(dp));
+      dp[0] = true;
+      for (int i = 0; i < word.size(); ++i) {
+        string str;
+        if (!dp[i]) continue;
+        auto* cur = parent_.get();
+        for (int j = i; j < word.size(); ++j) {
+          cur = cur->child[word[j]-'a'];
+          if (!cur) break;
+          if (dp[j+1] || (!i && j == word.size()-1)) continue;
+          if (cur->is_word) { 
+            dp[j+1] = true;
+          }  
+        }
+        if (dp[word.size()]) {
+          ans.push_back(word);
+          break;
+        }
+      } 
+    }
+    
+    return ans;
+  }
+};  
+
+// 1023. Camelcase Matching
+class Solution {
+ private:
+  struct Node {
+    unordered_map<char, Node*> child;
+    string data;
+  };
+  
+  unique_ptr<Node> parent_;
+  unordered_set<string> matchs_;
+  
+  void BuildTrie(const vector<string>& queries) {
+    parent_ = make_unique<Node>();
+    for (const auto& query : queries) {
+      auto* cur = parent_.get();
+      for (int i = 0; i < query.size(); ++i) {
+        if (cur->child.find(query[i]) == cur->child.end()) {
+          cur->child[query[i]] = new Node();
+        }
+        cur = cur->child[query[i]];
+      }
+      cur->data = query;
+    }
+  }
+  
+  void Find(const string& pattern, const int index, const Node* root) {
+    if (!root) return;
+    
+    if (index >= pattern.size()) {
+      if (root->data.size()) matchs_.insert(root->data);
+      for (int i = 0; i < 26; ++i) {
+        if (root->child.find('a'+i) != root->child.end()) {
+          Find(pattern, index + 1, root->child.at('a'+i));
+        }
+      }
+    } else {
+      if (root->child.find(pattern[index]) != root->child.end()) {
+          Find(pattern, index + 1, root->child.at(pattern[index]));
+      } 
+      for (int i = 0; i < 26; ++i) {
+        if (root->child.find('a'+i) != root->child.end())
+          Find(pattern, index, root->child.at('a'+i));
+      }
+    }
+  }
+  
+ public:
+  vector<bool> camelMatch(vector<string>& queries, string pattern) {
+    BuildTrie(queries); 
+    Find(pattern, 0, parent_.get());
+    vector<bool> ans;
+    
+    for (const auto query : queries) {
+      ans.push_back(matchs_.find(query) != matchs_.end());
+    }
+    return ans;
+  }
+};
+
+// 745. Prefix and Suffix Search
+// TLE
+class WordFilter {
+ private:
+  struct Node {
+    Node* child[26] = {nullptr};
+    int index = -1;
+  };
+  
+  void BuildTrie(const vector<string>& words) {
+    parent_ = make_unique<Node>();
+    int count = 0;
+    for (const auto& word : words) {
+      auto* cur = parent_.get();
+      for (const auto c : word) {
+        if (!cur->child[c-'a']) {
+          cur->child[c-'a'] = new Node();
+        }
+        cur = cur->child[c-'a']; 
+      }
+      cur->index = count;
+      ++count;
+    }
+  }
+  
+  Node* Find(const string& concat) {
+    auto* cur = parent_.get();
+    for (const auto c : concat) {
+      if (!cur->child[c-'a']) return nullptr;
+      cur = cur->child[c-'a'];
+    }
+    return cur;
+  }
+  
+  void Search(const Node* root, int& ans, const string& suffix, const int index) {
+    if (index >= suffix.size()) return;
+    if (!root) return;
+    
+    const auto c = suffix[index];
+    if (root->child[c-'a']) {
+      Search(root->child[c-'a'], ans, suffix, index+1);
+      const int new_index = root->child[c-'a']->index;
+      if (new_index >= 0 && index + 1 == suffix.size()) {
+        ans = max(ans, new_index);
+      }
+    } 
+    for (int i = 0; i < 26; ++i) {
+      Search(root->child[i], ans, suffix, 0);
+    }
+  }
+  
+  unique_ptr<Node> parent_;
+  vector<string> words_;
+  
+ public:
+  WordFilter(vector<string>& words) {
+    BuildTrie(words);   
+    words_ = words;
+  }
+    
+  int f(string prefix, string suffix) {
+    // Find the prefix and suffix has overlap
+    int ans = -1;
+    for (int i = 1; i <= min(prefix.size(), suffix.size()); ++i) {
+      // cout << i << " " << prefix.substr(prefix.size() - i, i) << " " << suffix.substr(0, i) << endl;
+      if (prefix.substr(prefix.size() - i, i) == suffix.substr(0, i)) {
+        const string concat = prefix.substr(0, prefix.size() - i) + suffix;
+        // cout << "Concat " << concat << endl;
+        if (Node* cur = Find(concat)) {
+          ans = max(ans, cur->index);
+        }
+      } 
+    }
+    const auto* root = Find(prefix);
+    // cout << prefix << " " << (root? -1:root->index) << " " << (root?"Found " : "Not found ") << suffix <<  " " << ans << endl;
+    Search(root, ans, suffix, 0);
+    
+    return ans;
+  }
+};
+// Suffix Wrap
+class WordFilter {
+ private:
+  struct Node {
+    Node* child[27] = {nullptr};
+    int index = -1;
+  };
+  
+  void BuildTrie(const vector<string>& words) {
+    parent_ = make_unique<Node>();
+    int count = 0;
+    for (const auto& pre_word : words) {
+      string word = "#" + pre_word;
+      for (int i = pre_word.size() - 1; i >= 0; --i) {
+        word = pre_word[i] + word;
+        Node* cur = parent_.get();
+        for (const auto c : word) {
+          if (c == '#') {
+            if (!cur->child[26]) {
+              cur->child[26] = new Node();
+            }
+            cur = cur->child[26];
+          } else {
+            if (!cur->child[c-'a']) 
+              cur->child[c-'a'] = new Node();
+            cur = cur->child[c-'a']; 
+          }
+          cur->index = count;
+        }
+      }
+      ++count;
+    }
+  }
+  
+  int Search(const string& concat) {
+    Node* cur = parent_.get();
+    int i = 0;
+    for (const auto c:concat) {
+      if (c == '#') {
+        if (!cur->child[26]) return -1;
+        cur = cur->child[26];
+      } else {
+        if (!cur->child[c-'a']) {
+          return -1;
+        }
+        cur = cur->child[c-'a'];
+      }
+      ++i;
+    }
+    return cur->index;
+  }
+  
+  unique_ptr<Node> parent_;
+  
+ public:
+  WordFilter(vector<string>& words) {
+    BuildTrie(words);   
+  }
+    
+  int f(string prefix, string suffix) {
+    return Search(suffix + "#" + prefix);
+  }
+};
+
+// Not write but simple
+// 1032. Stream of Characters https://leetcode.com/problems/stream-of-characters/
+// 1065. Index Pairs of a String https://leetcode.com/problems/index-pairs-of-a-string/
 ```
 
