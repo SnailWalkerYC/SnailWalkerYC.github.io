@@ -896,3 +896,11 @@ class WordFilter {
 // 1065. Index Pairs of a String https://leetcode.com/problems/index-pairs-of-a-string/
 ```
 
+```c++
+// Not solved yet
+// 336. Palindrome Pairs
+// https://leetcode.com/problems/palindrome-pairs/
+// 425. Word Squares
+// https://leetcode.com/problems/word-squares/
+```
+

@@ -214,6 +214,64 @@ class Solution {
   }
 };
 
+// Large space Union-Find, will calculate the result first then for the query.
+// 1627. Graph Connectivity With Threshold
+class Solution {
+ private:
+  class UnionFind {
+   public:
+    UnionFind(const int n, const int threshold) {
+      for (int i = 0; i <= n; ++i) 
+        record_.push_back(i);
+      rank_ = vector<int>(n+1, 0);
+      for (int t = threshold; t <=n; ++t) {
+        int m = 2;
+        while (m * t <= n) {
+          Union(t, m*t);
+          ++m;
+        }
+      }
+    }
+    
+    int Find(const int num) {
+      if (record_[num] != num) {
+        record_[num] = Find(record_[num]);
+      }
+      return record_[num];
+    }
+    
+    void Union(const int a, const int b) {
+      const int p_a = Find(a);
+      const int p_b = Find(b);
+      if (p_a == p_b) return;
+      if (rank_[p_a] > rank_[p_b]) {
+        record_[p_b] = p_a;
+      } else {
+        record_[p_a] = p_b;
+        if (rank_[p_a] == rank_[p_b]) {
+          ++rank_[p_b];
+        }
+      }
+    }
+    
+    bool IsInSameUnion(const int a, const int b) {
+      return Find(a) == Find(b);
+    }
+    
+    vector<int> record_;
+    vector<int> rank_;
+  };
+ public:
+  vector<bool> areConnected(int n, int threshold, vector<vector<int>>& queries) {
+    vector<bool> ans;
+    UnionFind uf(n, threshold+1);
+    for (const auto& query : queries) {
+      ans.emplace_back(uf.IsInSameUnion(query[0], query[1]));
+    }
+    return ans;
+  }
+};
+
 // 2D union find
 // Similar problem:
 // 959. Regions Cut By Slashes
@@ -683,6 +741,257 @@ class Solution {
     return last_ans;
   }
 };
+
+// 1168. Optimize Water Distribution in a Village
+class Solution {
+ private:
+  class UnionFind {
+   public:
+    UnionFind(const int n) {
+      rank_ = vector<int>(n, 0);
+      num_component_ = n;
+      for (int i = 0; i < n; ++i) {
+        record_.push_back(i);
+      }
+    }
+    
+    int Find(const int num) {
+      if (record_[num] != num) {
+        record_[num] = Find(record_[num]);
+      }
+      return record_[num];
+    }
+    
+    void Union(const int a, const int b, const int cost) {
+      const auto p_a = Find(a);
+      const auto p_b = Find(b);
+      if (p_a == p_b) return;
+      if (rank_[p_a] > rank_[p_b]) {
+        record_[p_b] = p_a;
+      } else {
+        record_[p_a] = p_b;
+        if (rank_[p_a] == rank_[p_b]) {
+          ++rank_[p_b];
+        }
+      }
+      cost_ += cost;
+      --num_component_;
+    }
+    
+    vector<int> rank_;
+    vector<int> record_;
+    int cost_ = 0;
+    int num_component_ = 0;
+  };
+ public:
+  int minCostToSupplyWater(int n, vector<int>& wells, vector<vector<int>>& pipes) {
+    for (int i = 0; i < wells.size(); ++i) {
+      pipes.push_back({0, i+1, wells[i]});
+    }      
+    sort(pipes.begin(), pipes.end(), [](const vector<int>& p1, const vector<int>& p2) {
+      return p1[2] < p2[2];
+    });
+    UnionFind uf(n+1);
+    for (const auto& pipe : pipes) {
+      uf.Union(pipe[0], pipe[1], pipe[2]);
+      if (uf.num_component_ == 1) break;
+    }
+    return uf.cost_;
+  }
+}
+
+// 1631. Path With Minimum Effort
+// Dijkstra's
+class Solution {
+ public:
+  int minimumEffortPath(vector<vector<int>>& heights) {
+    const int &rows = heights.size();
+    const int &cols = heights.empty() ? 0 : heights[0].size();
+    if (!rows || !cols) return 0;
+    vector<vector<int>> efforts(rows, vector<int>(cols, INT_MAX));
+    efforts[0][0] = 0;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> search_nodes;
+    search_nodes.push({0, 0});
+      
+    while (!search_nodes.empty()) {
+      const auto tp = search_nodes.top();
+      search_nodes.pop();
+      const auto &r = tp.second / 100;
+      const auto &c = tp.second % 100;
+      if (r == rows - 1 && c == cols - 1)
+        break;
+      static const int dir[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+      for (int i = 0; i < 4; ++i) {
+        const auto &new_r = dir[1][i] + r;
+        const auto &new_c = dir[0][i] + c;
+        if (new_r < 0 || new_r >= rows || new_c < 0 || new_c >= cols) 
+          continue;
+        const auto new_effort = max(abs(heights[r][c] - heights[new_r][new_c]), efforts[r][c]);
+        if (new_effort < efforts[new_r][new_c]) {
+          efforts[new_r][new_c] = new_effort;
+          search_nodes.push({new_effort, new_r*100 + new_c});
+        }
+      }
+    }
+    return efforts[rows-1][cols-1];
+  }
+};
+// The trick here is to convert the graph into edges.
+class Solution {
+ private:
+  class UnionFind {
+   public:
+    UnionFind(const int n) {
+      rank_ = vector<int>(n, 0);
+      cost_ = vector<int>(n, 0);
+      for (int i = 0; i < n; ++i) {
+        record_.push_back(i);
+      }
+    }
+    
+    int Find(const int num) {
+      if (record_[num] != num) {
+        record_[num] = Find(record_[num]);
+      }
+      return record_[num];
+    } 
+    
+    void Union(const int a, const int b, const int cost) {
+      const int p_a = Find(a);
+      const int p_b = Find(b);
+      if (p_a == p_b) return;
+      if (rank_[p_a] > rank_[p_b]) {
+        record_[p_b] = p_a;
+        cost_[p_a] += cost;
+      } else {
+        record_[p_a] = p_b;
+        if (rank_[p_a] == rank_[p_b]) {
+          ++rank_[p_b];
+        }
+        cost_[p_b] += cost;
+      }
+    }
+    
+    vector<int> record_;
+    vector<int> rank_;
+    vector<int> cost_;
+  };
+ public:
+  int minimumEffortPath(vector<vector<int>>& heights) {
+    vector<vector<int>> costs;
+    UnionFind uf(heights.size() * heights[0].size());
+    const int row = heights.size();
+    const int col = heights[0].size();
+    for (int i = 0; i < row; ++i) {
+      for (int j = 0; j < col; ++j) {
+        if (i > 0) {
+          costs.push_back({(i-1)*col + j, 
+                          i*col +j, abs(heights[i][j] - heights[i-1][j])});
+        }
+        if (j > 0) {
+          costs.push_back({i*col + j - 1, 
+                          i*col +j, abs(heights[i][j] - heights[i][j-1])});
+        }
+      }
+    }
+    sort(begin(costs), end(costs), [](const vector<int>& a, const vector<int>& b) {
+      return a[2] < b[2];
+    });
+    int cost = INT_MAX;
+    const int target0 = 0;
+    const int target1 = heights.size() * heights[0].size() - 1;
+    for (const auto edge : costs) {
+      uf.Union(edge[0], edge[1], edge[2]);
+      if (uf.Find(target0) == uf.Find(target1)) {
+        return edge[2];
+      }
+    }
+    return 0;
+  }
+};
+// 1102. Path With Maximum Minimum Value
+class Solution { 
+ public:
+  class UnionFind {
+   public: 
+    UnionFind(const int n) {
+      for (int i = 0; i < n; ++i) 
+        record_.emplace_back(i);
+      rank_ = vector<int>(n, 0);
+    }
+    
+    int Find(const int num) {
+      if (num != record_[num])
+        record_[num] = Find(record_[num]);
+      return record_[num];
+    }
+    
+    void Union(const int a, const int b) {
+      const int p_a = Find(a);
+      const int p_b = Find(b);
+      if (p_a == p_b) return;
+      if (rank_[p_a] > rank_[p_b]) {
+        record_[p_b] = p_a;
+      } else {
+        record_[p_a] = p_b;
+        if (rank_[p_a] == rank_[p_b]) {
+          ++rank_[p_b];
+        }
+      }
+    }
+    
+    vector<int> record_;
+    vector<int> rank_;
+  };
+  
+  int maximumMinimumPath(vector<vector<int>>& A) {
+    const int row = A.size();
+    const int col = A[0].size();
+    vector<vector<int>> edges;
+    for (int i = 0; i < row; ++i) {
+      for (int j = 0; j < col; ++j) {
+        if (i > 0) {
+          edges.push_back({(i-1)*col + j, i*col + j, min(A[i-1][j], A[i][j])});
+        }
+        if (j > 0) {
+          edges.push_back({i*col+j-1, i*col+j, min(A[i][j-1], A[i][j])});
+        }
+      }
+    }
+    sort(begin(edges), end(edges), [](const vector<int>& a, const vector<int>& b) {
+      return a[2] > b[2];
+    });
+    UnionFind uf(row * col);
+    int max_val = 0;
+    for (const auto& edge : edges) {
+      if (uf.Find(0) == uf.Find(row*col-1)) {
+        return max_val;
+      }
+      uf.Union(edge[0], edge[1]);
+      max_val = edge[2];
+    }
+    return 0;
+  }
+};
+
+```
+
+
+
+```c++
+// Problem not solved yet.
+// 1697. Checking Existence of Edge Length Limited Paths
+// https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths/
+// 1724. Checking Existence of Edge Length Limited Paths II
+// https://leetcode.com/problems/checking-existence-of-edge-length-limited-paths-ii/
+// 1632. Rank Transform of a Matrix
+// https://leetcode.com/problems/rank-transform-of-a-matrix/
+// 1579. Remove Max Number of Edges to Keep Graph Fully Traversable
+// https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
+// 803. Bricks Falling When Hit
+// https://leetcode.com/problems/bricks-falling-when-hit/
+// 399. Evaluate Division
+// https://leetcode.com/problems/evaluate-division/
 
 ```
 
