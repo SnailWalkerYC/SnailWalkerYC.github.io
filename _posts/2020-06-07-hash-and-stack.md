@@ -1,6 +1,6 @@
 ---
 layout: post
-title: hash
+title: hash and stack
 date: 2020-06-07
 categories: [technology]
 tags: [tech]

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: union find and ordered map
+title: union find
 date: 2020-06-06
 categories: [technology]
 tags: [tech]
@@ -992,6 +992,9 @@ class Solution {
 // https://leetcode.com/problems/bricks-falling-when-hit/
 // 399. Evaluate Division
 // https://leetcode.com/problems/evaluate-division/
-
+// 928. Minimize Malware Spread II
+// https://leetcode.com/problems/minimize-malware-spread-ii/
+// 947. Most Stones Removed with Same Row or Column
+// https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 ```
 
