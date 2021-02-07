@@ -448,7 +448,7 @@ bool IsEmpltyChild(const Node* head) {
   return true;
 }  
   
-const int dirs[2][4] = {{-1, 0, 1, 0}, {0, 1, 0, -1}};  
+const int dirs[2][4] = { {-1, 0, 1, 0}, {0, 1, 0, -1} };  
 vector<vector<char>> board_;
   
 void Search(const int row, const int col, Node* cur_node,
