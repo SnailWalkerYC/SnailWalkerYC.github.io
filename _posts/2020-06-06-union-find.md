@@ -820,7 +820,7 @@ class Solution {
       const auto &c = tp.second % 100;
       if (r == rows - 1 && c == cols - 1)
         break;
-      static const int dir[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+      static const int dir[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
       for (int i = 0; i < 4; ++i) {
         const auto &new_r = dir[1][i] + r;
         const auto &new_c = dir[0][i] + c;
