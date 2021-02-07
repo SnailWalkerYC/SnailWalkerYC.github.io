@@ -374,7 +374,7 @@ class Solution {
         record[grid[i][j]] = make_pair(i, j);
       }
     }
-    const int dirs[2][4] = {{-1, 0, 1, 0}, {0, 1, 0, -1}};
+    const int dirs[2][4] = { {-1, 0, 1, 0}, {0, 1, 0, -1} };
     for (int i = 0; i < grid.size()*grid.size(); ++i) {
       const auto num = record[i];
       for (int j = 0; j < 4; ++j) {
