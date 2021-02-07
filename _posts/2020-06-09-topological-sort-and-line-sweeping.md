@@ -207,6 +207,94 @@ class Solution {
 };
 
 // 1203. Sort Items by Groups Respecting Dependencies
-
+class Solution {
+ public:
+  vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+    
+    int gp_id = m;
+    for (int i = 0; i < group.size(); ++i) { 
+      if (group[i] == -1) {
+        group[i] = gp_id++;    
+      }
+    }
+    
+    // Items indegrees & edges
+    unordered_map<int, unordered_set<int>> item_edges;
+    vector<int> item_indegrees(n, 0);
+    // Group indegrees & edges
+    unordered_map<int, unordered_set<int>> group_edges;
+    vector<int> group_indegrees(gp_id, 0);
+    
+    unordered_map<int, unordered_set<int>> group_item_mp;
+    
+    for (int i = 0; i < n; ++i) {
+      for (const auto& v:beforeItems[i]) {
+        item_edges[v].insert(i);
+        ++item_indegrees[i];
+        if (group[v] != group[i]) {
+          const auto [_, status] = group_edges[group[v]].insert(group[i]);
+          if (status)
+            ++group_indegrees[group[i]];
+        }
+      }
+      group_item_mp[group[i]].insert(i);
+    }
+    
+    queue<int> group_que;
+    vector<int> group_order;
+    for (int i = 0; i < group_indegrees.size(); ++i) {
+      if (!group_indegrees[i]) {
+        group_que.push(i);
+      }
+    }
+    while (!group_que.empty()) {
+      const auto tp = group_que.front();
+      
+      group_order.push_back(tp);
+      group_que.pop();
+      for (const auto& g:group_edges[tp]) {
+        // cout << "visit " << tp << " " << g << " " << group_indegrees[g] << endl;
+        --group_indegrees[g];
+        if (!group_indegrees[g])
+          group_que.push(g);
+      }
+    }
+    /*
+    cout << "Group order size is " << group_order.size() << 
+        " " << group_indegrees.size() << endl; */
+    if (group_order.size() != group_indegrees.size()) {
+      return {};
+    }
+    
+    vector<int> ans;
+    for (const auto& gp_id : group_order) {
+      const auto items = group_item_mp[gp_id];
+      queue<int> item_que;
+      for (const auto& item : items) {
+        if (!item_indegrees[item]) {
+          item_que.push(item);
+        }
+      }
+      vector<int> cur_order;
+      while (!item_que.empty()) {
+        const auto tp = item_que.front();
+        cur_order.push_back(tp);
+        item_que.pop();
+        for (const auto& i : item_edges[tp]) {
+          --item_indegrees[i];
+          if (!item_indegrees[i] &&
+             items.find(i) != items.end()) 
+            item_que.push(i);
+        }
+      }
+      if (cur_order.size() != items.size()) {
+        return {};
+      }
+      ans.insert(ans.end(), cur_order.begin(), cur_order.end());
+    }
+    
+    return ans;
+  }
+};
 ```
 
