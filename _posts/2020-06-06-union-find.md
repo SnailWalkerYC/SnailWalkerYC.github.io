@@ -308,7 +308,7 @@ class Solution {
       
     int num_connected = 0;
     // [x, y]
-    int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+    int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
     vector<int> ans;
       
     for (const auto& position : positions) {
