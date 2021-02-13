@@ -11,6 +11,9 @@ comments: false
 
 ### Ordered Map(ordered set)
 
+- Ordered Map: **at**(can be used in const map; and throw exception)，比[]好在如果不存在就会抛出异常，但是[]不会抛出，不存在就插入; begin, cbegin, end, cend, crbegin, crend -> bidirectional; **clear**: remove all elements and set size to 0. Could use the "**count**" to calculate. **Emplace_hint:** return the position of the same member. **equal_range:** pair of [lower_bound, upper_bound]. **Find:** find the iterator, otherwise the end will be returned.   Insert: insert iterator的时候，结束的是不包括在里面的; key_comp, value_comp, lower_bound, upper_bound: 返回对比的结果。
+- 对于interval的常见套路：固定一个size k，进行添加和删除；使用iterator进行操作，可以实现log(n)的效果。另外有个套路用来记录interval的：https://leetcode.com/problems/meeting-rooms-ii/discuss/203658/HashMapTreeMap-resolves-Scheduling-Problem
+
 ```c++
 // 220. Contains Duplicate III
 class Solution {
@@ -159,7 +162,31 @@ class Solution {
   }
 };
 
-
+// 729. My Calendar I
+// 731. My Calendar II
+class MyCalendarTwo {
+ private:
+  map<int, int> record_;
+  int threshold_ = 2;
+  
+ public:
+  MyCalendarTwo() {}
+    
+  bool book(int start, int end) {
+    ++record_[start];    
+    --record_[end];
+    int count = 0;
+    for (const auto& [ts, num] : record_) {
+      count += num;
+      if (count > threshold_) {
+        --record_[start];
+        ++record_[end];
+        return false;
+      }
+    }
+    return true;
+  }
+};
 ```
 
 
