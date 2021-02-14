@@ -187,6 +187,174 @@ class MyCalendarTwo {
     return true;
   }
 };
+
+// 715. Range Module
+class RangeModule {
+  map<int, int> record_;
+ public:
+  RangeModule() {
+        
+  }
+    
+  void addRange(int left, int right) {
+    auto lower_it = record_.lower_bound(left);
+    auto upper_it = record_.upper_bound(right);
+    if (lower_it != record_.begin()) {
+      --lower_it;
+      if (lower_it->second < left) ++lower_it;
+    }
+    if (lower_it != upper_it) {
+      left = min(left, lower_it->first);
+      right = max(right, (--upper_it)->second);
+      record_.erase(lower_it, ++upper_it);
+    }
+    record_[left] = right;
+  }
+    
+  bool queryRange(int left, int right) {
+    auto it = record_.upper_bound(left);
+    if (it == record_.begin() || (--it)->second < right)
+      return false;
+    return true;
+  }
+    
+  void removeRange(int left, int right) {
+    auto it1 = record_.upper_bound(left);
+    auto it2 = record_.upper_bound(right);
+    if (it1 != record_.begin()) {
+      --it1;
+      if (it1->second < left) {
+        ++it1;
+      }
+    }
+    if (it1 == it2) return;
+    int l1 = min(left, it1->first);
+    int r2 = max(right, (--it2)->second);
+    record_.erase(it1, ++it2);
+    if (l1 != left) record_[l1] = left;
+    if (r2 != right) record_[right] = r2;
+  }
+};
+
+// 732. My Calendar III
+class MyCalendarThree {
+public:
+  map<int, int> record_;
+  
+  MyCalendarThree() {}
+    
+  int book(int start, int end) {
+    ++record_[start];
+    --record_[end];
+    int count = 0;
+    int max_count = 0;
+    for (auto it = record_.begin(); it != record_.end(); ++it) {
+      count += it->second;
+      max_count = max(count, max_count);
+    }
+    return max_count;
+  }
+};
+
+// 252. Meeting Rooms
+class Solution {
+ public:
+  static bool compareAll(const vector<int>& v1, const vector<int>& v2) {
+    return v1[0] < v2[0] || (v1[0]==v2[0] && v1[1] < v2[1]);
+  }
+  bool canAttendMeetings(vector<vector<int>>& intervals) {
+    if (!intervals.size()) {
+      return true;
+    }
+    sort(intervals.begin(), intervals.end(), compareAll);    
+    int cur_max = INT_MIN;    
+    for (auto ele: intervals) {
+      if (ele[0] < cur_max) {
+        return false;
+      }
+      cur_max = ele[1];
+    }
+    return true;
+  }
+  
+  bool canAttendMeetings2(vector<vector<int>>& intervals) {
+    map<int, int> intervals_mp;
+    for (const auto& interval : intervals) {
+      ++intervals_mp[interval[0]];
+      --intervals_mp[interval[1]];
+    }
+    int count = 0;
+    for (const auto& interval : intervals_mp) {
+      count += interval.second;
+      if (count > 1) return false;
+    }
+    return true;
+  }
+};
+
+// 253. Meeting Rooms II
+int minMeetingRooms(vector<vector<int>>& intervals) {
+  map<int, int> record;
+  for (const auto& interval : intervals) {
+    ++record[interval[0]];
+    --record[interval[1]];
+  }
+  int count = 0;
+  int max_count = 0;
+  for (const auto& interval : record) {
+    count += interval.second;
+    max_count = max(max_count, count);
+  }
+  return max_count;
+}
+
+// 56. Merge Intervals
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+  map<int, int> rec_int;
+  for (auto inter: intervals) {
+    if (rec_int.find(inter[0]) == rec_int.end() ||
+      rec_int[inter[0]] < inter[1]) {
+      rec_int[inter[0]] = inter[1];
+    }
+  }
+  vector<vector<int>> res_int;
+  for (auto ele:rec_int) {
+    if (!res_int.size() || res_int.back()[1] < ele.first) {
+      res_int.push_back(vector<int>({ele.first,ele.second}));
+    }
+    else {
+      int left = res_int.back()[0];
+      int right = max(res_int.back()[1], ele.second);
+      res_int.pop_back();
+      res_int.push_back(vector<int>({left, right}));
+    }
+  }
+  return res_int;
+}
+
+// 57. Insert Interval
+vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
+  auto it=intervals.begin();
+  while(it!=intervals.end()&&newInterval.start>it->start){
+    ++it;
+  }
+  intervals.insert(it,newInterval);
+  vector<Interval>ans;
+  for(const auto interval: intervals){
+    if(ans.empty() || ans.back().end<interval.start){
+      ans.push_back(interval);
+    }
+    else {
+      ans.back().end=max(ans.back().end,interval.end);
+    }    
+ }
+ return ans;
+}
+
+// 
+
+// To do problems:
+// 1606, 975, 699, 683.
 ```
 
 
