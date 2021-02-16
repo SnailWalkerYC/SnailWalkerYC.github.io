@@ -343,6 +343,45 @@ vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& v
   return ans;
 }
 
+// 332. Reconstruct Itinerary
+class Solution {
+ public:
+  bool find_ = false;
+  vector<string> ans_;
+  
+  void FindItinerary(const unordered_map<string, set<string>>& edges,
+                     const string& stt, unordered_map<string, int>& count,
+                     vector<string> ans) {
+    ans.push_back(stt);
+    if (!count.size()) {
+      find_ = true;
+      ans_ = ans;
+    }
+    if (find_) return;
+    if (!edges.count(stt)) return;
+    for (const auto& t : edges.at(stt)) {
+      const auto& str = stt + t;
+      if (!count.count(str)) continue;
+      --count[str];
+      if (count[str] <= 0) count.erase(str);
+      FindItinerary(edges, t, count, ans);
+      ++count[str];
+    }
+  }
+  
+  vector<string> findItinerary(vector<vector<string>>& tickets) {
+    unordered_map<string, set<string>> edges;
+    unordered_map<string, int> count;
+    for (const auto& edge : tickets) {
+      edges[edge[0]].emplace(edge[1]);
+      ++count[edge[0]+edge[1]];
+    }
+    vector<string> ans;
+    FindItinerary(edges, "JFK", count, ans);
+    return ans_;
+  }
+};
+
 // Good problem: 631. Design Excel Sum Formula
 To 854. 
 ```

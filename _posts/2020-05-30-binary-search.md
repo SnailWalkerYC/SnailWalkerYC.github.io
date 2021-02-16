@@ -10,6 +10,7 @@ comments: false
 
 
 - Basic template: stt + 1; stt + (fin - stt)/2; get result from stt and fin.
+- 理论：二分查找，通过二分查找，trie，KMP，哈希表来进行；遍历排序，heap，quick sort；数组类型的就是前缀后缀，以及单调栈全部过一遍。
 
 ```c++
 
@@ -41,6 +42,136 @@ int firstBadVersion(int n) {
   if (isBadVersion(fin_idx)) return fin_idx; 
   return -1; 
 } 
+```
+
+- **1755 Closest Subsequence Sum**
+
+```c++
+void GetSum(const vector<int>& nums, const int target, const int idx, 
+            const int cur, unordered_set<int>& s) {
+  if (idx > target) {
+    s.insert(cur);
+    return;
+  }
+  GetSum(nums, target, idx+1, cur, s);
+  GetSum(nums, target, idx+1, cur + nums[idx], s);
+}
+  
+int minAbsDifference(vector<int>& nums, int goal) {
+  unordered_set<int> sum1;
+  unordered_set<int> sum2;  
+  GetSum(nums, nums.size()/2, 0, 0, sum1);
+  GetSum(nums, nums.size() - 1, nums.size()/2+1, 0, sum2);  
+  vector<int> half_vec(sum1.begin(), sum1.end());
+  sort(half_vec.begin(), half_vec.end());  
+  int min_val = INT_MAX;
+  for (const auto& num : sum2) {
+    int idx = lower_bound(half_vec.begin(), half_vec.end(), 
+                          goal - num) - half_vec.begin(); 
+    if (idx < half_vec.size()) 
+      min_val = min(min_val, abs(goal - half_vec[idx] - num));
+    if (idx > 0)
+      min_val = min(min_val, abs(goal - half_vec[idx-1] - num));
+  }
+  return min_val;
+}
+```
+
+- **Search for the minmax and maxmin**
+
+```c++
+// 1760 Minimum Limit of Balls in a Bag
+// Solution: https://leetcode-cn.com/problems/minimum-limit-of-balls-in-a-bag/solution/dai-zi-li-zui-shao-shu-mu-de-qiu-by-zero-upwe/
+// Looking for left BS framework
+/*
+L = 最小的可能值；
+R = 最大的可能值；
+while (L < R)
+{
+    mid = (L + R) >> 1;
+    if (检查发现，mid是ok的)
+        R = mid;
+    else
+        L = mid + 1;
+}
+return L;
+*/
+
+int minimumSize(vector<int>& nums, int maxOperations) {
+  int left = 1;
+  int right = 1e9;
+  int mid;
+  while (left + 1 < right) {
+    mid = left + (right - left) / 2;
+    int cur = 0;
+    for (const auto& num : nums) {
+      cur += ceil((num*1.0)/mid) - 1;
+    }
+    // cout << cur << " " << mid << endl;
+    if (cur <= maxOperations) {
+      right = mid;
+    } else if (cur > maxOperations) {
+      left = mid;
+    }
+  }
+  int cur = 0;
+  for (const auto& num : nums) {
+    cur += ceil((num*1.0)/left) - 1;
+  }
+  if (cur < maxOperations) return left;
+  return right;
+}
+
+int minimumSize(vector<int>& nums, int maxOperations) {
+  int left = 1;
+  int right = 1e9;
+  int mid;
+  while (left < right) {
+    mid = left + (right - left) / 2;
+    int cur = 0;
+    for (const auto& num : nums) {
+      cur += ceil((num*1.0)/mid) - 1;
+    }
+    if (cur > maxOperations) {
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+  return left;
+}
+
+// 1552 Magnetic force between two balls
+int Check(const vector<int>& position, const int m, const int dis) {
+  int idx = 0;
+  int cnt = 1;
+  int stt = 0;
+  while (idx < position.size()) {
+    if (position[idx] - position[stt] >= dis) {
+      ++cnt;
+      stt = idx;
+    } else {
+      ++idx;
+    }
+  }
+  return cnt >= m?-1:0;
+}
+  
+int maxDistance(vector<int>& position, int m) {
+  int left = 1;
+  int right = 1e9;
+  int mid;
+  sort(begin(position), end(position));
+  while (left + 1 < right) {
+    mid = left + (right - left) / 2;
+    if (Check(position, m, mid) < 0) {
+      left = mid;
+    } else {
+      right = mid;
+    }
+  }
+  return left;
+}
 ```
 
 - **Search for range** 
