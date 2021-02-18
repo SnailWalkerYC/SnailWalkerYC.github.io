@@ -300,3 +300,60 @@ class Solution {
 
 ### Line Sweep
 
+```c++
+// 1272. Remove Interval
+vector<vector<int>> removeInterval(vector<vector<int>>& intervals, vector<int>& toBeRemoved) {
+  int idx = 0;
+  vector<vector<int>> ans;
+  while (idx < intervals.size()) {
+    if (toBeRemoved[0] >= intervals[idx][1] ||
+        toBeRemoved[1] <= intervals[idx][0]) {
+      ans.emplace_back(intervals[idx]);
+    } else {
+      if (toBeRemoved[0] > intervals[idx][0]) {
+        ans.emplace_back(vector<int>({intervals[idx][0], toBeRemoved[0]}));
+      } 
+      if (toBeRemoved[1] < intervals[idx][1]) {
+        ans.emplace_back(vector<int>({toBeRemoved[1], intervals[idx][1]}));
+      } 
+    } 
+    ++idx;
+  }
+  return ans;
+}
+
+// 391. Perfect Rectangle
+// Method 1: 用几何学面积和顶点来判断
+bool isRectangleCover(vector<vector<int>>& rectangles) {
+  map<pair<int, int>, int> pts;
+  int area = 0;
+  int tp_x = INT_MIN;
+  int tp_y = INT_MIN;
+  int bm_x = INT_MAX;
+  int bm_y = INT_MAX;
+  for (const auto& rectangle:rectangles) {
+    ++pts[{rectangle[0], rectangle[1]}];
+    ++pts[{rectangle[0], rectangle[3]}];
+    ++pts[{rectangle[2], rectangle[3]}];
+    ++pts[{rectangle[2], rectangle[1]}];
+    area += (rectangle[3]-rectangle[1]) * (rectangle[2]-rectangle[0]);
+    tp_x = max(rectangle[2], tp_x);
+    tp_y = max(rectangle[3], tp_y);
+    bm_x = min(rectangle[0], bm_x);
+    bm_y = min(rectangle[1], bm_y);
+  }
+  if (area != (tp_x - bm_x)*(tp_y - bm_y))
+    return false;
+  int cnt = 0;
+  ++pts[{tp_x, tp_y}];
+  ++pts[{tp_x, bm_y}];
+  ++pts[{bm_x, tp_y}];
+  ++pts[{bm_x, bm_y}];
+  for (const auto& [_, num] : pts) 
+    if (num % 2) return false;
+  return true;
+}
+// Method 2: sweep line
+
+```
+
