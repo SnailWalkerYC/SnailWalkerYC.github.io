@@ -34,11 +34,13 @@ comments: false
 
 ## Linked List
 
+链表主要是对于数据合并可以进行很好的操作，不过如果是unordered_map + list这种双链表结构，是可以实现O(1)读取的。请看 [Linked List Summary](http://yuchenspace.info/linked-list-summary/)
+
 
 
 ## Tree
 
-树是进行二分搜索查找极好的数据结构。比较高阶的就有：binary search tree，trie，binary indexed tree，segment tree。
+树是进行二分搜索查找极好的数据结构。比较高阶的就有：binary search tree，trie，binary indexed tree，segment tree。请看总结：[Tree]
 
 
 

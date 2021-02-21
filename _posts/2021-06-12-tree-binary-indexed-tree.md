@@ -1,11 +1,10 @@
 ---
 layout: post
-title: binary indexed tree
-date: 2019-06-02
+title: tree binary indexed tree
+date: 2021-06-12
 categories: [technology]
 tags: [tech]
 comments: false
-
 ---
 
 - 使用情况
