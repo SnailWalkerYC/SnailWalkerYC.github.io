@@ -1,7 +1,7 @@
 ---
 layout: post
-title: sliding window and heap
-date: 2020-06-11
+title: array sliding window
+date: 2020-06-04
 categories: [technology]
 tags: [tech]
 comments: false

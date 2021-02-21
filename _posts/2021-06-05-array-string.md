@@ -1,7 +1,7 @@
 ---
 layout: post
-title: two pointers and bit manipulation
-date: 2020-06-13
+title: array string
+date: 2021-06-05
 categories: [technology]
 tags: [tech]
 comments: false

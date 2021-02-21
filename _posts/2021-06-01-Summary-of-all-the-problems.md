@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Summary of all the problems
-date: 2020-05-26
+date: 2018-06-01
 categories: [technology]
 tags: [tech]
 comments: false
@@ -21,7 +21,11 @@ comments: false
 
 # Array 
 
-数组类知识点主要在于如何对于随机读取的线性结构进行数据的过滤处理，请看
+数组类知识点主要在于如何对于随机读取的线性结构进行数据的过滤处理，请看[Array Introduction](http://yuchenspace.info/array/)
+
+
+
+
 
  
 
