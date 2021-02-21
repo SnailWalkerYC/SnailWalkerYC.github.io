@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Summary of all the problems
-date: 2018-06-01
+date: 2021-06-01
 categories: [technology]
 tags: [tech]
 comments: false
