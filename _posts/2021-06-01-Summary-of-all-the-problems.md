@@ -40,11 +40,13 @@ comments: false
 
 ## Tree
 
-树是进行二分搜索查找极好的数据结构。比较高阶的就有：binary search tree，trie，binary indexed tree，segment tree。请看总结：[Tree]
+树是进行二分搜索查找极好的数据结构。比较高阶的就有：binary search tree，trie，binary indexed tree，segment tree。请看总结：[Tree](http://yuchenspace.info/tree/)
 
 
 
 ## Hash 
+
+哈希本质就是进行快速索引，以及对键值进行某种程度的管理。具体情况：[Hash]()
 
 
 
