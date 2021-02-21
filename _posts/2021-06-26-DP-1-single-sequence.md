@@ -1,11 +1,10 @@
 ---
 layout: post
-title: DP 1 (Sequence)
-date: 2020-05-29
+title: DP 1 single sequence
+date: 2021-06-26
 categories: [technology]
 tags: [coding]
 comments: false
-
 ---
 
 - **Sequence DP**

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: DP 2 (Two Sequence)
-date: 2020-05-28
+title: DP 2 two sequence
+date: 2021-06-27
 categories: [technology]
 tags: [coding]
 comments: false
