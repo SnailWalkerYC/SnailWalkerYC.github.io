@@ -19,13 +19,104 @@ comments: false
 
 
 
-# Array 
+# Data Structure
+
+数据结构基本上分为**数组、链表、树、哈希、栈、堆、设计**。
+
+
+
+
+## Array 
 
 数组类知识点主要在于如何对于随机读取的线性结构进行数据的过滤处理，请看[Array Introduction](http://yuchenspace.info/array/)
 
 
 
+## Linked List
 
+
+
+## Tree
+
+树是进行二分搜索查找极好的数据结构。比较高阶的就有：binary search tree，trie，binary indexed tree，segment tree。
+
+
+
+## Hash 
+
+
+
+## Stack
+
+
+
+## Heap
+
+
+
+## Design
+
+
+
+
+
+# Algorithms
+
+算法涉及大类，DP、greedy、graph、binary search、sort、divide & conquer。
 
  
+
+## DP
+
+
+
+## Greedy
+
+
+
+## Graph
+
+
+
+## Greedy
+
+
+
+## Binary Search
+
+
+
+## Sort
+
+
+
+## Divide & Conquer
+
+
+
+
+
+# Math
+
+
+
+## Bit manipulation
+
+
+
+## Geometry
+
+
+
+## Line Sweep
+
+
+
+## Probability 
+
+
+
+## Number Theory
+
+
 

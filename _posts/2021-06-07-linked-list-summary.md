@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Linked List Summary
-date: 2019-05-01
+title: linked list summary
+date: 2021-06-07
 categories: [technology]
 tags: [coding]
 comments: false
