@@ -1,7 +1,7 @@
 ---
 layout: post
-title: deque
-date: 2020-06-04
+title: heap deque
+date: 2021-06-22
 categories: [technology]
 tags: [tech]
 comments: false
