@@ -52,19 +52,19 @@ comments: false
 
 ## Stack
 
-Stack栈，是一种后进先出的数据结构，在进行递归的时候，很适合使用，请看 [Stack]()。
+Stack栈，是一种后进先出的数据结构，在进行递归的时候，很适合使用，请看 [Stack](http://yuchenspace.info/stack/)。
 
 
 
 ## Heap
 
-Heap是一种先进先出的数据结构，当然经过了改进，后面有了双向的deque和极值在堆顶的特殊结构，请看[Heap]()。
+Heap是一种先进先出的数据结构，当然经过了改进，后面有了双向的deque和极值在堆顶的特殊结构，请看[Heap](http://yuchenspace.info/heap/)。
 
 
 
 ## Design
 
-
+系统设计其实是算法和数据结构的结合，但是也可以理解为对各种数据组合之后创造了新的数据结构，这个数据结构支持某些特殊的操作，具体请看：[Design]().
 
 
 
