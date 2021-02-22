@@ -1,7 +1,7 @@
 ---
 layout: post
 title: More Effective C++
-date: 2020-03-18
+date: 2020-11-02
 categories: [technology]
 tags: [book]
 comments: false
