@@ -1,7 +1,7 @@
 ---
 layout: post
 title: binary search
-date: 2020-05-30
+date: 2021-07-05
 categories: [technology]
 tags: [coding]
 comments: false

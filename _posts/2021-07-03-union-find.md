@@ -1,7 +1,7 @@
 ---
 layout: post
-title: union find
-date: 2020-06-06
+title: graph union find
+date: 2021-07-03
 categories: [technology]
 tags: [tech]
 comments: false
