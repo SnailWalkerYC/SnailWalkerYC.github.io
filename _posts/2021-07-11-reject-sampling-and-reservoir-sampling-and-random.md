@@ -1,7 +1,7 @@
 ---
 layout: post
 title: reject sampling and reservoir sampling and random
-date: 2020-06-03
+date: 2021-07-11
 categories: [technology]
 tags: [tech]
 comments: false
@@ -9,9 +9,9 @@ comments: false
 
  - 说明
  随机数部分，考察的是比如对一个形状进行均匀采样，或者从随机数A生成B。采样其中一种叫做“reject sampling”，直到采到需要的样本才停止，可以计算其期望。
- 
+
   - Reject Sampling
-  
+
 ```c++
 // 478. Generate Random Point in a Circle
 // Trick: uniform [0, 1] with rand()/RAND_MAX. radius needs sqrt.
@@ -46,7 +46,7 @@ int rand10() {
   }  
   return val % 10 + 1;  
 }
-``` 
+```
 
 Ref:
  - [Why sqrt?](https://www.cs.cornell.edu/courses/cs6630/2015fa/notes/pdf-transform.pdf )
@@ -56,7 +56,7 @@ Ref:
  - [More generalization](https://leetcode.com/problems/implement-rand10-using-rand7/discuss/150301/Three-line-Java-solution-the-idea-can-be-generalized-to-%22Implement-RandM()-Using-RandN()%22)
 
  - Reservoir Sampling
- 
+
 ```c++
  // 398. Random Pick Index
  
@@ -112,7 +112,7 @@ int getRandom() {
 ```
 
  - Random
- 
+
 ```
 // 528. Random Pick with Weight
 vector<int> accumulate_sum_;    
@@ -222,4 +222,5 @@ void reset() {
 ```
 
 Ref:
+
  - [Sampling iluustration](https://zhuanlan.zhihu.com/p/29178293)

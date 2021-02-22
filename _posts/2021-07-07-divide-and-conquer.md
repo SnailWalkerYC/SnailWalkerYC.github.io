@@ -1,7 +1,7 @@
 ---
 layout: post
-title: divide and conquer and recursion
-date: 2020-06-10
+title: divide and conquer
+date: 2021-07-07
 categories: [technology]
 tags: [tech]
 comments: false

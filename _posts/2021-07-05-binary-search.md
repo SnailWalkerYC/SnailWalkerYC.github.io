@@ -13,7 +13,6 @@ comments: false
 - 理论：二分查找，通过二分查找，trie，KMP，哈希表来进行；遍历排序，heap，quick sort；数组类型的就是前缀后缀，以及单调栈全部过一遍。
 
 ```c++
-
 // 704. Binary Search 
 int search(vector<int>& nums, int target) { 
   int stt_idx = 0; 
