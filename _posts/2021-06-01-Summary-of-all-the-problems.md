@@ -100,35 +100,47 @@ Heap是一种先进先出的数据结构，当然经过了改进，后面有了�
 
 ## Sort
 
+排序是个很有用的东西，C++里面有集成的排序了，还有稳定排序。请看：[sort](http://yuchenspace.info/sort/)
+
 
 
 ## Divide & Conquer
 
-
+分而治之是一种编程集大成的思想，具体参考: [Divide & Conquer](http://yuchenspace.info/divide-and-conquer/)
 
 
 
 # Math
 
+数学也是经常考的一个专题，这个专题目前总结了位操作、几何学、扫描线、概率、数学理论。
+
 
 
 ## Bit manipulation
+
+位操作，进行各种位操作，可以实现意想不到的组合，具体请看：[Bit Manipulation](http://yuchenspace.info/bit-manipulation/)
 
 
 
 ## Geometry
 
+几何学方面，对于求取轮廓之类的有较大的帮助，具体可以看：[Geometry](http://yuchenspace.info/geometry/)
+
 
 
 ## Line Sweep
+
+扫描线对于求解区间问题是个大杀器，可以看：[Line Sweep](http://yuchenspace.info/line-sweeping/)
 
 
 
 ## Probability 
 
+这里主要是求解各种随机数，可以进行各种采样。请看: [Probability](http://yuchenspace.info/reject-sampling-and-reservoir-sampling-and-random/)
+
 
 
 ## Number Theory
 
-
+数学理论涉及各种数学的操作，脑筋急转弯等等，具体请看： [Theory](http://yuchenspace.info/number-theory-and-brainteaser-and-minimax/)
 
