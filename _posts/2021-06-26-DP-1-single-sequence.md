@@ -92,6 +92,7 @@ int lengthOfLIS(vector<int>& nums) {
 }
 
 // 5. Longest Palindromic Substring
+// LCS and expanding center.
 // Init 1, 2 characters & bottom to top & return maximum length of string
 string longestPalindrome(string s) {
   if (s.size() == 0) return "";
