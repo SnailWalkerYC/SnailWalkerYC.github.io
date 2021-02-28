@@ -45,5 +45,27 @@ class Solution {
     return min_val;
   }
 };
+
+// 53. Maximum Subarray
+tuple<int, int, int, int> MaxMergeSum(const vector<int>& nums, int left, int right) {
+  if (left == right) return make_tuple(nums[left], nums[left], 
+                             nums[left], nums[left]);
+  
+  const int mid = (right - left)/2 + left;
+  tuple<int, int, int, int> l_sums = MaxMergeSum(nums, left, mid);
+  tuple<int, int, int, int> r_sums = MaxMergeSum(nums, mid+1, right);
+  
+  const int ttl_sum = get<0>(l_sums) + get<0>(r_sums);
+  const int l_max_sum = max(get<1>(l_sums), get<0>(l_sums) + get<1>(r_sums));
+  const int r_max_sum = max(get<2>(l_sums)+get<0>(r_sums), get<2>(r_sums));
+  const int m_max_sum = max(max(get<3>(l_sums), get<3>(r_sums)), get<2>(l_sums) + get<1>(r_sums));
+
+  return make_tuple(ttl_sum, l_max_sum, r_max_sum, m_max_sum);
+}  
+  
+int maxSubArray(vector<int>& nums) {
+  return get<3>(MaxMergeSum(nums, 0, nums.size() - 1));
+}
+
 ```
 

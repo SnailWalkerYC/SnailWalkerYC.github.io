@@ -10,6 +10,74 @@ comments: false
 - **Sequence DP**
 
 ```c++
+// 53. Maximum Subarray
+// Dynamic programming
+// f(i)=max{f(i−1)+nums[i],nums[i]}
+int maxSubArray(vector<int>& nums) {
+  int cur_sum = nums[0];
+  int max_sum = nums[0];
+  for (int i = 1; i < nums.size(); ++i) {
+    cur_sum = max(cur_sum + nums[i], nums[i]);
+    max_sum = max(max_sum, cur_sum);
+  }
+  return max_sum;
+}
+// Kadane's algorithm
+// dp[i] = Math.max(dp[i - 1], 0) + nums[i]
+
+//42. Trapping Rain Water
+int trap(vector<int>& height) {
+  if (height.empty()) return 0;
+  
+  vector<int> left_height(height.size(), 0);
+  vector<int> right_height(height.size(), 0);
+  int max_left = height[0];
+  for (int i = 0; i < height.size(); ++i) {
+    max_left = max(height[i], max_left);
+    left_height[i] = max_left;
+  }
+  int max_right = height[height.size()-1];
+  for (int i = height.size()-1; i >= 0; --i) {
+    max_right = max(height[i], max_right);
+    right_height[i] = max_right;
+  }
+  int count = 0;
+  for (int i = 0; i < height.size(); ++i) {
+    count += min(left_height[i] - height[i], right_height[i] - height[i]);
+  }
+  return count;
+}
+
+// 84. Largest Rectangle in Histogram
+int largestRectangleArea(vector<int>& heights) {
+  if (heights.empty()) return 0;
+  
+  vector<int> left_index(heights.size(), 0);
+  vector<int> right_index(heights.size(), 0);
+  left_index[0] = -1;
+  right_index[heights.size()-1] = heights.size();
+  
+  for (int i = 1; i < heights.size(); ++i) {
+    int t = i - 1;
+    while (t >= 0 && heights[t] >= heights[i]) t = left_index[t];
+    left_index[i] = t;
+  }
+  
+  for (int i = heights.size() - 1; i >= 0; --i) {
+    int t = i + 1;
+    while (t < heights.size() && heights[t] >= heights[i])
+      t = right_index[t];
+    right_index[i] = t;
+  }
+  
+  int max_area = 0;
+  for (int i = 0; i < heights.size(); ++i) {
+    max_area = max(max_area, heights[i] * (right_index[i] - left_index[i] - 1));
+  }
+  
+  return max_area;
+}
+
 // 1770. Maximum Score from Performing Multiplication Operations
 bool init = false;
 int record[1001][1001];  
@@ -231,5 +299,37 @@ int longestValidParentheses(string s) {
   }
   return max_val;
 }
+// Stack solution.
+int longestValidParentheses(string s) {
+  stack<int> record;
+  int count = 0;
+  for (const auto& c : s) {
+    if (c == '(') record.push(count);
+    else {
+      if (record.empty()) record.push(count);
+      else {
+        if (s[record.top()] == '(')
+          record.pop();
+        else 
+          record.push(count);
+      }
+    }
+    ++count;
+  }
+  if (record.empty()) return s.size();
+  int a = s.size();
+  int max_len = 0;
+  while (!record.empty()) {
+    const int tp = record.top();
+    record.pop();
+    max_len = max(max_len, a - tp - 1);
+    a = tp;
+  }
+  max_len = max(max_len, a);
+  
+  return max_len;
+}
+
+
 ```
 
