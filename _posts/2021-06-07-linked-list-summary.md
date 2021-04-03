@@ -198,6 +198,11 @@ bool hasCycle(ListNode *head) {
 }
 
 // 142. Linked List Cycle II (2k-k=nr,k=nr, s=k-m, s=nr-m=(n-1)r+(r-m)
+// slow: a + b; fast: a + b + b + c. so a = c. 
+// https://www.cnblogs.com/hiddenfox/p/3408931.html
+// a + b + k1 (b + c) = 2[a + b + k2(b + c)]
+// a + b = (k1 - 2k2)(b + c) = k(b + c)
+// a = k(b + c) - b, so meet in the start point.
 ListNode *detectCycle(ListNode *head) {
   ListNode* fast_node = head;
   ListNode* slow_node = head;    
@@ -681,3 +686,4 @@ TreeNode* sortedListToBST(ListNode* head) {
   return SortListToBST(size);
 }
 ```
+
