@@ -330,6 +330,21 @@ int longestValidParentheses(string s) {
   return max_len;
 }
 
-
+// 1218. Longest Arithmetic Subsequence of Given Difference
+int longestSubsequence(vector<int>& arr, int diff) {
+  unordered_map<int, int> record;
+  for (const auto& num : arr) {
+    if (record.find(num - diff) != record.end()) {
+      record[num] = max(record[num], record[num - diff] + 1);
+    } else {
+      record[num] = max(record[num], 1);
+    }
+  }
+  int res = 0;
+  for_each(begin(record), end(record), [&](const pair<int, int>& num) {
+    res = max(num.second, res);
+  });
+  return res;
+}
 ```
 

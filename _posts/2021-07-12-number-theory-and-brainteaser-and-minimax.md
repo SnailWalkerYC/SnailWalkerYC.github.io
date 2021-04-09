@@ -9,6 +9,29 @@ comments: false
 
 
 
+### Number Theory
+
+```c++
+// 1819. Number of Different Subsequences GCDs
+int countDifferentSubsequenceGCDs(vector<int>& nums) {
+  vector<bool> record(200001, false);
+  int ans = 0;
+  for (const auto& num : nums) record[num] = true;
+  for (int i = 1; i <= 200000; ++i) {
+    int fst = -1;
+    for (int j = i; j <= 200000; j += i) {
+      if (record[j]) {
+        if (fst == -1) fst = j;
+        else fst = __gcd(fst, j);
+      }
+    }
+    ans += fst == i;
+  } 
+      
+  return ans;
+} 1819. Number of Different Subsequences GCDs
+```
+
 
 
 ### Brainteaser
