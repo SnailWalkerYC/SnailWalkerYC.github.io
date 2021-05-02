@@ -358,3 +358,80 @@ vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
 
 
 
+### Ordered Set / Multiset
+
+- **Multiset**: erase element will erase all the same number. equal_range will return pair of iterator for the search element.
+
+```c++
+// 1825. Finding MK Average
+class MKAverage {
+ public:  
+  queue<int> record_;
+  multiset<int> left, right, mid;
+  int cur_sum_ = 0;
+  int m_ = 0;
+  int k_ = 0;
+  vector<int> init_vec_;
+  
+  MKAverage(int m, int k): m_(m), k_(k) {}
+  
+  void addElement(int num) {
+    if (record_.size() >= m_) {
+      const int rm_num = record_.front();
+      if (rm_num < *mid.cbegin()) {
+        left.erase(left.find(rm_num));
+        left.insert(*mid.cbegin());
+        mid.erase(mid.cbegin());
+        cur_sum_ -= *left.crbegin();
+      } else if (rm_num > *mid.crbegin()) {
+        right.erase(right.find(rm_num));
+        right.insert(*mid.crbegin());
+        mid.erase(mid.find(*mid.crbegin()));
+        cur_sum_ -= *right.cbegin();
+      } else {
+        mid.erase(mid.find(rm_num));
+        cur_sum_ -= rm_num;
+      }
+    } else {
+      init_vec_.emplace_back(num);
+    }
+    
+    if (record_.size() >= m_) {
+      if (*left.crbegin() < num && *right.cbegin() > num) {
+        mid.insert(num);
+        cur_sum_ += num;
+      } else if (*left.crbegin() >= num) {
+        cur_sum_ += *left.crbegin();
+        mid.insert(*left.crbegin());
+        left.erase(left.find(*left.crbegin()));
+        left.insert(num);
+      } else {
+        cur_sum_ += *right.cbegin();
+        mid.insert(*right.cbegin());
+        right.erase(right.cbegin());
+        right.insert(num);
+      }
+    } else {
+      if (init_vec_.size() == m_) {
+        std::sort(std::begin(init_vec_), std::end(init_vec_));
+        for (int i = 0; i < k_; ++i) left.insert(init_vec_[i]);
+        for (int i = k_; i < m_ - k_; ++i) {
+          mid.insert(init_vec_[i]);
+          cur_sum_ += init_vec_[i];
+        }
+        for (int i = m_ - k_; i < m_; ++i) right.insert(init_vec_[i]);
+      }
+    }
+    
+    if (record_.size() >= m_) record_.pop();
+    record_.push(num);
+  }
+    
+  int calculateMKAverage() {
+    return record_.size() >= m_? cur_sum_/(m_ - (k_ << 1)) : -1;
+  }
+};
+```
+
+
+
