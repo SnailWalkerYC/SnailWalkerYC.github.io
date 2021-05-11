@@ -225,7 +225,7 @@ std::string s = absl::StrJoin(a, "-");
 // s == "1-2-3"
 
 // For the map
-std::map<std::string, int> m = {{"a", 1}, {"b", 2}, {"c", 3}};
+std::map<std::string, int> m = { {"a", 1}, {"b", 2}, {"c", 3} };
 std::string s = absl::StrJoin(m, ";", absl::PairFormatter("="));
 // s == "a=1;b=2;c=3"
 
