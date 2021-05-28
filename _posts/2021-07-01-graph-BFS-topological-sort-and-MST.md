@@ -9,6 +9,37 @@ comments: false
 
 
 
+### State Compression
+
+```c++
+// 847. Shortest Path Visiting All Nodes
+int shortestPathLength(vector<vector<int>>& graph) {
+  vector<vector<int>> dists(graph.size(), vector<int>(1 << graph.size(), INT_MAX));
+  queue<pair<int, int>> visited;
+  for (int i = 0; i < graph.size(); ++i) {
+    visited.push({i, 1 << i});
+    dists[i][1 << i] = 0;
+  }
+  const int target_state = (1 << graph.size()) - 1;
+  while (!visited.empty()) {
+    const auto [idx, state] = visited.front();
+    visited.pop();
+    if (state == target_state) return dists[idx][state];
+    for (const auto& node : graph[idx]) {
+      const int new_state = 1 << node | state;
+      const int cur_score = dists[idx][state];
+      if (cur_score + 1 < dists[node][new_state]) {
+        dists[node][new_state] = cur_score + 1;
+        visited.push({node, new_state});
+      }
+    }
+  }
+  return -1;
+}
+```
+
+
+
 
 
 ### Topological Sort

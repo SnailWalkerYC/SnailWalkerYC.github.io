@@ -10,6 +10,38 @@ comments: false
 - **Sequence DP**
 
 ```c++
+// 1872. Stone Game VIII
+int stoneGameVIII(vector<int>& w) {
+  vector<int> s(w.size()+1, 0);
+  vector<int> f(w.size()+1, 0);
+  reverse(w.begin(), w.end());
+  for (int i = 1; i <= w.size(); ++i) {
+    s[i] = s[i-1] + w[i-1]; 
+  }
+  int v = s[w.size()];
+  for (int i = 2; i <= w.size(); ++i) {
+    f[i] = v;
+    v = max(v, s[w.size()] - s[i-1] - f[i]);
+  }
+  return f[w.size()];
+}
+
+// 1871. Jump Game VII
+bool canReach(string str, int minJump, int maxJump) {
+  vector<int> f(str.size()+1, 0);
+  vector<int> s(str.size()+1, 0);
+  s[1] = f[1] = 1;
+  for (int i = 2; i <= str.size(); ++i) {
+    if (str[i-1] == '0' && i - minJump >= 1) {
+      int l = max(1, i - maxJump);
+      int r = i - minJump;
+      if (s[r] > s[l-1]) f[i] = 1;
+    }
+    s[i] = s[i-1] + f[i]; 
+  }
+  return f[str.size()];
+}
+
 // 53. Maximum Subarray
 // Dynamic programming
 // f(i)=max{f(i−1)+nums[i],nums[i]}

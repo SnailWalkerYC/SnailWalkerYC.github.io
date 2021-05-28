@@ -978,6 +978,62 @@ class Solution {
 
 
 
+
+
+```c++
+// 离散化使用
+// 1851. Minimum Interval to Include Each Query
+vector<int> indexs_;
+vector<int> lens_;
+vector<int> values_;  
+
+int GetIndex(const int value) const {
+  return lower_bound(values_.begin(), values_.end(), value) - values_.begin();
+}  
+  
+int Find(const int idx) {
+  if (idx != indexs_[idx]) indexs_[idx] = Find(indexs_[idx]);
+  return indexs_[idx];
+}  
+  
+vector<int> minInterval(vector<vector<int>>& intervals, vector<int>& queries) {
+  for (const auto& v : intervals) {
+    values_.emplace_back(v[0]);
+    values_.emplace_back(v[1]);
+  }      
+  for (const auto& v : queries) values_.emplace_back(v);
+  sort(begin(values_), end(values_));
+  values_.resize(distance(values_.begin(), unique(values_.begin(), values_.end())));
+  indexs_.resize(values_.size()+1);
+  lens_.resize(values_.size()+1, -1);
+  
+  for (int i = 0; i < indexs_.size(); ++i) indexs_[i] = i;
+  
+  sort(intervals.begin(), intervals.end(), [](const vector<int>& v1, const vector<int>& v2) {
+    return v1[1] - v1[0] < v2[1] - v2[0];
+  });
+  
+  for (const auto& interval : intervals) {
+    int left = GetIndex(interval[0]);
+    int right = GetIndex(interval[1]);
+    int len = interval[1] - interval[0] + 1;
+    while (Find(left) <= right) {
+      left = Find(left);
+      lens_[left] = len;
+      indexs_[left] = left + 1;
+    }
+  }
+  
+  vector<int> ans;
+  for (const auto& query : queries) {
+    ans.emplace_back(lens_[GetIndex(query)]);
+  }
+  return ans;
+}
+```
+
+
+
 ```c++
 // Problem not solved yet.
 // 1697. Checking Existence of Edge Length Limited Paths
