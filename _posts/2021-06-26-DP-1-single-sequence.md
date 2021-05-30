@@ -378,5 +378,25 @@ int longestSubsequence(vector<int>& arr, int diff) {
   });
   return res;
 }
+
+// 1883. Minimum Skips to Arrive at Meeting On Time
+int minSkips(vector<int>& dist, int speed, int m) {
+  int n = dist.size();
+  vector<vector<double>> record(dist.size()+1, vector<double>(dist.size()+1, 0.0));
+  static constexpr double kEps = 1e-8;  
+  
+  for (int i = 1; i <= n; ++i) {
+    const double t_i = static_cast<double>(dist[i-1]) / speed;
+    for (int j = 0; j <= i; ++j) {
+      record[i][j] = INT_MAX;
+      if (j < i) record[i][j] = ceil(record[i-1][j] + t_i - kEps);
+      if (j) record[i][j] = min(record[i][j], record[i-1][j-1] + t_i);
+    }
+  }
+  for (int i = 0; i <= n; ++i) {
+    if (record[dist.size()][i] <= m) return i;
+  }
+  return -1;
+}
 ```
 

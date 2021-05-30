@@ -12,6 +12,11 @@ comments: false
 ### Number Theory
 
 ```c++
+// High accuracy
+// Template
+// 1. Store with int array.
+// 2. 
+
 // 1819. Number of Different Subsequences GCDs
 int countDifferentSubsequenceGCDs(vector<int>& nums) {
   vector<bool> record(200001, false);
@@ -29,7 +34,7 @@ int countDifferentSubsequenceGCDs(vector<int>& nums) {
   } 
       
   return ans;
-} 1819. Number of Different Subsequences GCDs
+}
 ```
 
 

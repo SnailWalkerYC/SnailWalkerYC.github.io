@@ -13,6 +13,45 @@ comments: false
 - 理论：二分查找，通过二分查找，trie，KMP，哈希表来进行；遍历排序，heap，quick sort；数组类型的就是前缀后缀，以及单调栈全部过一遍。
 
 ```c++
+// Choose the interval [] containing the answer.
+// Integer binary search.
+// Template 1.
+int binarySearch(const vector<int> &A, const int target) {
+  if (A.empty() {
+    return -1;
+  }
+  int start = 0;
+  int end = A.size() - 1;
+  int mid;
+
+  while (start + 1 < end) {
+    mid = start + (end - start) / 2;
+    if (A[mid] == target) {
+      end = mid;
+    } else if (A[mid] < target) {
+      start = mid;
+    } else if (A[mid] > target) {
+      end = mid;
+    }
+  }
+
+  // judge which side you want.    
+  if (A[start] == target) {
+    return start;
+  }
+  if (A[end] == target) {
+    return end;
+  }
+
+  return -1; 
+}
+// Template 2.
+      
+```
+
+
+
+```c++
 // 704. Binary Search 
 int search(vector<int>& nums, int target) { 
   int stt_idx = 0; 
