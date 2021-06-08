@@ -10,6 +10,45 @@ comments: false
 ### Divide and Conquer
 
 ```c++
+// Merge sort.
+// 1. get the separate point. The index.
+// 2. recursive call left & right
+// 3. merge the sorting with both left & right parts.
+void MergeSort(const int l, const int r, std::vector<int>& nums) {
+  if (l >= r) return;
+  const int mid = l + (r - l)/2;
+  MergeSort(l, mid, nums);
+  MergeSort(mid+1, r, nums);
+  std::vector<int> tmp(r - l + 1);
+  int i = l; 
+  int j = mid+1;
+  int cnt = 0;
+  while (i <= mid && j <= r) {
+    if (nums[i] <= nums[j]) {
+      tmp[cnt++] = nums[i++];
+    } else {
+      tmp[cnt++] = nums[j++];
+    }
+  }
+  
+  while (i <= mid) tmp[cnt++] = nums[i++];
+  while (j <= r) tmp[cnt++] = nums[j++];
+  for (int i = l, j = 0; i <= r; ++i, ++j) {
+    nums[i] = tmp[j];
+  }    
+}
+
+// inverse order numbers
+
+```
+
+
+
+
+
+
+
+```c++
 // 1755. Closest Subsequence Sum
 class Solution {
  public:
