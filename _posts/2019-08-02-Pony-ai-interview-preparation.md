@@ -293,7 +293,23 @@ TreeNode* deserialize(string data) {
 }
 ```
 
-- binary search with k times add +1
+- binary search/two pointers with k times add +1
+
+```c++
+// 1838. Frequency of the Most Frequent Element
+int maxFrequency(vector<int>& nums, int k) {
+  sort(begin(nums), end(nums));
+  vector<long long> acc_sum(nums.size()+1, 0);
+  for (int i = 0; i < nums.size(); ++i)
+    acc_sum[i+1] = acc_sum[i] + nums[i];
+  int max_res = 0;
+  for (int i = 1, j = 1; i < acc_sum.size(); ++i) {
+    while ((i - j + 1ll)*nums[i-1] - (acc_sum[i] - acc_sum[j-1]) > k) ++j;
+    max_res = max(max_res, i - j + 1);
+  }
+  return max_res;
+}
+```
 
 - shortest distance to target character
 
