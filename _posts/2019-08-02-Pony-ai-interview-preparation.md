@@ -11,7 +11,21 @@ comments: false
 
 ```c++
 // 386. Lexicographical Numbers
-
+vector<int> lexicalOrder(int n) {
+  vector<int> ans;
+  
+  Helper(1, n, ans);
+  
+  return ans;
+}
+void Helper(const int stt, const int end, vector<int>& ans) {
+  if (stt > end) return;
+  ans.push_back(stt);
+  Helper(stt * 10, end, ans);
+  if (stt % 10 != 9) {
+    Helper(stt + 1, end, ans);
+  }
+}  
 ```
 
 - Lowest Common Ancestor
@@ -306,6 +320,129 @@ vector<int> shortestToChar(string s, char c) {
     }
   }
   return ans;
+}
+```
+
+- Skyline 
+
+```c++
+// 218. The Skyline Problem
+vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+  vector<pair<int, int>> pts;
+  for (const auto& building : buildings) {
+    pts.emplace_back(building[0], -building[2]);
+    pts.emplace_back(building[1], building[2]);
+  }
+  sort(begin(pts), end(pts));
+  multiset<int> pq({0});
+  int prev_max = 0;
+  vector<vector<int>> ans;
+  for (const auto& pt : pts) {
+    if (pt.second < 0) pq.insert(-pt.second);
+    else pq.erase(pq.find(pt.second));
+    const auto cur_max = *crbegin(pq);
+    if (cur_max != prev_max) {
+      ans.emplace_back(vector<int>({pt.first, cur_max}));
+      prev_max = cur_max;
+    }
+  }
+  return ans;
+}
+```
+
+https://leetcode-cn.com/problems/the-skyline-problem/solution/218tian-ji-xian-wen-ti-sao-miao-xian-fa-by-ivan_al/ 
+
+- Two Sum BST
+
+```c++
+// 653. Two Sum IV - Input is a BST
+bool Find(TreeNode* root, unordered_set<int>& set1, const int k) {
+  if (!root) return false;
+  if (set1.count(k - root->val) > 0) return true;
+  set1.insert(root->val);
+  return Find(root->left, set1, k) || Find(root->right, set1, k);
+}  
+bool findTarget(TreeNode* root, int k) {
+  unordered_set<int> set1;
+  return Find(root, set1, k);
+}
+
+// 1214. Two Sum BSTs
+void Traverse(TreeNode* root, unordered_set<int>& set1) {
+  if (!root) return;
+  set1.insert(root->val);
+  Traverse(root->left, set1);
+  Traverse(root->right, set1);
+}  
+
+bool Find(TreeNode* root, unordered_set<int>& set1, const int target) {
+  if (!root) return false;
+  if (set1.count(target - root->val) > 0) return true;
+  return Find(root->left, set1, target) || Find(root->right, set1, target);
+}
+  
+bool twoSumBSTs(TreeNode* root1, TreeNode* root2, int target) {
+  unordered_set<int> set1;
+  Traverse(root1, set1);
+  return Find(root2, set1, target);
+}
+```
+
+- Basic Calculator
+
+```c++
+// 772. Basic Calculator III
+string parserString (string s, int idx, int & new_idx) {
+  int num_brance = 1;
+  string str = ""; 
+  for (int i = idx; i < s.size(); ++i) {
+    if (s[i] == '(') {
+      ++num_brance;
+    }
+    else if (s[i] == ')') {
+      --num_brance;
+    }        
+    if (!num_brance) {
+      new_idx = i;
+      return str;
+    }        
+    str += s[i];
+  }      
+  return str;
+}
+int calculate(string s) {
+  int s_len = s.size();
+  long long cur_num = 0;
+  int cur_res = 0;
+  int fin_res = 0;
+  char ope = '+';      
+  for (int idx = 0; idx < s_len; ++idx) {
+    if (s[idx] == '(') {
+      int new_idx = 0;
+      string str = parserString(s, idx+1, new_idx);
+      cur_num = calculate(str);
+      idx = new_idx;
+    }        
+    if (isdigit(s[idx])) {
+      cur_num = cur_num*10 + (s[idx] - '0');
+    }        
+    if (s[idx] == '+' || s[idx] == '-' || s[idx] == '*' ||
+      s[idx] == '/' || s_len == idx + 1) {
+      switch(ope) {
+        case '+': cur_res += cur_num; break;
+        case '-': cur_res -= cur_num; break;
+        case '*': cur_res *= cur_num; break;
+        case '/': cur_res /= cur_num; break;    
+      }
+      if (s[idx] == '-' || s[idx] == '+' || s_len - 1 == idx) {
+        fin_res += cur_res;
+        cur_res = 0;
+      }        
+      ope = s[idx];
+      cur_num = 0;
+    }
+  }      
+  return fin_res;
 }
 ```
 
