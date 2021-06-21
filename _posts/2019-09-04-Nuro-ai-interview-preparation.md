@@ -426,14 +426,14 @@ int numDistinctIslands(vector<vector<int>>& grid) {
   unordered_map<int, vector<vector<int>>> trajectory;
   
   const int shift = 50;
-  const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0} };
+  const int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
   for (int i = 0; i < grid.size(); ++i) {
     for (int j = 0; j < grid[0].size(); ++j) {
       if (grid[i][j]) {
         int num = 0;
         vector<int> cur_traj;
         grid[i][j] = 0;
-        queue<pair<int, int>> que({{i, j} });
+        queue<pair<int, int>> que({ {i, j} });
         while (!que.empty()) {
           const auto [row, col] = que.front();
           que.pop(); 
