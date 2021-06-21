@@ -86,6 +86,22 @@ class SparseVector {
 
 ```c++
 // 239. Sliding Window Maximum
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+  deque<int> cur_max;
+  vector<int> max_arrs;
+  for (int i = 0; i < nums.size(); ++i) {
+    while (!cur_max.empty() && nums[i] >= nums[cur_max.front()]) {
+      cur_max.pop_front();
+    }
+    cur_max.push_front(i);
+    while (cur_max.back() + k - 1 < i) cur_max.pop_back();
+    if (i >= k - 1) {
+      max_arrs.emplace_back(nums[cur_max.back()]);
+    }
+  }
+  
+  return max_arrs;
+}
 
 // 480. Sliding window median
 // Insert to left, then transfer left largest to right, compare size for transfering.
@@ -295,20 +311,227 @@ class LRUCache {
 };
 
 // 460. LFU Cache
+// Method 1
+class LFUCache {
+ private:
+  struct Node {
+    int count_ = 0;
+    int value_ = 0;
+    int key_ = 0;
+    Node(const int cnt, const int v, const int k):
+     count_(cnt), value_(v), key_(k) {}
+  };
+  
+  unordered_map<int, list<Node>> data_;
+  unordered_map<int, list<Node>::iterator> keys_;
+  int min_count_ = INT_MAX;
+  int capacity_ = 0;
+  
+ public:  
+  LFUCache(int capacity) {
+    capacity_ = capacity;
+  }
+    
+  int get(int key) {
+    if (keys_.find(key) == keys_.end())
+      return -1;
+    const auto it = keys_[key];
+    const int prev_count = it->count_;
+    const int value = it->value_;
+    
+    data_[prev_count].erase(it);
+    if (data_[prev_count].empty()) {
+      data_.erase(prev_count);
+      if (min_count_ == prev_count)
+        ++min_count_;
+    }
+    
+    auto& cur_level = data_[prev_count+1];
+    cur_level.push_back(Node(prev_count+1, value, key));
+    keys_[key] = prev(cur_level.end());
+    
+    return value;
+  }
+    
+  void put(int key, int value) {
+    if (!capacity_)
+      return;
+    if (keys_.find(key) == keys_.end()) {
+      if (keys_.size() >= capacity_) {
+        while (data_.find(min_count_) == data_.end())
+          ++min_count_;
+        auto& level = data_[min_count_];
+        const int key = level.front().key_;
+        keys_.erase(key);
+        level.erase(level.begin());
+        if (level.empty()) {
+          data_.erase(min_count_);
+        }
+      }
+      data_[0].push_back(Node(0, value, key));
+      keys_[key] = data_[0].begin();
+      min_count_ = 0;
+    }
+    auto& it = keys_[key];
+    const int prev_count = it->count_;
+    data_[prev_count].erase(it);
+    if (data_[prev_count].empty()) {
+      data_.erase(prev_count);
+      if (min_count_ == prev_count)
+        ++min_count_;
+    }
+    auto& cur_level = data_[prev_count+1];
+    cur_level.push_back(Node(prev_count+1, value, key));
+    keys_[key] = prev(cur_level.end());
+    
+  }
+};
 
+// Method 2
+class LFUCache {
+public:
+    class VALUE{
+        public:
+        int _value;
+        int _cnt;
+        list<int>::iterator _listItr;
+        VALUE(int v, int c, list<int>::iterator list_itr) {
+            _value = v;
+            _cnt = c;
+            _listItr = list_itr;
+        }
+    };
+    
+    int _capacity;
+    int _minCnt;
+    unordered_map<int, VALUE*> _recKey;
+    unordered_map<int, list<int>> _hirarchCache;
+    
+    LFUCache(int capacity) {
+        _capacity = capacity;
+        _minCnt = 0;
+    }
+    
+    int get(int key) {
+        if (_recKey.find(key) == _recKey.end() || _capacity <= 0) {
+            return -1;
+        }
+        
+        auto cur_node = _recKey[key];
+        _hirarchCache[cur_node->_cnt].erase(cur_node->_listItr);
+        if (_minCnt == cur_node->_cnt && !_hirarchCache[cur_node->_cnt].size()) {
+            ++_minCnt;
+        }
+        cur_node->_cnt++;
+        _hirarchCache[cur_node->_cnt].push_front(key);
+        _recKey[key] = new VALUE(cur_node->_value, cur_node->_cnt, _hirarchCache[cur_node->_cnt].begin());
+        
+        return cur_node->_value;
+    }
+    
+    void put(int key, int value) {
+        if (_capacity <= 0) {
+            return;
+        }
+        if (_recKey.find(key) == _recKey.end() && _recKey.size() < _capacity) {
+            _hirarchCache[1].push_front(key);
+           VALUE* new_value = new VALUE(
+                value,
+                1,
+                _hirarchCache[1].begin()
+            );
+            _recKey.insert(make_pair(key, new_value));
+            _minCnt = 1;
+            return;
+        }
+        
+        if (_recKey.find(key) != _recKey.end()) {
+            auto cur_node = _recKey[key];
+            _hirarchCache[cur_node->_cnt].erase(cur_node->_listItr);
+            if (_minCnt == cur_node->_cnt && !_hirarchCache[cur_node->_cnt].size()) {
+                ++_minCnt;
+            }
+            cur_node->_cnt++;
+            _hirarchCache[cur_node->_cnt].push_front(key);
+            _recKey[key] = new VALUE(
+                value, 
+                cur_node->_cnt,                       
+                _hirarchCache[cur_node->_cnt].begin());
+            return;
+        }
+        
+        auto cur_layer = _hirarchCache[_minCnt];
+        int rm_key = cur_layer.back();
+        
+        _hirarchCache[_minCnt].pop_back();
+        _recKey.erase(rm_key);
+        _minCnt = 1;
+        _hirarchCache[1].push_front(key);
+        _recKey[key] = new VALUE(
+               value,
+               1,
+               _hirarchCache[1].begin()
+        );
+    }
+};
 ```
 
 
 
 ```c++
 // 529. Minesweeper
-
+vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+  const int dirs[2][8] = {{-1, 0, 1, 1, 1, 0, -1, -1}, {-1, -1, -1, 0, 1, 1, 1, 0}};
+  
+  queue<pair<int, int>> processing;
+  processing.push(make_pair(click[0], click[1]));
+  while (!processing.empty()) {
+    const auto [row, col] = processing.front();
+    processing.pop();
+    if (board[row][col] == 'M') {
+      board[row][col] = 'X';
+      return board;
+    } else if (board[row][col] == 'E') {
+      int cnt_mine = 0;
+      vector<int> empty;
+      for (int i = 0; i < 8; ++i) {
+        const int new_row = row + dirs[1][i];
+        const int new_col = col + dirs[0][i];
+        if (new_row < 0 || new_col < 0 || new_row >= board.size() ||
+              new_col >= board[0].size()) continue;
+        if (board[new_row][new_col] == 'M') ++cnt_mine;
+        else if (board[new_row][new_col] == 'E') 
+          empty.push_back(i);
+      }
+      if (!cnt_mine) {
+        board[row][col] = 'B';
+        for (const auto& idx : empty) {
+          processing.push(make_pair(dirs[1][idx] + row, dirs[0][idx] + col));
+        }
+      } else {
+        board[row][col] = '0' + cnt_mine;
+      }  
+    }
+  }
+  return board;
+}
 ```
 
 
 
 ```c++
 // 1230. Toss Strange Coins
+double probabilityOfHeads(vector<double>& prob, int target) {
+  vector<double> join_probs(prob.size()+1, 0.0);
+  join_probs[0] = 1.0;
+  for (int i = 0; i < prob.size(); ++i) {
+    vector<double> tmp = join_probs;
+    for (int j = 0; j <= i + 1; ++j) {
+      join_probs[j] = tmp[j] * (1.0 - prob[i]) + (j > 0? tmp[j-1] * prob[i]:0.0);
+    }
+  }
+  return join_probs[target];
+}
 ```
 
 
