@@ -481,7 +481,7 @@ public:
 ```c++
 // 529. Minesweeper
 vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
-  const int dirs[2][8] = {{-1, 0, 1, 1, 1, 0, -1, -1}, {-1, -1, -1, 0, 1, 1, 1, 0}};
+  const int dirs[2][8] = { {-1, 0, 1, 1, 1, 0, -1, -1}, {-1, -1, -1, 0, 1, 1, 1, 0} };
   
   queue<pair<int, int>> processing;
   processing.push(make_pair(click[0], click[1]));
