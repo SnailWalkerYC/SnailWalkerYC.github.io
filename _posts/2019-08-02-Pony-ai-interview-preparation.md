@@ -462,3 +462,37 @@ int calculate(string s) {
 }
 ```
 
+
+
+Fractional class：https://www.cnblogs.com/gongkai/p/10806080.html
+
+```c++
+friend ostream& operator<< (ostream& os,const fraction& the_fraction);
+friend istream& operator>> (istream& is,fraction& the_fraction);     
+friend fraction operator+  (const fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator-  (const fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator*  (const fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator/  (const fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator+= (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator-= (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator*= (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator/= (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend fraction operator-  (const fraction& the_fraction);
+friend fraction operator++ (fraction& the_fraction); 
+friend fraction operator++ (fraction& the_fraction,int);
+friend fraction operator-- (fraction& the_fraction);
+friend fraction operator-- (fraction& the_fraction,int);
+    
+friend bool operator>  (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend bool operator<  (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend bool operator>= (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend bool operator<= (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend bool operator== (fraction& the_fraction_a,const fraction& the_fraction_b);
+friend bool operator!= (fraction& the_fraction_a,const fraction& the_fraction_b);
+      
+fraction();
+fraction(long long the_numerator);
+fraction(long long the_numerator,long long the_denominator);
+fraction(fraction the_fraction_a,fraction the_fraction_b);
+```
+

@@ -1,9 +1,9 @@
 ---
 layout: post
-title: camera calibration
-date: 2021-09-01
+title: CUDA Summary
+date: 2020-11-05
 categories: [technology]
-tags: [tech]
+tags: [book]
 comments: false
 ---
 

@@ -101,6 +101,17 @@ int main () {
 
 
 
+### Example
+
+```c++
+// Accumulate Array
+
+```
+
+
+
+
+
 **Ref:**
 
 - [Modern C++ concurrency](https://www.educative.io/courses/modern-cpp-concurrency-in-practice-get-the-most-out-of-any-machine)
