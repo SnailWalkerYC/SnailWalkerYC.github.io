@@ -623,6 +623,93 @@ Painting method & Hungarian algorithm.
 
 背包问题
 
+```c++
+// 0-1 Knapsack： 0-1 背包，每个物体只有1件
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 1010;
+int n, m;
+int v[N], w[N];
+int f[N];
+
+int main() {
+  cin >> n >> m;
+  for (int i = 1; i <= n; i ++ ) cin >> v[i] >> w[i];
+  for (int i = 1; i <= n; i ++ )
+    for (int j = m; j >= v[i]; j -- )
+       f[j] = max(f[j], f[j - v[i]] + w[i]);
+
+  cout << f[m] << endl;
+
+  return 0;
+}
+
+// Complete Knapsack: 完全背包，每种物品有无数件
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 1010;
+int n, m;
+int v[N], w[N];
+int f[N];
+
+int main() {
+  cin >> n >> m;
+  for (int i = 1; i <= n; i ++ ) cin >> v[i] >> w[i];
+  for (int i = 1; i <= n; i ++ )
+    for (int j = v[i]; j <= m; j ++ )
+      f[j] = max(f[j], f[j - v[i]] + w[i]);
+  cout << f[m] << endl;
+  return 0;
+}
+
+// Multiple Knapsack: 多重背包，每种物品是有限的
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 110;
+int n, m;
+int v[N], w[N], s[N];
+int f[N][N];
+int main() {
+  cin >> n >> m;
+  for (int i = 1; i <= n; i ++ ) cin >> v[i] >> w[i] >> s[i];
+  for (int i = 1; i <= n; i ++ )
+    for (int j = 0; j <= m; j ++ )
+      for (int k = 0; k <= s[i] && k * v[i] <= j; k ++ )
+        f[i][j] = max(f[i][j], f[i - 1][j - v[i] * k] + w[i] * k);
+  cout << f[n][m] << endl;
+  return 0;
+}
+
+// Group Knapsack: 分组背包
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 110;
+int n, m;
+int v[N][N], w[N][N], s[N];
+int f[N];
+
+int main() {
+  cin >> n >> m;
+  for (int i = 1; i <= n; i ++ ) {
+    cin >> s[i];
+    for (int j = 0; j < s[i]; j ++ )
+      cin >> v[i][j] >> w[i][j];
+  }
+  for (int i = 1; i <= n; i ++ )
+    for (int j = m; j >= 0; j -- )
+      for (int k = 0; k < s[i]; k ++ )
+        if (v[i][k] <= j)
+          f[j] = max(f[j], f[j - v[i][k]] + w[i][k]);
+
+  cout << f[m] << endl;
+  return 0;
+}
+```
+
 
 
 ## Linear DP

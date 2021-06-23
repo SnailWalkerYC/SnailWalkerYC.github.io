@@ -67,7 +67,7 @@ bool isUnivalTree(TreeNode* root, const int val = 100) {
 
 
 ```c++
-// Leetcode basi calculator series
+// Leetcode basic calculator series
 ```
 
 

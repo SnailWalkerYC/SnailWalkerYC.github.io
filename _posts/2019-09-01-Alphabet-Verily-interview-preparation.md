@@ -31,6 +31,15 @@ uint32_t reverseBits(uint32_t n) {
   }
   return res;
 }
+
+uint32_t reverseBits(uint32_t n) {
+  n = (n >> 16) | (n << 16);
+  n = ((n & 0xff00ff00) >> 8) | ((n & 0x00ff00ff) << 8);
+  n = ((n & 0xf0f0f0f0) >> 4) | ((n & 0x0f0f0f0f) << 4);
+  n = ((n & 0xcccccccc) >> 2) | ((n & 0x33333333) << 2);
+  n = ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1);
+  return n;
+}
 ```
 
 
@@ -211,7 +220,72 @@ class Solution {
 ```c++
 // map：map快速操作
 // 355. Design Twitter
-
+class Twitter {
+ public:
+  class Compare {
+   public:
+    bool operator()(const pair<int, int>&p1, const pair<int, int>& p2) {
+      return p1.second > p2.second;
+    }
+  };
+  
+  unordered_map<int, unordered_set<int>> follower_ids_;
+  unordered_map<int, vector<pair<int, int>>> posts_;
+  int count_ = 0;
+  
+  /** Initialize your data structure here. */
+  Twitter() {}
+    
+  /** Compose a new tweet. */
+  void postTweet(int userId, int tweetId) {
+    posts_[userId].push_back({tweetId, count_++});
+  }
+    
+  /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+  vector<int> getNewsFeed(int userId) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, Compare> pq;
+    int cnt = 0;
+    for (auto it = posts_[userId].crbegin(); it != posts_[userId].crend(); ++it) {
+      if (pq.size() < 10) {
+        pq.push(*it);
+      } else {
+        if (it->second < pq.top().second) break;
+        pq.push(*it);
+      }
+    }
+    
+    for (auto id = follower_ids_[userId].begin(); id != follower_ids_[userId].end(); ++id) {
+      for (auto it = posts_[*id].crbegin(); it != posts_[*id].crend(); ++it) {
+        if (pq.size() < 10) {
+          pq.push(*it);
+        } else {
+          if (it->second < pq.top().second) break;
+          pq.pop();
+          pq.push(*it);
+        }
+      }
+    }
+    vector<int> ans;
+    while (!pq.empty()) {
+      ans.push_back(pq.top().first);
+      pq.pop();
+    }
+    reverse(ans.begin(), ans.end());
+    return ans;
+  }
+    
+  /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+  void follow(int followerId, int followeeId) {
+    if (followerId != followeeId) {
+      follower_ids_[followerId].insert(followeeId);
+    }
+  }
+    
+  /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+  void unfollow(int followerId, int followeeId) {
+    follower_ids_[followerId].erase(followeeId);    
+  }
+};
 ```
 
 
