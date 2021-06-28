@@ -733,7 +733,7 @@ string generateTheString(int n) {
 }
 
 // 79. Word Search
-int dir[4][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+int dir[4][2] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0 } };
 bool findWord(vector<vector<char>>& board,
               string word,
               int cur_idx,
@@ -811,7 +811,7 @@ bool IsEmpltyChild(const Node* head) {
   }
   return true;
 }  
-const int dirs[2][4] = {{-1, 0, 1, 0}, {0, 1, 0, -1}};  
+const int dirs[2][4] = { {-1, 0, 1, 0}, {0, 1, 0, -1 } };  
 vector<vector<char>> board_;
 void Search(const int row, const int col, Node* cur_node,
             string cur_str, vector<vector<char>>& visited) {
