@@ -323,3 +323,9 @@ int TravelWays(const int N) {
 // easier way, only 2^(N-2), as we could select this station or not.
 ```
 
+
+
+```c++
+// Link parse with DFS & memorial search.
+```
+

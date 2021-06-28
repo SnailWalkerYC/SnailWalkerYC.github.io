@@ -430,6 +430,8 @@ class Solution {
 
 ## Shortest Path
 
+#### Dijkstra
+
 ```c++
 // Dijkstra, source -> target
 // 743. Network Delay Time
@@ -499,6 +501,26 @@ class Solution {
   }
 };
 ```
+
+#### Bellmanford
+
+```c++
+// 经过k条边适用
+```
+
+
+
+#### SPFA
+
+```c++
+// 不经过k条边
+```
+
+
+
+
+
+
 
 ## MST
 
@@ -617,7 +639,9 @@ Painting method & Hungarian algorithm.
 
 # DP
 
+DP = state representation(how to represent the state,  set + attributes[max, min, count]) + state caculation (how to calculate state, set divide，所有选法)
 
+DP optimization: DP code equal transform
 
 ## Knapsack
 
@@ -625,6 +649,32 @@ Painting method & Hungarian algorithm.
 
 ```c++
 // 0-1 Knapsack： 0-1 背包，每个物体只有1件
+// Naive
+// f[i, j], previous i objects, volumn <= j, max
+// max(f[i-1, j], f[i-1][j-v[i]] + w[i]) 
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 1010;
+int n, m;
+int v[N], w[N];
+int f[N][N];
+
+int main() {
+  cin >> n >> m;
+  for (int i = 1; i <= n; i ++ ) cin >> v[i] >> w[i];
+  for (int i = 1; i <= n; i ++ )
+    for (int j = m; j >= v[i]; j -- ) {
+      f[i][j] = f[i-1][j];
+      if (j >= v[i]) f[i][j] = max(f[i][j], f[i-1][j-v[i]] + w[i]);
+    }
+
+  cout << f[n][m] << endl;
+
+  return 0;
+}
+
+// Optimized
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -646,6 +696,29 @@ int main() {
 }
 
 // Complete Knapsack: 完全背包，每种物品有无数件
+// f[i-1, j - k*v[i]] + k * w[i]
+// Naive
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 1010;
+int n, m;
+int v[N], w[N];
+int f[N][N];
+
+int main() {
+  cin >> n >> m;
+  for (int i = 1; i <=n; ++i) cin >> v[i] >> w[i];
+  for (int i = 1; i <= n; ++i) 
+    for (int j = 0; j <= m; ++j)
+      for (int k = 0; k * v[i] <= j; ++k)
+        f[i][j] = max(f[i][j], f[i-1][j - v[i]*k] + w[i]*k);
+  cout << f[n][m] << endl;
+  
+  return 0;
+}
+
+// Optimized
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -683,7 +756,7 @@ int main() {
   return 0;
 }
 
-// Group Knapsack: 分组背包
+// Group Knapsack: 分组背包，每组最多一个物品
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -723,6 +796,25 @@ int main() {
 ## Count DP
 
 计数DP
+
+```c++
+public int change(int amount, int[] coins) {
+        int[][] dp = new int[coins.length + 1][amount + 1];
+        dp[0][0] = 1;        
+        for (int j = 1; j <= coins.length; j++) {
+            dp[j][0] = 1;
+            for (int i = 1; i <= amount; i++) {
+                dp[j][i] = dp[j - 1][i];
+                if (i - coins[j - 1] >= 0) {
+                    dp[j][i] += dp[j][i - coins[j - 1]];
+                }
+            }
+        }
+        return dp[coins.length][amount];
+    }
+```
+
+
 
 
 ## Digit DP

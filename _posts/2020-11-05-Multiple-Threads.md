@@ -110,6 +110,12 @@ int main () {
 
 
 
+```c++
+// max pooling; convolution; average pooling.
+```
+
+
+
 
 
 **Ref:**

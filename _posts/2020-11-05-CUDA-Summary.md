@@ -80,5 +80,7 @@ sumCommSingleBlock<<<1, blockSize>>>(dev_a, dev_out);
 
 // Ref: https://sodocumentation.net/cuda/topic/6566/parallel-reduction--e-g--how-to-sum-an-array-
 // https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+
+// CUDA: max pooling; convolution; average pooling.
 ```
 

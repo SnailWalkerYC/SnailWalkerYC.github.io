@@ -21,4 +21,16 @@ Ref:
 
 4. [SQL vs NO-SQL](https://www.mongodb.com/nosql-explained/nosql-vs-sql)
 
-   
+5. https://my.oschina.net/u/4800383/blog/4870606
+
+6. https://zhuanlan.zhihu.com/p/24001696
+
+7. https://zhuanlan.zhihu.com/p/128684859
+
+8. https://acecodeinterview.com/sql_vs_nosql/
+
+9. https://www.cnblogs.com/xrq730/p/11039384.html
+
+10. https://zhuanlan.zhihu.com/p/140272240
+
+    
