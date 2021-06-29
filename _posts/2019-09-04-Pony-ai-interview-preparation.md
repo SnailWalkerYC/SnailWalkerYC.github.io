@@ -442,6 +442,19 @@ int maxProfit(vector<int>& prices) {
 // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
 
 // 386. Lexicographical Numbers
+vector<int> lexicalOrder(int n) {
+  vector<int> ans;
+  Helper(1, n, ans); 
+  return ans;
+}  
+void Helper(const int stt, const int end, vector<int>& ans) {
+  if (stt > end) return;
+  ans.push_back(stt);
+  Helper(stt * 10, end, ans);
+  if (stt % 10 != 9) {
+    Helper(stt + 1, end, ans);
+  }
+} 
 
 给了一堆点的横纵坐标，要求找到一个三角形，这个三角形不包含任何其他的点
 

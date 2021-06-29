@@ -82,5 +82,8 @@ sumCommSingleBlock<<<1, blockSize>>>(dev_a, dev_out);
 // https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
 
 // CUDA: max pooling; convolution; average pooling.
+// Convolution: FFT; with matrix multiply.
+// High Performance Convolutional Neural Networks forDocument Processing
+// make the feature map, each windon data as line W * W * M, and the output kernel with matrix: W * W * M * N 
 ```
 

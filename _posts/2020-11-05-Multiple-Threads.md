@@ -116,6 +116,59 @@ int main () {
 
 
 
+### Summary
+
+```c++
+// Produce-consumer
+void task_queue_t::produce(const task_t& task_) {       
+  lock_guard_t lock(m_mutex);
+  if (m_tasklist->empty()){//! 条件满足唤醒等待线程
+    m_cond.signal();
+  }
+  m_tasklist->push_back(task_);
+}
+int task_queue_t::comsume(task_t& task_){
+  lock_guard_t lock(m_mutex);
+  while (m_tasklist->empty()) {//! 当没有作业时，就等待直到条件满足被唤醒{
+    if (false == m_flag){
+      return -1;
+    }
+    m_cond.wait();
+  }
+  task_ = m_tasklist->front();
+  m_tasklist->pop_front();
+  return 0;
+}
+
+// IO & logic separation
+void handle_xx_msg(long uid, const xx_msg_t& msg){
+    logic_task_queue->post(boost::bind(&servie_t::proces, uid, msg));
+}
+
+// Pipeline
+void handle_xx_msg(long uid, const xx_msg_t& msg) {
+　　logic_task_queue_array[uid % sizeof(logic_task_queue_array)]->post(
+　　　　boost::bind(&servie_t::proces, uid, msg));
+}
+
+// Map/Reducer with shared_ptr.
+struct reducer{
+    void set_result(int index, long result) {
+        m_result[index] = result;
+    }
+    ~reducer(){
+        long total = 0;
+        for (int i = 0; i < sizeof(m_result); ++i){
+            total += m_result[i];
+        }
+        //! post total to somewhere
+    }
+    long m_result[10];
+};
+```
+
+[Multi-threads summary](https://cloud.tencent.com/developer/article/1056593)
+
 
 
 **Ref:**
