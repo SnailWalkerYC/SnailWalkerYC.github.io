@@ -1042,5 +1042,40 @@ TreeNode* deserialize(string data) {
   }
   return root;
 }
+
+// 402. Remove K Digits
+string removeKdigits(string num, int k) {
+  stack<char> stk;
+  const int K = k;
+  int index = 0;
+  for (const auto& c : num) {
+    while (!stk.empty() && stk.top() > c) {
+      stk.pop();
+      --k;
+      if (!k)
+        break;
+    }
+    if (!k) break;
+    stk.push(c);
+    ++index;
+  }
+  string ans;
+  while (!stk.empty()) {
+    ans = string(1, stk.top()) + ans;
+    stk.pop();
+  }
+  ans += num.substr(index);
+  ans = ans.substr(0, num.size() - K);
+  string ans2;
+  index = 0;
+  while (index < ans.size()) {
+    if (ans[index] != '0') {
+      ans2 += ans.substr(index);
+      break;
+    }
+    ++index;
+  }
+  return ans2.empty() ? "0" : ans2;
+}
 ```
 

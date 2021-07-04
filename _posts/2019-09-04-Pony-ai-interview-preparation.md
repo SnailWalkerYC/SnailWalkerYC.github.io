@@ -98,8 +98,6 @@ TreeNode* lowestCommonAncestor(TreeNode* root,
   return left && right? root:(left?left:right);
 }
 
-
-
 class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
@@ -413,11 +411,6 @@ int numMatchingSubseq(string S, vector<string>& words) {
   return ans;
 }
 
-// 489. Robot Room Cleaner
-
-// 33. Search in Rotated Sorted Array
-// Follow up, with duplicate
-
 // Buy stock series.
 // 121. Best Time to Buy and Sell Stock
 int maxProfit(vector<int>& prices) {
@@ -433,13 +426,48 @@ int maxProfit(vector<int>& prices) {
   return p;
 }
 
-// 122. Best Time to Buy and Sell Stock II
-// 123. Best Time to Buy and Sell Stock III
-// 188. Best Time to Buy and Sell Stock IV
-// 309. Best Time to Buy and Sell Stock with Cooldown
-// 714. Best Time to Buy and Sell Stock with Transaction Fee
+// 33. Search in Rotated Sorted Array
+// Follow up, with duplicate
+int search(vector<int>& nums, int target) {
+  if (!nums.size()) return -1;
+  int stt_idx = 0;
+  int fin_idx = nums.size() - 1;
+  while (stt_idx + 1 < fin_idx) {
+    const int mid_idx = stt_idx + (fin_idx - stt_idx) / 2;
+    const int val = nums[mid_idx];
+    if (nums[stt_idx] < val) {
+      if (val >= target && nums[stt_idx] <= target) fin_idx = mid_idx;
+      else stt_idx = mid_idx;
+    } else {
+      if (val <= target && nums[fin_idx] >= target) stt_idx = mid_idx;
+      else fin_idx = mid_idx;
+    }
+  }
+  if (nums[stt_idx] == target) return stt_idx;
+  if (nums[fin_idx] == target) return fin_idx;
+  return -1;
+}
 
-// 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+bool search(vector<int>& nums, int target) {
+  if (!nums.size()) return false;
+  int stt_idx = 0;
+  int fin_idx = nums.size() - 1;
+  while (stt_idx + 1 < fin_idx) {
+    const int mid_idx = stt_idx + (fin_idx - stt_idx) / 2;
+    const int val = nums[mid_idx];
+    if (nums[stt_idx] < val) {
+      if (val >= target && nums[stt_idx] <= target) fin_idx = mid_idx;
+      else stt_idx = mid_idx;
+    } else if (nums[stt_idx] > val){
+      if (val <= target && nums[fin_idx] >= target) stt_idx = mid_idx;
+      else fin_idx = mid_idx;
+    } else {
+      ++stt_idx;
+    }       
+  }
+  if (nums[stt_idx] == target || nums[fin_idx] == target) return true;
+  return false;  
+}
 
 // 386. Lexicographical Numbers
 vector<int> lexicalOrder(int n) {
@@ -455,10 +483,96 @@ void Helper(const int stt, const int end, vector<int>& ans) {
     Helper(stt + 1, end, ans);
   }
 } 
+  
+// 1824. Minimum Sideway Jumps 
+class Solution {
+public:
+  struct Node {
+    int dis_ = INT_MAX;
+    int lane_ = -1;
+    int point_ = -1;
+    Node(const int lane, const int point, const int dis = INT_MAX) {
+      lane_ = lane;
+      point_ = point;
+      dis_ = dis;
+    }
+  };
+  struct Comp {
+    bool operator()(const Node& node1, const Node& node2) {
+      return node1.dis_ > node2.dis_;
+    }
+  };
+  pair<int, int> OtherLane(const int num) {
+    if (num == 1) return make_pair(2, 3);
+    if (num == 2) return make_pair(1, 3);
+    return make_pair(1, 2);
+  }
+  int minSideJumps(vector<int>& obstacles) {
+    const int n = obstacles.size() - 1;
+    priority_queue<Node, vector<Node>, Comp> pq;
+    vector<vector<int>> history(4, vector<int>(obstacles.size(), INT_MAX));
+    pq.push(Node(2, 0, 0));
+    pq.push(Node(1, 0, 1));
+    pq.push(Node(3, 0, 1));
+    history[2][0] = 0;
+    history[1][0] = 1;
+    history[3][0] = 1;
+    while (!pq.empty()) {
+      const auto tp = pq.top();
+      pq.pop();
+      const auto [l1, l2] = OtherLane(tp.lane_);
+      if (obstacles[tp.point_] != l1) {
+        if (history[l1][tp.point_] > tp.dis_ + 1) {
+          history[l1][tp.point_] = tp.dis_ + 1;
+          pq.push(Node(l1, tp.point_, tp.dis_ + 1));
+        }
+      }
+      if (obstacles[tp.point_] != l2) {
+        if (history[l2][tp.point_] > tp.dis_ + 1) {
+          history[l2][tp.point_] = tp.dis_ + 1;
+          pq.push(Node(l2, tp.point_, tp.dis_ + 1));
+        }
+      }
+      if (tp.point_ < n && obstacles[tp.point_+1] != tp.lane_) {
+        history[tp.lane_][tp.point_+1] = tp.dis_;
+        pq.push(Node(tp.lane_, tp.point_ + 1, tp.dis_));
+      }
+    }
+    return min(min(history[1][n], history[2][n]), history[3][n]);
+  }
+};
+  
+// 1838. Frequency of the Most Frequent Element
+int maxFrequency(vector<int>& nums, int k) {
+  sort(begin(nums), end(nums));
+  vector<long long> acc_sum(nums.size()+1, 0);
+  for (int i = 0; i < nums.size(); ++i)
+    acc_sum[i+1] = acc_sum[i] + nums[i];
+  int max_res = 0;
+  for (int i = 1, j = 1; i < acc_sum.size(); ++i) {
+    while ((i - j + 1ll)*nums[i-1] - (acc_sum[i] - acc_sum[j-1]) > k) ++j;
+    max_res = max(max_res, i - j + 1);
+  }
+  return max_res;
+}  
+
+// 122. Best Time to Buy and Sell Stock II
+// 123. Best Time to Buy and Sell Stock III
+// 188. Best Time to Buy and Sell Stock IV
+// 309. Best Time to Buy and Sell Stock with Cooldown
+// 714. Best Time to Buy and Sell Stock with Transaction Fee
+
+// 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+// 1239. Maximum Length of a Concatenated String with Unique Characters
+
+// 489. Robot Room Cleaner
+
+// https://leetcode.com/problems/k-th-smallest-prime-fraction/
+// 786. K-th Smallest Prime Fraction
 
 给了一堆点的横纵坐标，要求找到一个三角形，这个三角形不包含任何其他的点
 
-// Candidate: 786, 291, 1235, 1824, 1838.  
+// Candidate: 786, 291, 1235, 1915. Number of Wonderful Substrings, https://leetcode.com/problems/count-ways-to-build-rooms-in-an-ant-colony/
 ```
 
 
