@@ -90,7 +90,7 @@ int shortestPath(vector<vector<int>>& grid, int k) {
   visited.insert(0);
   queue<vector<int>> cur_visiting;
   cur_visiting.push({0, 0, 0, 0});
-  const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+  const int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
   
   while (!cur_visiting.empty()) {
     const auto cur = cur_visiting.front();
