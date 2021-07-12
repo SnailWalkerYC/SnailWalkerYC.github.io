@@ -13,6 +13,250 @@ For the projects, see the DL/ML summary; CUDA summary; multi-threading.
 
 
 
+```c++
+// uni-value tree
+// 965. Univalued Binary Tree
+bool isUnivalTree(TreeNode* root, const int val = 100) {
+  if (!root) return true;
+  if (val != 100 && root->val != val) return false;
+  return isUnivalTree(root->left, root->val) && isUnivalTree(root->right, root->val);
+}
+
+// 链表有随机节点的那个
+// 138. Copy List with Random Pointer
+Node* copyRandomList(Node* head) {
+  unordered_map<Node*, Node*> record;
+  record[nullptr] = nullptr;
+  Node* new_head = new Node(0);
+  auto copy_cur = new_head;
+  auto cur = head;
+  while (cur) {
+    copy_cur->next = new Node(cur->val);
+    copy_cur = copy_cur->next;
+    record[cur] = copy_cur;
+    cur = cur->next;
+  }
+  cur = head;
+  copy_cur = new_head->next;
+  while (cur) {
+    copy_cur->random = record[cur->random];
+    copy_cur = copy_cur->next;
+    cur = cur->next;
+  }
+  return new_head->next;
+}
+
+// 问了如何check一个点在一个长方形内，给提供长方形四个点坐标
+// 问了如何check两个长方形有相交
+// https://blog.csdn.net/weixin_43619346/article/details/107513919
+
+// 几何题给一个多段线段首尾相连组成的折线段，比如AB,BC,CD， 分割成等距离的k段，找到所有分段点的坐标。题目挺直白的，顺利做出来了。
+// 向量，根据比例给值
+
+// 168. Excel Sheet Column Title
+string convertToTitle(int n) {
+  string rel;
+  while(n > 0) {
+    int n1 = (n-1)/26;
+    int n2 = (n-1)%26;
+    n = n1;
+    rel = char(n2 + 'A') + rel; 
+  }      
+  return rel;
+}
+
+// 八皇后
+// 51. N-Queens
+static constexpr int kNum = 10;
+char kQueen[kNum][kNum];
+bool row[kNum] = {false};
+bool col[kNum] = {false};  
+bool dg[2*kNum] = {false};
+bool udg[2*kNum] = {false};
+void StoreResult(const int N, vector<vector<string>>& ans) {
+  vector<string> sol;
+  for (int i = 0; i < N; ++i) {
+    string tmp;
+    for (int j = 0; j < N; ++j) {
+      tmp += kQueen[i][j];
+    }
+    sol.push_back(tmp);
+  }
+  ans.push_back(sol);
+}  
+void DFS(int x, int y, 
+         const int n, const int N,
+        vector<vector<string>>& ans) {
+  if (n > N) return;
+  if (y == N) {
+    y = 0;
+    ++x;
+  }
+  if (x == N) {
+    if (n == N) {
+      StoreResult(N, ans);
+    }
+    return;
+  }
+  kQueen[x][y] = '.';
+  DFS(x, y+1, n, N, ans);
+  if (!row[y] && !col[x] && !dg[x+y] && !udg[-y+x+N]) {
+    row[y] = col[x] = dg[x+y] = udg[-y+x+N] = true;
+    kQueen[x][y] = 'Q';
+    DFS(x, y + 1, n+1, N, ans);
+    row[y] = col[x] = dg[x+y] = udg[-y+x+N] = false;
+    kQueen[x][y] = '.';
+  }
+}  
+vector<vector<string>> solveNQueens(int n) {
+  vector<vector<string>> ans;
+  DFS(0, 0, 0, n, ans);
+  return ans;
+}
+
+// 719. Find K-th Smallest Pair Distance
+// binary search + sliding window
+int Check(const int num, const vector<int>& nums) {
+  int res = 0;
+  for (int i = 0, j = 0; i < nums.size(); ++i) {
+    while (nums[i] - nums[j] > num)
+      ++j;
+    res += i - j;
+  }
+  return res;
+}  
+  
+int smallestDistancePair(vector<int>& nums, int k) {
+  sort(begin(nums), end(nums));
+  int l = 0;
+  int r = nums.back() - nums[0];
+  while (l + 1 < r) {
+    const int mid = l + (r - l)/2;
+    if (Check(mid, nums) >= k) {
+      r = mid;
+    } else {
+      l = mid;
+    }
+  }
+  if (Check(l, nums) >= k) return l;
+  return r;
+}
+// priority_queue, Time exceeded.
+struct Compare {
+  bool operator()(const vector<int>& v1, const vector<int>& v2) {
+    return v1[0] > v2[0];
+  }
+};  
+int smallestDistancePair(vector<int>& nums_init, int k) {
+  map<int, int> record;
+  for (const auto& num : nums_init)
+    ++record[num];
+  vector<int> nums;
+  // diff, stt_idx, len
+  priority_queue<vector<int>, vector<vector<int>>, Compare> pq;
+  for (const auto& [k, count] : record) {
+    nums.emplace_back(k);
+  }    
+  for (int i = 0; i < nums.size(); ++i) {
+    if (record[nums[i]] > 1) {
+      const auto count = record[nums[i]];
+      pq.push({0, i, 0, count * (count - 1) / 2});
+    } else if (i+1 < nums.size()) {
+      pq.push({nums[i+1] - nums[i], i, 1, record[nums[i+1]]*record[nums[i]]});
+    }
+  }
+  --k;
+  while (k > 0) {
+    const auto tp = pq.top();
+    k -= tp[3];
+    if (k < 0) {
+      return tp[0];
+    }
+    pq.pop();
+    if (tp[1]+tp[2]+1 < nums.size()) {
+      pq.push({nums[tp[1]+tp[2]+1] - nums[tp[1]], tp[1], tp[2]+1,
+               record[nums[tp[1]+tp[2]+1]] * record[nums[tp[1]]]});
+    }
+  }
+  return pq.top()[0];
+}
+
+// 826. Most Profit Assigning Work
+int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+  vector<vector<int>> tasks;
+  for (int i = 0; i < difficulty.size(); ++i) {
+    tasks.emplace_back(vector<int>({difficulty[i], profit[i]}));
+  }
+  sort(begin(tasks), end(tasks));
+  sort(begin(worker), end(worker));
+  int max_profit = 0;
+  int ttl_profit = 0;
+  for (int i = 0, j = 0; i < worker.size(); ++i) {
+    while (j < tasks.size() && worker[i] >= tasks[j][0]) {
+      max_profit = max(max_profit, tasks[j][1]);
+      ++j;
+    }
+    ttl_profit += max_profit;
+  }
+  return ttl_profit;
+}
+
+// subset的 找不重复的子集
+// 78. Subsets
+vector<vector<int>> sub_sets_;
+void GetAllSubSets(const vector<int>& nums, const int idx, 
+                   vector<int> cur_vec) {
+  if (idx >= nums.size()) return;
+  GetAllSubSets(nums, idx + 1, cur_vec);
+  cur_vec.emplace_back(nums[idx]);
+  sub_sets_.emplace_back(cur_vec);
+  GetAllSubSets(nums, idx + 1, cur_vec);
+}    
+vector<vector<int>> subsets(vector<int>& nums) {
+  GetAllSubSets(nums, 0, {});
+  sub_sets_.push_back({});
+  return sub_sets_;
+}
+// 90. Subsets II
+vector<vector<int>> sub_sets_;
+vector<int> cur_;  
+void SubSets(const vector<int>& nums, const int idx) {
+  if (idx >= nums.size()) {
+    sub_sets_.push_back(cur_);
+    return;
+  }
+  int i = idx + 1;
+  while (i < nums.size() && nums[i] == nums[idx]) {
+    ++i;
+  }
+  for (int j = idx; j <= i; ++j) {
+    SubSets(nums, i);
+    cur_.push_back(nums[idx]);
+  }
+  for (int j = idx; j <= i; ++j) {
+    cur_.pop_back();
+  }
+}
+vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+  sort(begin(nums), end(nums));
+  SubSets(nums, 0);
+  return sub_sets_;
+}
+
+// 矩阵迷宫start走到end，中间有路障，和金币，要求吃到所有金币，有多少种走法？一开始用iteration DFS，后来发现需要用backtrack
+// https://blog.csdn.net/ProLayman/article/details/96325387
+
+// Geometry
+```
+
+ML/DL preparation. http://usa.baidu.com/careers/?gh_jid=3048306 
+
+
+
+-----------------------------------------------------------
+
+
+
 For the coding part, see the below:
 
 ```c++

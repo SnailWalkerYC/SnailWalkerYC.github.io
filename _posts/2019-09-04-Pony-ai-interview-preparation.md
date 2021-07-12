@@ -556,14 +556,133 @@ int maxFrequency(vector<int>& nums, int k) {
   return max_res;
 }  
 
+// 121. Best Time to Buy and Sell Stock
+int maxProfit(vector<int>& prices) {
+  int buy = prices[0];
+  int p = 0;
+  for (int i = 1; i < prices.size(); ++i) {
+    if (prices[i] > buy) {
+      p = max(p, prices[i] - buy);
+    } else {
+      buy = prices[i];
+    }
+  }
+  return p;
+}
+// Clean solution
+int MaxProfit(const vector<int>& nums) {
+  int profit = 0;
+  for (int i = 0, min_p = INT_MAX; i < nums.size(); ++i) {
+    profit = max(profit, nums[i] - min_p);
+    min_p = min(nums[i], min_p);
+  }
+  return profit;
+}
+
 // 122. Best Time to Buy and Sell Stock II
+int maxProfit(vector<int>& prices) {
+  int profit = 0;
+  for (int i = 0; i + 1< prices.size(); ++i) {
+    profit += max(0, prices[i+1] - prices[i]);
+  }
+  return profit;
+}
+
 // 123. Best Time to Buy and Sell Stock III
+// f(i) = p(i) - min_p
+//      = f(i-1)
+// 前后缀分解
+int maxProfit(vector<int>& prices) {
+  vector<int> f(prices.size()+2, 0);
+  for (int i = 1, min_p = INT_MAX; i <= prices.size(); ++i) {
+    f[i] = max(f[i-1], prices[i-1]-min_p);
+    min_p = min(min_p, prices[i-1]);
+  }
+  int res = 0;
+  for (int i = prices.size(), max_p = 0;
+       i >= 1; --i) {
+    res = max(res, f[i-1] + max_p - prices[i-1]);
+    max_p = max(prices[i-1], max_p);
+  }
+  return res;
+}
+
 // 188. Best Time to Buy and Sell Stock IV
+// state machine DP
+// 0(no buy stock)  1(buy stock)
+int maxProfit(int k, vector<int>& prices) {
+  const int INF = -1e8;
+  const int size = prices.size();
+  if (k >= size/2) {
+    int res = 0;
+    for (int i = 1; i < prices.size(); ++i) {
+      res += max(0, prices[i] - prices[i-1]);
+    }
+    return res;
+  }
+  vector<vector<int>> f(size+1, vector<int>(k+1, INF));
+  auto g = f;
+  int res = 0;
+  f[0][0] = 0;
+  for (int i = 1; i <= size; ++i) {
+    for (int j = 0; j <= k; ++j) {
+      f[i][j] = max(f[i-1][j], g[i-1][j] + prices[i-1]);
+      g[i][j] = g[i-1][j];
+      if (j) g[i][j] = max(g[i][j], f[i-1][j-1] - prices[i-1]);
+      res = max(res, f[i][j]);
+    }
+  }
+  return res;
+}
+// Optimization
+int maxProfit(int k, vector<int>& prices) {
+  const int INF = -1e8;
+  const int size = prices.size();
+  if (k >= size/2) {
+    int res = 0;
+    for (int i = 1; i < prices.size(); ++i) {
+      res += max(0, prices[i] - prices[i-1]);
+    }
+    return res;
+  }
+  vector<vector<int>> f(2, vector<int>(k+1, INF));
+  auto g = f;
+  int res = 0;
+  f[0][0] = 0;
+  for (int i = 1; i <= size; ++i) {
+    for (int j = 0; j <= k; ++j) {
+      f[i & 1][j] = max(f[i-1 & 1][j], g[i-1 & 1][j] + prices[i-1]);
+      g[i & 1][j] = g[i-1 & 1][j];
+      if (j) g[i & 1][j] = max(g[i & 1][j], f[i-1 & 1][j-1] - prices[i-1]);
+      res = max(res, f[i & 1][j]);
+    }
+  }
+  return res;
+}
+
 // 309. Best Time to Buy and Sell Stock with Cooldown
+
 // 714. Best Time to Buy and Sell Stock with Transaction Fee
+// https://www.acwing.com/problem/content/description/1165/
+int maxProfit(vector<int>& prices, int fee) {
+  const int size = prices.size();
+  const int INF = 1e8;
+  vector<vector<int>> f(size+1, vector<int>(2, -INF));
+  f[0][0] = 0;
+  int res = 0;
+  for (int i = 1; i <= size; ++i) {
+    f[i][0] = max(f[i-1][0], f[i-1][1] + prices[i-1]);
+    f[i][1] = max(f[i-1][1], f[i-1][0] - prices[i-1] - fee);
+    res = max(res, f[i][0]);
+  }
+  return res;
+}
 
 // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
 // 1239. Maximum Length of a Concatenated String with Unique Characters
+
+// 5802. Count Good Numbers
+// 5803. Longest Common Subpath
 
 // 489. Robot Room Cleaner
 
@@ -573,6 +692,79 @@ int maxFrequency(vector<int>& nums, int k) {
 给了一堆点的横纵坐标，要求找到一个三角形，这个三角形不包含任何其他的点
 
 // Candidate: 786, 291, 1235, 1915. Number of Wonderful Substrings, https://leetcode.com/problems/count-ways-to-build-rooms-in-an-ant-colony/
+  
+// 759. Employee Free Time
+vector<Interval> MergeIntervals(const vector<vector<Interval>>& schedule, const 
+                                int left, const int right) {
+  if (left == right) return schedule[left];
+  else if (left > right) return {};
+  
+  const int mid = left + (right - left)/2;
+  const auto left_int = MergeIntervals(schedule, left, mid);
+  const auto right_int = MergeIntervals(schedule, mid + 1, right);
+  if (left_int.empty()) return right_int;
+  if (right_int.empty()) return left_int;
+  vector<Interval> ans;
+  int stt = INT_MIN;
+  int ed = INT_MIN;
+  int idx1 = 0;
+  int idx2 = 0;
+  while (idx1 < left_int.size() && idx2 < right_int.size()) {
+    if (ed < min(left_int[idx1].start, right_int[idx2].start)) {
+      if (stt >= 0) {
+        ans.emplace_back(Interval(stt, ed));
+      } 
+      stt = min(left_int[idx1].start, right_int[idx2].start);
+      if (left_int[idx1].start >= right_int[idx2].start) {
+        ed = right_int[idx2].end;
+        ++idx2;
+      }
+      else { 
+        ed = left_int[idx1].end;
+        ++idx1;
+      }
+    } else {
+      const int tmp = ed;
+      if (ed >= left_int[idx1].start) {
+        ed = max(ed, left_int[idx1].end);
+        ++idx1;
+      }
+      if (tmp >= right_int[idx2].start) {
+        ed = max(ed, right_int[idx2].end);
+        ++idx2;
+      }
+    }
+  }
+  ans.emplace_back(Interval(stt, ed));
+  while (idx1 < left_int.size()) {
+    if (ans.back().end >= left_int[idx1].start) {
+      ans.back().end = max(left_int[idx1].end, ans.back().end);
+    } else {
+      ans.emplace_back(left_int[idx1]);
+    }
+    ++idx1;
+  }
+  while (idx2 < right_int.size()) {
+    if (ans.back().end >= right_int[idx2].start) {
+      ans.back().end = max(right_int[idx2].end, ans.back().end);
+    } else {
+      ans.emplace_back(right_int[idx2]);
+    }
+    ++idx2;
+  }
+  return ans;
+}  
+vector<Interval> employeeFreeTime(vector<vector<Interval>> schedule) {
+  vector<Interval> intervals = MergeIntervals(schedule, 0, schedule.size()-1);      
+  vector<Interval> ans;
+  int stt = INT_MIN;
+  for (const auto& interval : intervals) {
+    if (stt >= 0)
+      ans.emplace_back(Interval(stt, interval.start));
+    stt = interval.end;
+  }
+  return ans;
+}  
 ```
 
 

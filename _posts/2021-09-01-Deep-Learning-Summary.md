@@ -9,15 +9,42 @@ comments: false
 
 
 
+### Loss
+
+- Cross entropy:
+- Regression loss
+
+
+
 ### Forward & Backward Propagation
 
+https://www.jianshu.com/p/e160983d601a
 
+https://www.zdaiot.com/MachineLearning/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%89%8D%E5%90%91%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/
+
+
+
+https://zhuanlan.zhihu.com/p/343564175
+
+https://www.zhihu.com/question/465918667
+
+https://zhuanlan.zhihu.com/p/358220419
+
+https://zhuanlan.zhihu.com/p/359524837
+
+https://zhuanlan.zhihu.com/p/360441891
+
+https://github.com/godweiyang/NN-CUDA-Example
 
 ###  Component
 
 
 
+### Best Network Architecture Recently
 
+- **Conv method**: EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks
+- **DETR** ：End-to-End Object Detection with Transformers
+- **MLP:**  MLP-Mixer: An all-MLP Architecture for Vision 
 
 ### Unbalance Label
 
