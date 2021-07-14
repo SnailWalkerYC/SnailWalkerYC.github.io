@@ -9,6 +9,42 @@ comments: false
 
 
 
+# Video
+
+
+
+https://www.youtube.com/watch?v=bUHFg8CZFws
+
+https://www.youtube.com/c/SystemDesignInterview/featured
+
+
+
+# Designing Data-Intensive Applications
+
+
+
+# Github
+
+https://github.com/sunyd1006/ssp
+
+https://www.cyc2018.xyz/#%E7%AE%97%E6%B3%95
+
+https://github.com/frank-lam/fullstack-tutorial
+
+
+
+# Framework
+
+
+
+## K8s
+
+
+
+## Django
+
+
+
 
 
 Ref:
@@ -32,5 +68,7 @@ Ref:
 9. https://www.cnblogs.com/xrq730/p/11039384.html
 
 10. https://zhuanlan.zhihu.com/p/140272240
+
+11. https://www.1point3acres.com/bbs/thread-773194-1-1.html
 
     

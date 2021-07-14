@@ -9,6 +9,14 @@ comments: false
 
 
 
+Stanford Courses: http://cs149.stanford.edu/fall20/lecture/
+
+CMU Courses: http://www.cs.cmu.edu/~418/
+
+
+
+
+
 ```c++
 // Vector Cosine of CUDA
 __global__ void VCos(int n, float* x, float* y) {

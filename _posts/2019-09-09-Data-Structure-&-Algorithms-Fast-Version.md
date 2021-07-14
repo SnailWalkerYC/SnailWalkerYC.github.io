@@ -504,6 +504,8 @@ class Solution {
 
 #### Bellmanford
 
+![cherimola](../images/bellman_ford.png) 
+
 ```c++
 // 经过k条边适用
 ```
@@ -525,6 +527,14 @@ class Solution {
 ## MST
 
 Minimum spanning tree.
+
+Naive Prime:
+
+
+![cherimola](../images/naive_prime3.png) 
+
+
+![cherimola](../images/naive_prime2.png) 
 
 ```c++
 // Prime 
@@ -643,9 +653,25 @@ DP = state representation(how to represent the state,  set + attributes[max, min
 
 DP optimization: DP code equal transform
 
+
+
+![cherimola](../images/dp_analysis2.png) 
+
+
+
+
+
 ## Knapsack
 
-背包问题
+ **背包问题**
+
+
+
+完全背包问题：
+
+![cherimola](../images/dp_ss.png)
+
+![cherimola](../images/dp_knapsack.png)
 
 ```c++
 // 0-1 Knapsack： 0-1 背包，每个物体只有1件
@@ -823,6 +849,10 @@ public int change(int amount, int[] coins) {
 ## State Compression DP
 
 状态压缩DP。
+
+## State Translation DP
+
+![cherimola](../images/state_dp.png)
 
 
 
