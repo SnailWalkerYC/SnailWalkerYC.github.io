@@ -9,6 +9,18 @@ comments: false
 
 
 
+CMU course: https://www.cs.cmu.edu/~15210/pasl.html
+
+CMU courses: http://www.cs.cmu.edu/~418/
+
+MIT paralle computing: https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-189-multicore-programming-primer-january-iap-2007/lecture-notes-and-video/l6-design-patterns-for-parallel-programming-i/
+
+Stanford courses: http://cs149.stanford.edu/fall20/lecture/
+
+UCB courses: https://sites.google.com/lbl.gov/cs194-15-fa2020
+
+https://sites.google.com/lbl.gov/cs267-spr2020
+
 ### memory sharing
 
 - Find the race condition.  Initialization; 

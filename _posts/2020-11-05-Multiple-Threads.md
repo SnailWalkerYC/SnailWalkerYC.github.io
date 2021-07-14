@@ -116,6 +116,21 @@ int main () {
 
 
 
+```c++
+// https://blog.csdn.net/jiange_zh/article/details/51602938
+std::future<int> f1 = std::async(std::launch::async, []() {
+  return 45;
+});
+std::cout << f1.get() << std::endl;   // output 45
+
+std::future<int> f2 = std::async(std::launch::async, []() {
+  std::cout << 54 << std::endl;
+});
+f2.wait();  // output 54
+```
+
+
+
 ### Summary
 
 ```c++

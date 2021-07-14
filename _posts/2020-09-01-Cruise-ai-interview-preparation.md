@@ -175,7 +175,7 @@ int largestRectangleArea(vector<int>& heights) {
 
 // 529. Minesweeper
 vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
-  const int dirs[2][8] = {{-1, 0, 1, 1, 1, 0, -1, -1}, {-1, -1, -1, 0, 1, 1, 1, 0}};
+  const int dirs[2][8] = { {-1, 0, 1, 1, 1, 0, -1, -1}, {-1, -1, -1, 0, 1, 1, 1, 0} };
   queue<pair<int, int>> processing;
   processing.push(make_pair(click[0], click[1]));
   while (!processing.empty()) {
@@ -248,7 +248,7 @@ int numIslands(vector<vector<char>>& grid) {
     return cnt;
   }
   int col = grid[0].size();
-  int dir[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};      
+  int dir[4][2] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1} };      
   for (int r = 0; r < row; ++r) {
     for (int c = 0; c < col; ++c) {
       if (grid[r][c] < '1') {
@@ -469,14 +469,14 @@ bool SameIsland(const vector<int>& cur_traj, const vector<vector<int>>& target) 
 int numDistinctIslands(vector<vector<int>>& grid) {
   unordered_map<int, vector<vector<int>>> trajectory;
   const int shift = 50;
-  const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+  const int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
   for (int i = 0; i < grid.size(); ++i) {
     for (int j = 0; j < grid[0].size(); ++j) {
       if (grid[i][j]) {
         int num = 0;
         vector<int> cur_traj;
         grid[i][j] = 0;
-        queue<pair<int, int>> que({{i, j}});
+        queue<pair<int, int>> que({ {i, j} });
         while (!que.empty()) {
           const auto [row, col] = que.front();
           que.pop(); 
@@ -518,7 +518,7 @@ int maxAreaOfIsland(vector<vector<int>>& grid) {
   priority_queue<int> cur_island; 
   int cnt_res = 0;
   const int MAX_SIZE = 50;
-  int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  int dirs[4][2] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1} };
   const int NUM_DIR = 4;
   for (int r = 0; r < row; ++r) {
     for (int c = 0; c < col; ++c) {
@@ -598,7 +598,7 @@ class Solution {
 };
 
 // 79. Word Search
-const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+const int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
 bool Exist(const vector<vector<char>>& board, const int row, 
            const int col, const int index, const string& word,
            vector<vector<bool>>& status) {
