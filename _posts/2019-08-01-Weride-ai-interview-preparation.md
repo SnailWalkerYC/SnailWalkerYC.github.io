@@ -115,3 +115,32 @@ void sortColors(vector<int>& nums) {
 }
 ```
 
+
+
+---------------------------------------
+
+```c++
+// DFS，给一个K，K 是总播放分钟，给int[int[]], 每一个一维数组代表一个广告，一维数组中有a,b， a是这个广告的时长(分钟， b是广告的报价，要求K分钟里最大利润，然后播每一个广告是至少播放时长/2， 比如10分钟，至少要播5分钟
+
+// 就是给一堆事件和时间，然后如果最近十秒没出现过这个事件就println要是出现过update时间， 输入是String[], Time[]，一一对应，比如 food- 01 shower- 04, food-11, run-15, 还有一个要求是每次遇到新的事件，要把已存下的事件中超过十秒(时间差大于10)的删除, 比如我遇到run-15，就要把shower-4删掉。  我是拿MAP存的，可是后面删除旧事件(超过十秒）会把时间复杂度提高了，面试官说用其他数据结构可以比n平方少
+
+// 239. Sliding Window Maximum -> max difference
+
+// public static void main(String[] args) {
+      System.out.println("You're running Java!");
+      List<Integer> seq = Arrays.asList(new Integer[]{2, 1, 3, 2, 4, 3, 2, 5, 4, 5});
+
+       // Should print [1, 2, 3, 4, 5]
+      System.out.println(findLongestSequence(seq));
+
+      seq = Arrays.asList(new Integer[]{2, 1, 3, 2, 4, 3, 2, 5, 5});
+      /*
+    * 2 1 3 2 4 3 2 5 5
+    * ^   ^    ^     ^
+        */
+       // Should print [2, 3, 4, 5]
+      System.out.println(findLongestSequence(seq));
+    }
+
+```
+
