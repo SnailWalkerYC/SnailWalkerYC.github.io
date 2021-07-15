@@ -32,7 +32,7 @@ int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
 
 // 980. Unique Paths III
 int cur_ = 0;  
-const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+const int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
 pair<int, int> Find(const vector<vector<int>>& grid, const int target) {
   for (int i = 0; i < grid.size(); ++i) {
     for (int j = 0; j < grid[0].size(); ++j) {
