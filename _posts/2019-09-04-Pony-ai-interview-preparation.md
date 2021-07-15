@@ -685,6 +685,28 @@ int maxProfit(vector<int>& prices, int fee) {
 // 5803. Longest Common Subpath
 
 // 489. Robot Room Cleaner
+unordered_set<string> record_;
+const int dirs_[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };  
+void cleanRoom(Robot& robot, const int x = 0, 
+               const int y = 0, const int dir = 0) {
+  const auto key = to_string(x) + " " + to_string(y);
+  if (record_.count(key)) return;
+  record_.insert(key);
+  robot.clean();
+  for (int i = 0; i < 4; ++i) {
+    const int new_x = x + dirs_[0][(i+dir)%4];
+    const int new_y = y + dirs_[1][(i+dir)%4];
+    if (robot.move()) {
+      cleanRoom(robot, new_x, new_y, (dir + i)%4);
+      robot.turnRight();
+      robot.turnRight();
+      robot.move();
+      robot.turnRight();
+      robot.turnRight();
+    }
+    robot.turnRight();
+  }
+}
 
 // https://leetcode.com/problems/k-th-smallest-prime-fraction/
 // 786. K-th Smallest Prime Fraction

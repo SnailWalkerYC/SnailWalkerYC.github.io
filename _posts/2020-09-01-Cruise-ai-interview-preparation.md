@@ -31,6 +31,57 @@ int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
 }
 
 // 980. Unique Paths III
+int cur_ = 0;  
+const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+pair<int, int> Find(const vector<vector<int>>& grid, const int target) {
+  for (int i = 0; i < grid.size(); ++i) {
+    for (int j = 0; j < grid[0].size(); ++j) {
+      if (grid[i][j] == target) {
+        return {i, j};
+      }
+    }
+  }
+  return {-1, -1};
+}  
+int Calculate(const vector<vector<int>>& grid) {
+  int num = 0;
+  for (int i = 0; i < grid.size(); ++i) {
+    for (int j = 0; j < grid[0].size(); ++j) {
+      num += !grid[i][j];
+    }
+  }
+  return num;
+}  
+void UniquePaths(const pair<int, int>& target, vector<vector<int>>& grid,
+                 const pair<int, int>& source, const int num, const int target_num) {
+  if (target == source) {
+    if (num == target_num) {
+      ++cur_;
+    }
+    return;
+  }
+  const auto x = source.second;
+  const auto y = source.first;
+  if (x < 0 || y < 0 || y >= grid.size() || x >= grid[0].size() 
+      || grid[y][x] == -1 || grid[y][x] == INT_MAX)
+    return;
+  const int prev = grid[y][x];
+  grid[y][x] = INT_MAX;
+  for (int i = 0; i < 4; ++i) {
+    const auto new_x = dirs[0][i] + source.second;
+    const auto new_y = dirs[1][i] + source.first;
+    UniquePaths(target, grid, {new_y, new_x}, num + 1, target_num); 
+  }
+  grid[y][x] = prev;
+}      
+int uniquePathsIII(vector<vector<int>>& grid) {
+  const pair<int, int> stt = Find(grid, 1);
+  const pair<int, int> fin = Find(grid, 2);
+  const int target = Calculate(grid);
+  if (stt.first < 0) return 0;
+  UniquePaths(fin, grid, stt, -1, target);
+  return cur_;
+}
 
 // 986. Interval List Intersections
 vector<vector<int>> intervalIntersection(vector<vector<int>>& first, vector<vector<int>>& second) {
@@ -56,7 +107,75 @@ vector<vector<int>> intervalIntersection(vector<vector<int>>& first, vector<vect
 }
 
 // 1258. Synonymous Sentences
-
+vector<string> ans_;  
+string Find(const string& s1, unordered_map<string, string>& sents) {
+  if (sents[s1] != s1) {
+    sents[s1] = Find(sents[s1], sents);
+  }
+  return sents[s1];
+}    
+vector<string> SplitString(const string& text) {
+  vector<string> ans;
+  string cur;
+  for (const auto& c : text) {
+    if (c == ' ') {
+      if (!cur.empty()) {
+        ans.emplace_back(cur);
+      }
+      cur.clear();
+    } else {
+      cur += c;
+    }
+  }
+  if (!cur.empty()) {
+    ans.emplace_back(cur);
+  }
+  return ans;
+}  
+void Generate(const vector<string>& strs, const int idx, 
+              const unordered_set<string>& sets, 
+              const unordered_map<string, string> sents,
+              const unordered_map<string, vector<string>>& synos, 
+              const string cur) {
+  if (idx >= strs.size()) {
+    ans_.emplace_back(cur);
+    return;
+  }
+  if (!sets.count(strs[idx])) {
+    Generate(strs, idx+1, sets, sents, synos, cur + (cur.empty()?"":" ") + strs[idx]);
+  } else {
+    for (const auto& w : synos.at(sents.at(strs[idx]))) {
+      Generate(strs, idx+1, sets, sents, synos, cur + (cur.empty()?"":" ") + w);
+    }
+  }
+}  
+vector<string> generateSentences(vector<vector<string>>& synonyms, string text) {
+  unordered_map<string, vector<string>> synos; // parent -> all synonymous
+  unordered_map<string, string> sents;  // sym -> parent
+  for (const auto& syn : synonyms) {
+    sents[syn[0]] = syn[0];
+    sents[syn[1]] = syn[1];
+  }
+  unordered_set<string> sets;
+  for (const auto& syn : synonyms) {
+    const auto& p1 = Find(syn[0], sents);
+    const auto& p2 = Find(syn[1], sents);
+    sets.insert(syn[0]);
+    sets.insert(syn[1]);
+    if (p1 != p2) {
+      sents[p1] = p2;
+    }
+  }
+  for (const auto& it : sets) {
+    const auto& p1 = Find(it, sents);
+    synos[p1].emplace_back(it);
+  }
+  vector<string> strs = SplitString(text);
+  Generate(strs, 0, sets, sents, synos, "");
+  sort(begin(ans_), end(ans_));
+  return ans_;
+}
+  
 // 489. Robot Room Cleaner
 
 // LRU cache
@@ -386,6 +505,7 @@ int main() {
 ```c++
 // Memory pool
 // http://www.pinksquirrellabs.com/blog/2018/01/31/-fixed-memory-pool-design/
+// https://github.com/cacay/MemoryPool
 ```
 
 
