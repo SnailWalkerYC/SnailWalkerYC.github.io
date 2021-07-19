@@ -696,7 +696,7 @@ int maxProfit(vector<int>& prices, int fee) {
 
 // 1349. Maximum Students Taking Exam
 // TLE
-const int dirs_[2][4] = {{-1, 1, -1, 1}, {0, 0, -1, -1}};  
+const int dirs_[2][4] = { {-1, 1, -1, 1}, {0, 0, -1, -1} };  
 int cur_ = 0;  
 void MaxStudents(int x, int y, const int cur, 
                 vector<vector<char>>& seats) {
