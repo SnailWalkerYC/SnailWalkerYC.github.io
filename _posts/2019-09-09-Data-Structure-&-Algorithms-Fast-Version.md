@@ -430,7 +430,15 @@ class Solution {
 
 ## Shortest Path
 
+**Summary:**
+
+
+
+![cherimola](../images/shortest.png)
+
 #### Dijkstra
+
+![cherimola](../images/prime_dj.png)
 
 ```c++
 // Dijkstra, source -> target
@@ -514,12 +522,17 @@ class Solution {
 
 #### SPFA
 
+![cherimola](../images/spfa.png)
+
 ```c++
 // 不经过k条边
 ```
 
 
 
+#### Floyd
+
+![cherimola](../images/floyd.png)
 
 
 
@@ -668,6 +681,14 @@ DP optimization: DP code equal transform
 
 
 完全背包问题：
+
+![cherimola](../images/knapsack_1.png)
+
+
+
+
+
+
 
 ![cherimola](../images/dp_ss.png)
 
@@ -869,6 +890,130 @@ public int change(int amount, int[] coins) {
 
 
 # Greedy
+
+```c++
+// Intervals operation
+// 56. Merge Intervals
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+  sort(begin(intervals), end(intervals), [](
+       vector<int>& v1, vector<int>& v2) {
+    return v1[0] < v2[0];
+  });
+  vector<vector<int>> ans;
+  int stt = intervals[0][0];
+  int ed = intervals[0][1];
+  for (const auto& c : intervals) {
+    if (c[0] <= ed) {
+      ed = max(c[1], ed);
+      stt = min(stt, c[0]);
+    } else {
+      ans.push_back(vector<int>({stt, ed}));
+      ed = c[1];
+      stt = c[0];
+    }
+  }
+  ans.push_back({stt, ed});
+  return ans;
+}
+
+// 57. Insert Interval
+vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+  auto low_it = lower_bound(begin(intervals), end(intervals), newInterval, [](
+       const vector<int>& v1, const vector<int>& v2) {
+    return v1[1] < v2[0];
+  });
+  auto high_it = upper_bound(begin(intervals), end(intervals), newInterval, [](
+      const vector<int>& v1, const vector<int>& v2) {
+    return v1[1] < v2[0];
+  });
+  if (low_it == high_it) {
+    intervals.insert(low_it, newInterval);
+  } else {
+    --high_it;
+    (*high_it)[0] = min((*low_it)[0], newInterval[0]);
+    (*high_it)[1] = max((*high_it)[1], newInterval[1]);
+    intervals.erase(low_it, high_it);
+  }
+  return intervals;
+}
+
+// 435. Non-overlapping Intervals
+int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+  if (intervals.empty()) return 0;
+  sort(begin(intervals), end(intervals), [](const vector<int>& v1,
+                                            const vector<int>& v2) {
+    return v1[1] < v2[1];
+  });       
+  int res = 0;
+  int ed = -2e9;
+  for (const auto& inter : intervals) {
+    if (ed <= inter[0]) {
+      ++res;
+      ed = inter[1];
+    }
+  }
+  return intervals.size() - res;
+}
+
+// 986. Interval List Intersections
+vector<vector<int>> intervalIntersection(vector<vector<int>>& first, vector<vector<int>>& second) {
+  vector<vector<int>> ans;
+  int idx1 = 0;
+  int idx2 = 0;
+  while (idx1 < first.size() && idx2 < second.size()) {
+    if (first[idx1][1] < second[idx2][0]) {
+      ++idx1;
+    } else if (second[idx2][1] < first[idx1][0]) {
+      ++idx2;
+    } else {
+      ans.emplace_back(vector<int>({max(first[idx1][0], second[idx2][0]),
+                                    min(first[idx1][1], second[idx2][1])}));
+      if (first[idx1][1] > second[idx2][1]) {
+        ++idx2;
+      } else {
+        ++idx1;
+      }
+    }
+  }
+  return ans;
+}
+
+// 1272. Remove Interval
+// With binary search
+vector<vector<int>> removeInterval(vector<vector<int>>& intervals, vector<int>& removed) {
+  if (intervals.front()[0] >= removed[1] || intervals.back()[1] <= removed[0])
+    return intervals;
+  auto low_it = lower_bound(intervals.begin(), intervals.end(), removed[0], [](
+     const vector<int>& v1, const int& num) {
+    return v1[1] <= num;
+  });
+  auto high_it = lower_bound(begin(intervals), end(intervals), removed[1], [](
+     const vector<int>& v1, const int& num) {
+    return v1[1] <= num;
+  }); 
+  const auto high_val = high_it == intervals.end() ? vector<int>() : (*high_it);
+  const bool same_int = low_it == high_it;
+  bool change_low =false;
+  if ((*low_it)[0] < removed[0]) {
+    (*low_it)[1] = removed[0];
+    ++low_it;
+    change_low = true;
+  }
+  if (high_it != intervals.end()) {
+    if (same_int && change_low) {
+      intervals.insert(low_it, vector<int>({max(high_val[0], removed[1]), high_val[1]}));
+    } else {
+      (*high_it)[0] = max(high_val[0], removed[1]);
+    }
+  }
+  if (low_it < high_it) {
+    intervals.erase(low_it, high_it); 
+  }
+  return intervals;
+}
+```
+
+
 
 
 

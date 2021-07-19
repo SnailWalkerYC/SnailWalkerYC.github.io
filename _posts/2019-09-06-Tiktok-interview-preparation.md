@@ -198,7 +198,41 @@ bool canPartition(vector<int>& nums) {
 // NP-hard 
 // Sorted from large to small
 // nums[i] == nums[i-1], nums[i] fail -> nums[i-1] fail.
+// Optimization
+// 1. 
 
 // 351. Android Unlock Patterns 
+int m_ = 0;
+int n_ = 0;  
+int DFS(const int key, int cur, const vector<vector<int>>& skips,
+       vector<bool>& vis) {
+  if (cur >= n_) return 0;
+  else if (cur == n_ - 1) return 1;
+  vis[key] = true;
+  int res = 0;
+  for (int i = 1; i <= 9; ++i) {
+    if (!vis[i] && (!skips[key][i] || vis[skips[key][i]]))
+      res += DFS(i, cur+1, skips, vis); 
+  }
+  vis[key] = false;
+  return res + (cur >= m_-1?1:0);
+}  
+int numberOfPatterns(int m, int n) {
+  m_ = m;
+  n_ = n;
+  vector<vector<int>> skips(10, vector<int>(10, 0));
+  skips[1][3] = skips[3][1] = 2;
+  skips[1][7] = skips[7][1] = 4;
+  skips[7][9] = skips[9][7] = 8;
+  skips[3][9] = skips[9][3] = 6;
+  skips[1][9] = skips[9][1] = skips[3][7] = skips[7][3]
+     = skips[2][8] = skips[8][2] = skips[4][6] = skips[6][4]
+     = 5;
+  vector<bool> vis(10, false);
+  int res = DFS(1, 0, skips, vis) * 4;
+  res += DFS(2, 0, skips, vis) * 4;
+  res += DFS(5, 0, skips, vis);
+  return res;
+}
 ```
 

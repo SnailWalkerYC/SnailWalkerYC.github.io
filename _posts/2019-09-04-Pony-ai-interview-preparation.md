@@ -660,8 +660,6 @@ int maxProfit(int k, vector<int>& prices) {
   return res;
 }
 
-// 309. Best Time to Buy and Sell Stock with Cooldown
-
 // 714. Best Time to Buy and Sell Stock with Transaction Fee
 // https://www.acwing.com/problem/content/description/1165/
 int maxProfit(vector<int>& prices, int fee) {
@@ -678,11 +676,100 @@ int maxProfit(vector<int>& prices, int fee) {
   return res;
 }
 
+// 309. Best Time to Buy and Sell Stock with Cooldown
+
 // 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
 // 1239. Maximum Length of a Concatenated String with Unique Characters
 
-// 5802. Count Good Numbers
-// 5803. Longest Common Subpath
+// 1922. Count Good Numbers
+// 1923. Longest Common Subpath
+
+// 1235. Maximum Profit in Job Scheduling
+
+// 1915. Number of Wonderful Substrings
+
+// 1916. Count Ways to Build Rooms in an Ant Colony
+
+// 786. K-th Smallest Prime Fraction
+
+// 291. Word Pattern II
+
+// 1349. Maximum Students Taking Exam
+// TLE
+const int dirs_[2][4] = {{-1, 1, -1, 1}, {0, 0, -1, -1}};  
+int cur_ = 0;  
+void MaxStudents(int x, int y, const int cur, 
+                vector<vector<char>>& seats) {
+  if (x >= seats[0].size()) {
+    x = 0;
+    ++y;
+  }
+  if (y >= seats.size()) {
+    cur_ = max(cur, cur_);
+    return;
+  }
+  while (seats[y][x] == '#') {
+    ++x;
+    if (x >= seats[0].size()) {
+      x = 0;
+      ++y;
+    }
+    if (y >= seats.size()) {
+      cur_ = max(cur, cur_);
+      return;
+    }
+  }
+  bool is_ok = true;
+  for (int i = 0; i < 4; ++i) {
+    const int new_x = dirs_[0][i] + x;
+    const int new_y = dirs_[1][i] + y;
+    if (new_x < 0 || new_x >= seats[0].size() ||
+        new_y < 0 || new_y >= seats.size()) {
+      continue;
+    }
+    if (seats[new_y][new_x] == '+') {
+      is_ok = false;
+      break;
+    }
+  }  
+  if (is_ok) {
+    seats[y][x] = '+';
+    MaxStudents(x+1, y, cur+1, seats);
+    seats[y][x] = '.';
+    MaxStudents(x+1, y, cur, seats);
+  } else {
+    MaxStudents(x+1, y, cur, seats);
+  }
+}  
+int maxStudents(vector<vector<char>>& seats) {
+  MaxStudents(0, 0, 0, seats);        
+  return cur_;
+}
+
+// 1525. Number of Good Ways to Split a String
+int numSplits(string s) {
+  int left[26] = {0};
+  int right[26] = {0};
+  int num_left = 1;
+  int num_right = 0;
+  ++left[s[0]-'a'];
+  for (int i = 1; i < s.size(); ++i) {
+    ++right[s[i]-'a'];
+    if (right[s[i]-'a'] == 1)
+      ++num_right;
+  }
+  int res = num_left == num_right;
+  for (int i = 1; i < s.size() - 1; ++i) {
+    --right[s[i]-'a'];
+    if (!right[s[i]-'a'])
+      --num_right;
+    ++left[s[i]-'a'];
+    if (left[s[i]-'a'] == 1)
+      ++num_left;
+    res += num_left == num_right;
+  }
+  return res;
+}
 
 // 489. Robot Room Cleaner
 unordered_set<string> record_;
@@ -708,12 +795,7 @@ void cleanRoom(Robot& robot, const int x = 0,
   }
 }
 
-// https://leetcode.com/problems/k-th-smallest-prime-fraction/
-// 786. K-th Smallest Prime Fraction
-
-给了一堆点的横纵坐标，要求找到一个三角形，这个三角形不包含任何其他的点
-
-// Candidate: 786, 291, 1235, 1915. Number of Wonderful Substrings, https://leetcode.com/problems/count-ways-to-build-rooms-in-an-ant-colony/
+// 给了一堆点的横纵坐标，要求找到一个三角形，这个三角形不包含任何其他的点
   
 // 759. Employee Free Time
 vector<Interval> MergeIntervals(const vector<vector<Interval>>& schedule, const 

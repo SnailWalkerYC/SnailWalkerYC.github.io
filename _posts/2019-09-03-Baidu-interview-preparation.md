@@ -9,6 +9,686 @@ comments: false
 
 
 
+```c++
+// 76. Minimum Window Substring
+string minWindow(string s, string t) {
+  unordered_map<char, int> cnt;
+  unordered_set<char> ts;
+  for (const auto& c:t) { 
+    --cnt[c];
+    ts.insert(c);
+  }
+  int diff = cnt.size();
+  int res = INT_MAX;
+  int stt_idx = 0;
+  for (int i = 0, j = 0; i < s.size(); ++i) {
+    ++cnt[s[i]];
+    if (ts.count(s[i])) {
+      if (!cnt[s[i]]) {
+        --diff;
+      } 
+      while(!ts.count(s[j]) || 
+            (ts.count(s[j]) && cnt[s[j]] > 0)) {
+        --cnt[s[j]];
+        ++j;
+      }
+    }
+    if (!diff) {
+      if (i - j + 1 < res) {
+        res = i - j + 1;
+        stt_idx = j;
+      }
+    }
+  }
+  return res == INT_MAX?"":s.substr(stt_idx, res);
+}
+
+// Verify if two line segment intersect
+// https://www.cnblogs.com/kane1990/p/5742830.html
+
+// 456. 132 Pattern
+bool find132pattern(vector<int>& nums) {
+  stack<int> stk;
+  int right = INT_MIN;
+  for (auto it = nums.rbegin(); it != nums.rend(); ++it) {
+    if (*it < right) return true;
+    while (!stk.empty() && stk.top() < *it) {
+      right = stk.top();
+      stk.pop();
+    }
+    stk.push(*it);
+  }
+  return false;
+}
+
+// 535. Encode and Decode TinyURL
+unordered_map<string, string> longToShort;
+  unordered_map<string, string> shortToLong;
+  int num_codes = 7;
+  string codes = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+  // Encodes a URL to a shortened URL.
+  string encode(string longUrl) {
+    bool hasCode = true;
+    string shortUrl = "";
+    while(hasCode) {
+      int c_ind = 62*rand() % 61;
+      shortUrl += codes[c_ind];
+      if(shortUrl.size()==num_codes) {
+        if(shortToLong.find(shortUrl)!=shortToLong.end()) {
+          shortUrl = "";
+        }    
+        else {
+          hasCode = false;
+        }
+      }
+    }    
+    longToShort[longUrl] = shortUrl;
+    shortToLong[shortUrl] = longUrl;
+    return shortUrl;
+  }
+  // Decodes a shortened URL to its original URL.
+  string decode(string shortUrl) {
+    return shortToLong[shortUrl];
+  }
+};
+
+// 121. Best Time to Buy and Sell Stock
+int maxProfit(vector<int>& prices) {
+  int buy = prices[0];
+  int p = 0;
+  for (int i = 1; i < prices.size(); ++i) {
+    if (prices[i] > buy) {
+      p = max(p, prices[i] - buy);
+    } else {
+      buy = prices[i];
+    }
+  }
+  return p;
+}
+// Clean solution
+int MaxProfit(const vector<int>& nums) {
+  int profit = 0;
+  for (int i = 0, min_p = INT_MAX; i < nums.size(); ++i) {
+    profit = max(profit, nums[i] - min_p);
+    min_p = min(nums[i], min_p);
+  }
+  return profit;
+}
+
+// 122. Best Time to Buy and Sell Stock II
+int maxProfit(vector<int>& prices) {
+  int profit = 0;
+  for (int i = 0; i + 1< prices.size(); ++i) {
+    profit += max(0, prices[i+1] - prices[i]);
+  }
+  return profit;
+}
+
+// 123. Best Time to Buy and Sell Stock III
+// f(i) = p(i) - min_p
+//      = f(i-1)
+// 前后缀分解
+int maxProfit(vector<int>& prices) {
+  vector<int> f(prices.size()+2, 0);
+  for (int i = 1, min_p = INT_MAX; i <= prices.size(); ++i) {
+    f[i] = max(f[i-1], prices[i-1]-min_p);
+    min_p = min(min_p, prices[i-1]);
+  }
+  int res = 0;
+  for (int i = prices.size(), max_p = 0;
+       i >= 1; --i) {
+    res = max(res, f[i-1] + max_p - prices[i-1]);
+    max_p = max(prices[i-1], max_p);
+  }
+  return res;
+}
+
+// 188. Best Time to Buy and Sell Stock IV
+// state machine DP
+// 0(no buy stock)  1(buy stock)
+int maxProfit(int k, vector<int>& prices) {
+  const int INF = -1e8;
+  const int size = prices.size();
+  if (k >= size/2) {
+    int res = 0;
+    for (int i = 1; i < prices.size(); ++i) {
+      res += max(0, prices[i] - prices[i-1]);
+    }
+    return res;
+  }
+  vector<vector<int>> f(size+1, vector<int>(k+1, INF));
+  auto g = f;
+  int res = 0;
+  f[0][0] = 0;
+  for (int i = 1; i <= size; ++i) {
+    for (int j = 0; j <= k; ++j) {
+      f[i][j] = max(f[i-1][j], g[i-1][j] + prices[i-1]);
+      g[i][j] = g[i-1][j];
+      if (j) g[i][j] = max(g[i][j], f[i-1][j-1] - prices[i-1]);
+      res = max(res, f[i][j]);
+    }
+  }
+  return res;
+}
+// Optimization
+int maxProfit(int k, vector<int>& prices) {
+  const int INF = -1e8;
+  const int size = prices.size();
+  if (k >= size/2) {
+    int res = 0;
+    for (int i = 1; i < prices.size(); ++i) {
+      res += max(0, prices[i] - prices[i-1]);
+    }
+    return res;
+  }
+  vector<vector<int>> f(2, vector<int>(k+1, INF));
+  auto g = f;
+  int res = 0;
+  f[0][0] = 0;
+  for (int i = 1; i <= size; ++i) {
+    for (int j = 0; j <= k; ++j) {
+      f[i & 1][j] = max(f[i-1 & 1][j], g[i-1 & 1][j] + prices[i-1]);
+      g[i & 1][j] = g[i-1 & 1][j];
+      if (j) g[i & 1][j] = max(g[i & 1][j], f[i-1 & 1][j-1] - prices[i-1]);
+      res = max(res, f[i & 1][j]);
+    }
+  }
+  return res;
+}  
+  
+// 91. Decode Ways
+int numDecodings(string s) {
+  int m = s.length();
+  if (m == 0) return 0;
+  if (s[0] == '0') return 0;
+  vector<int> cnt(m + 1, 0);
+  cnt[0] = 1;
+  cnt[1] = 1;
+  for (int i = 1; i < m; ++i) {
+    // check if 0 is the valid num
+    if (s[i] == '0') {
+      if (!is_valid_num(s[i - 1], s[i])) return 0;
+       else cnt[i + 1] = cnt[i - 1];
+     } else {
+       cnt[i + 1] += cnt[i];
+       if (is_valid_num(s[i - 1], s[i])) cnt[i + 1] += cnt[i - 1];
+     }
+  }
+  return cnt[m];
+}
+bool is_valid_num(char& a, char& b) {
+  if (a == '1' || a == '2' && b < '7') return true;
+  return false;
+}
+  
+// Implement vector class
+// Self implementation of the Vector Class in C++
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename T> 
+class vectorClass {
+ private: 
+	// arr is the integer pointer
+	// which stores the address of our vector
+	T* arr;
+	// capacity is the total storage
+	// capacity of the vector
+	int capacity;
+	// current is the number of elements
+	// currently present in the vector
+	int current;
+public:
+	// Default constructor to initialise
+	// an initial capacity of 1 element and
+	// allocating storage using dynamic allocation
+	vectorClass() {
+		arr = new T[1];
+		capacity = 1;
+		current = 0;
+	}
+
+	// Function to add an element at the last
+	void push(T data) {
+		// if the number of elements is equal to the
+		// capacity, that means we don't have space to
+		// accommodate more elements. We need to double the
+		// capacity
+		if (current == capacity) {
+			T* temp = new T[2 * capacity];
+			// copying old array elements to new array
+			for (int i = 0; i < capacity; i++) {
+				temp[i] = arr[i];
+			}
+			// deleting previous array
+			delete[] arr;
+			capacity *= 2;
+			arr = temp;
+		}
+		// Inserting data
+		arr[current] = data;
+		current++;
+	}
+
+	// function to add element at any index
+	void push(int data, int index) {
+		// if index is equal to capacity then this
+		// function is same as push defined above
+		if (index == capacity)
+			push(data);
+		else
+			arr[index] = data;
+	}
+
+	// function to extract element at any index
+	T get(int index) {
+		// if index is within the range
+		if (index < current)
+			return arr[index];
+	}
+
+	// function to delete last element
+	void pop() { current--; }
+
+	// function to get size of the vector
+	int size() { return current; }
+
+	// function to get capacity of the vector
+	int getcapacity() { return capacity; }
+
+	// function to print array elements
+	void print()
+	{
+		for (int i = 0; i < current; i++) {
+			cout << arr[i] << " ";
+		}
+		cout << endl;
+	}
+};
+
+// Driver code
+int main() {
+	vectorClass<int> v;
+	vectorClass<char> v1;
+	v.push(10);
+	v.push(20);
+	v.push(30);
+	v.push(40);
+	v.push(50);
+	v1.push(71);
+	v1.push(72);
+	v1.push(73);
+	v1.push(74);
+
+	cout << "Vector size : " << v.size() << endl;
+	cout << "Vector capacity : " << v.getcapacity() << endl;
+	cout << "Vector elements : ";
+	v.print();
+	v.push(100, 1);
+
+	cout << "\nAfter updating 1st index" << endl;
+	cout << "Vector elements of type int : " << endl;
+	v.print();
+	// This was possible because we used templates
+	cout << "Vector elements of type char : " << endl;
+	v1.print();
+	cout << "Element at 1st index of type int: " << v.get(1)
+		<< endl;
+	cout << "Element at 1st index of type char: "
+		<< v1.get(1) << endl;
+
+	v.pop();
+	v1.pop();
+
+	cout << "\nAfter deleting last element" << endl;
+	cout << "Vector size of type int: " << v.size() << endl;
+	cout << "Vector size of type char: " << v1.size()
+		<< endl;
+	cout << "Vector capacity of type int : "
+		<< v.getcapacity() << endl;
+	cout << "Vector capacity of type char : "
+		<< v1.getcapacity() << endl;
+
+	cout << "Vector elements of type int: ";
+	v.print();
+	cout << "Vector elements of type char: ";
+	v1.print();
+
+	return 0;
+}  
+  
+// LRU cache
+class LRUCache {
+ public:
+  unordered_map<int, pair<int, list<int>::iterator>> record_;
+  list<int> key_;
+  int capacity_ = 0;
+  
+  LRUCache(int capacity) {
+    capacity_ = capacity;
+  }
+    
+  int get(int key) {
+    auto it = record_.find(key);
+    if (it == record_.end()) return -1;
+    const auto value = it->second;
+    record_.erase(it);
+    key_.erase(value.second);
+    key_.push_front(key);
+    record_[key] = make_pair(value.first, key_.begin());
+    return value.first;
+  }
+    
+  void put(int key, int value) {
+    auto it = record_.find(key);
+    if (it != record_.end()) {
+      const auto [_, it_list] = it->second;
+      record_.erase(it);
+      key_.erase(it_list);
+    }
+    if (key_.size() >= capacity_) {
+      auto back_it = prev(key_.end());
+      record_.erase(*back_it);
+      key_.erase(back_it);
+    }
+    key_.push_front(key);
+    record_[key] = std::make_pair(value, key_.begin());
+  }
+};  
+
+// reverse bits in a byte.
+uint32_t reverseBits(uint32_t n) {
+  uint32_t res = 0;
+  int power = 31;
+  while (n > 0) {
+    res |= (n & 1) << power;
+    --power;
+    n = n >> 1;
+  }
+  return res;
+} 
+// Shift by 16, 8, 4, 2, 1 bits.
+
+// fabonacci number.
+// https://www.huaweicloud.com/articles/8359906.html
+  
+// 57. Insert Interval
+vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+  auto low_it = lower_bound(begin(intervals), end(intervals), newInterval, [](
+       const vector<int>& v1, const vector<int>& v2) {
+    return v1[1] < v2[0];
+  });
+  auto high_it = upper_bound(begin(intervals), end(intervals), newInterval, [](
+      const vector<int>& v1, const vector<int>& v2) {
+    return v1[1] < v2[0];
+  });
+  if (low_it == high_it) {
+    intervals.insert(low_it, newInterval);
+  } else {
+    --high_it;
+    (*high_it)[0] = min((*low_it)[0], newInterval[0]);
+    (*high_it)[1] = max((*high_it)[1], newInterval[1]);
+    intervals.erase(low_it, high_it);
+  }
+  return intervals;
+}
+
+// 矩阵迷宫start走到end，中间有路障，和金币，要求吃到所有金币，有多少种走法？backtracking.
+  
+// 5. Longest Palindromic Substring  
+string longestPalindrome(string s) {
+  string ans;
+  int s_len = s.size();
+  if(!s_len)
+    return s;
+  vector<vector<bool>> rec(s_len, vector<bool>(s_len, 0));
+  for(int len = 1; len <= s_len; len++) {
+    for(int ind = 0; ind<=s_len-len; ind++) {
+      int ind2 = ind+len-1;
+      rec[ind][ind2] = s[ind]==s[ind2] && (len==1 || len==2 || rec[ind+1][ind2-1]);
+      if(rec[ind][ind2] && ans.size()<len)
+        ans = s.substr(ind, len);
+    }
+  }
+  return ans;
+}
+// Expanding center
+string longestPalindrome(string s) {
+  int slen = s.length();
+  string res;
+  if(!slen) return res;      
+  int max_cnt = 1;
+  res = s[0];      
+  for(int i = 0; i < slen; i++) {
+    int ind1 = i, ind2 = i;
+    int cnt = -1;
+    while(1) { 
+      if(s[ind1] == s[ind2]) cnt += 2;
+      else break;
+      ind1--; ind2++;
+      if(ind1 < 0 || ind2 >= slen) break;
+    }
+    if(cnt > max_cnt){
+      ind1 = ind1 + 1;
+      max_cnt = cnt; res = s.substr(ind1, max_cnt);
+    }
+  }
+  for(int i = 0; i < slen-1; i++) {
+    int ind1 = i, ind2 = i+1;
+    int cnt = 0;
+    while(1) {
+      if(s[ind1] == s[ind2]) cnt += 2;
+      else break;
+      ind1--; ind2++;
+      if(ind1 < 0 || ind2 >= slen) break;
+    }
+    if(cnt > max_cnt) {
+      ind1 = ind1 + 1;
+      max_cnt = cnt;  res = s.substr(ind1, max_cnt);
+    }    
+  }
+  return res;
+}
+
+// 826. Most Profit Assigning Work
+int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+  vector<vector<int>> tasks;
+  for (int i = 0; i < difficulty.size(); ++i) {
+    tasks.emplace_back(vector<int>({difficulty[i], profit[i]}));
+  }
+  sort(begin(tasks), end(tasks));
+  sort(begin(worker), end(worker));
+  int max_profit = 0;
+  int ttl_profit = 0;
+  for (int i = 0, j = 0; i < worker.size(); ++i) {
+    while (j < tasks.size() && worker[i] >= tasks[j][0]) {
+      max_profit = max(max_profit, tasks[j][1]);
+      ++j;
+    }
+    ttl_profit += max_profit;
+  }
+  return ttl_profit;
+}    
+    
+// 74. Search a 2D Matrix
+bool searchMatrix(vector<vector<int>>& matrix, int target) {
+  if (target < matrix[0][0] || target > matrix.back().back())
+    return false;
+  vector<int> column;
+  for (int i = 0; i < matrix.size(); ++i) {
+    column.emplace_back(matrix[i][0]);
+  }
+  auto it = lower_bound(begin(column), end(column), target);
+  if (it == end(column) || (*it > target && it != begin(column)))
+    --it;
+  const int idx = it - begin(column);
+  it = lower_bound(begin(matrix[idx]), end(matrix[idx]), target);
+  return it != end(matrix[idx]) &&  *it == target;
+}  
+  
+// https://leetcode.com/problems/max-points-on-a-line/
+// 149. Max Points on a Line  
+bool SameLine(const vector<int>& p1,
+              const vector<int>& p2,
+              const vector<int>& p3) {
+  const int p21_x = p2[1] - p1[1];
+  const int p21_y = p2[0] - p1[0];
+  const int p31_x = p3[1] - p1[1];
+  const int p31_y = p3[0] - p1[0];
+  return p21_x * p31_y == p21_y * p31_x;
+}  
+int maxPoints(vector<vector<int>>& points) {
+  int res = 1;
+  for (int i = 0; i < points.size(); ++i) {
+    for (int j = i + 1; j < points.size(); ++j) {
+      int cur_len = 2;
+      for (int k = j + 1; k < points.size(); ++k) {
+        if (SameLine(points[i], points[j], points[k])) {
+          ++cur_len;
+        }
+      }
+      res = max(res, cur_len);
+    }
+  }
+  return res;
+}
+// 2 max points
+int maxPoints(vector<vector<int>>& points) {
+  int res = 0;
+  for (const auto& p:points) {
+    int ss = 0;
+    int vs = 0;
+    unordered_map<long double, int> record;
+    for (const auto& q: points) {
+      if (p == q) ++ss;
+      else if (p[0] == q[0]) ++vs;
+      else {
+        ++record[static_cast<long double>(p[1] - q[1]) / (p[0] - q[0])];
+      }
+    }
+    const auto data = {vs + ss, res};
+    res = *max_element(begin(data), end(data));
+    for (const auto& [k, t] : record) {
+      res = max(res, t + ss);
+    }
+  }
+  return res;
+}
+  
+// 1275. Find Winner on a Tic Tac Toe Game
+string tictactoe(vector<vector<int>>& moves) {
+  vector<vector<int>> record(8, vector<int>(2, 0));
+  int is_a = 0;
+  for (const auto& m : moves) {
+    ++record[m[0]][is_a];
+    ++record[m[1]+3][is_a];
+    if (m[0] == m[1])
+      ++record[6][is_a];
+    if (m[0] + m[1] == 2)
+      ++record[7][is_a];
+    is_a = 1 - is_a;
+  }
+  for (int i = 0; i < 8; ++i) {
+    if (record[i][0] == 3)
+      return "A";
+    if (record[i][1] == 3)
+      return "B";
+  }
+  return moves.size() == 9?"Draw":"Pending";
+}
+  
+// 794. Valid Tic-Tac-Toe State
+bool validTicTacToe(vector<string>& board) {
+  int X_num = 0;
+  int O_num = 0;
+  int state[8][2] = {0};
+  for (int ind1=0; ind1<3; ind1++) {
+    for (int ind2=0; ind2<3; ind2++) {
+      if (board[ind1][ind2]=='X') {
+        state[ind1][0]++;
+        state[ind2+3][0]++;
+        if (ind1==ind2)
+          state[6][0]++;
+        if (ind1+ind2==2)
+          state[7][0]++;
+        X_num++;
+      }
+      else if(board[ind1][ind2]=='O'){
+        state[ind1][1]++;
+        state[ind2+3][1]++;
+        if (ind1==ind2)
+          state[6][1]++;
+        if (ind1+ind2==2)
+          state[7][1]++;
+        O_num++;
+      }
+    }
+  }
+  if ((X_num != O_num && X_num != O_num+1))
+    return false;
+  int is_end_x = 0;
+  int is_end_o = 0;
+  for (int ind2=0; ind2<8; ind2++) {
+    if (state[ind2][0]==3)
+      s_end_x++;
+    if (state[ind2][1]==3)
+      is_end_o++;
+  }
+  if (is_end_x > 0 && is_end_o > 0)
+    return false;
+  if (!is_end_o && X_num-O_num==1)
+    return true;
+  if (!is_end_x && X_num==O_num)
+    return true;
+  return false; // is_end_x<=2 && is_end_o <=2;
+}
+  
+// 348. Design Tic-Tac-Toe
+class TicTacToe {
+ private:
+  vector<int> rec1_;
+  vector<int> rec2_;
+  int size_;
+  
+ public:
+  /** Initialize your data structure here. */
+  TicTacToe(int n) {
+    rec1_ = vector<int>((n<<1)+2,0);
+    rec2 = vector<int>((n<<1)+2,0);
+    size_ = n;
+  }  
+  /** Player {player} makes a move at ({row}, {col}).
+      @param row The row of the board.
+      @param col The column of the board.
+      @param player The player, can be either 1 or 2.
+      @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+  int move(int row, int col, int player) {
+    vector<int> &rec = (player==1)?rec1_:rec2_;
+    rec[row]++;
+    rec[col+size_]++;
+    if(col==row)
+      rec[size_<<1]++;
+    if(col+row==size_-1)
+      rec[(size_<<1) + 1]++;
+    if(rec[row]==size_ ||
+      rec[col+size_]==size_ ||
+      rec[size_<<1] == size_ ||
+      rec[(size_<<1) + 1] == size_)
+      return player;
+    return 0;
+  }
+};
+```
+
+
+
+-----------------------
+
+
+
 For the projects, see the DL/ML summary; CUDA summary; multi-threading.
 
 
