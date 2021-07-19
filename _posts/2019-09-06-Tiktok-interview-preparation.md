@@ -199,7 +199,8 @@ bool canPartition(vector<int>& nums) {
 // Sorted from large to small
 // nums[i] == nums[i-1], nums[i] fail -> nums[i-1] fail.
 // Optimization
-// 1. 
+// 1. 从大到小搜
+// 2. if num[i] == num[j] fail, skip the num[j] 
 
 // 351. Android Unlock Patterns 
 int m_ = 0;

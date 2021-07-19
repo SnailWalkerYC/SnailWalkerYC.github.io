@@ -11,18 +11,64 @@ comments: false
 
 ### Loss
 
-- Cross entropy:
-- Regression loss
+- Cross entropy: see the ML part.
+- Regression loss: MSE
 
 
 
 ### Forward & Backward Propagation
 
+[Convolution Backward Update](https://medium.com/@pavisj/convolutions-and-backpropagations-46026a8f5d2c) [2](https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/)
+
+![cherimola](../images/bpkernel.png)
+
+![cherimola](../images/bpinput.png)
+
+[Excellent Material](https://www.zhihu.com/question/314879954)
+
+[LeNet code](https://github.com/SnailWalkerYC/-c-)
+
+More ref: [BP!](https://zhuanlan.zhihu.com/p/33802329), [cs231n](https://cs231n.github.io/convolutional-networks/), [BP2](https://zhuanlan.zhihu.com/p/61863634), [BP3](https://zhuanlan.zhihu.com/p/61898234), [BP4](https://blog.csdn.net/liuweiyuxiang/article/details/100068947)
+
+
+
+[Pooling layer forward & backward](https://zhuanlan.zhihu.com/p/258604402)
+
+就是对于max pooling，那就是只有max的地方才有梯度，其它是0。对于average pooling那就是平均梯度。
+
+
+
+Max pooling forward & backward:
+
+![cherimola](../images/maxp.png)
+
+Average pooling forward & backward:
+
+![cherimola](../images/avep.png)
+
+
+
+[ReLU](https://blog.csdn.net/qq_39575835/article/details/89090923)
+
+取0或者1.
+
+
+
+[Batch Normalization](https://www.zhihu.com/question/38102762)
+
+解决internal covariance shift的问题，处理梯度爆炸或者梯度消失。对于batch要求，越大越好，16 -》8，性能下降严重。
+
+
+
+对于其它函数，可以通过导数的定义得到。
+
+
+
+**More ref:**
+
 https://www.jianshu.com/p/e160983d601a
 
 https://www.zdaiot.com/MachineLearning/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%89%8D%E5%90%91%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/
-
-
 
 https://zhuanlan.zhihu.com/p/343564175
 
@@ -38,6 +84,30 @@ https://github.com/godweiyang/NN-CUDA-Example
 
 ###  Component
 
+[Batch Normalization](https://www.zhihu.com/question/38102762)
+
+解决internal covariance shift的问题，处理梯度爆炸或者梯度消失。对于batch要求，越大越好，16 -》8，性能下降严重。
+
+
+
+**ReLU**
+
+实现非线性化的部分。
+
+
+
+**Upsampling**
+
+![cherimola](../images/upsampling.png)
+
+[**Transposed convolution**](https://naokishibuya.medium.com/up-sampling-with-transposed-convolution-9ae4f2df52d0)
+
+Fractionally-strided convolution; deconvolution.
+
+To decode the learning parameters and reconstruct information.
+
+![cherimola](../images/upconv.png)
+
 
 
 ### Best Network Architecture Recently
@@ -46,11 +116,13 @@ https://github.com/godweiyang/NN-CUDA-Example
 - **DETR** ：End-to-End Object Detection with Transformers
 - **MLP:**  MLP-Mixer: An all-MLP Architecture for Vision 
 
+
+
 ### Unbalance Label
 
 -  Re-sampling: over sampling on small size label
 - Synthetic Samplings: add Gaussian noise into this data; interpolation. **SMOTE**
-- Re-weighting: according to the inverse label size
+- Re-weighting: according to the inverse label size -> Focal loss.
 - Transfer leaning: large sampling to train the network, small network, use the large sampling model to teach the samll network
 - **metric learning** 
 - Decoupling of representation & classifier.
