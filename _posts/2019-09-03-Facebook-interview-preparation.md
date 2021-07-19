@@ -623,7 +623,7 @@ int closestValue(TreeNode* root, double target) {
 int shortestDistance(vector<vector<int>>& grid) {
   vector<vector<int>> grids(grid.size(), vector<int>(grid[0].size(), 0));
   vector<vector<int>> count(grid.size(), vector<int>(grid[0].size(), 0));
-  const int dirs[2][4] = {{0, 1, 0, -1}, {-1, 0, 1, 0}};
+  const int dirs[2][4] = { {0, 1, 0, -1}, {-1, 0, 1, 0} };
   int count_building = 0;
   int count_free = 0;
   for (int i = 0; i < grid.size(); ++i) {
