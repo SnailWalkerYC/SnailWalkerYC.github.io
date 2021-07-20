@@ -201,6 +201,44 @@ bool canPartition(vector<int>& nums) {
 // Optimization
 // 1. 从大到小搜
 // 2. if num[i] == num[j] fail, skip the num[j] 
+// 3. 当前第一个数失败了，那么一定失败
+// 4. 最后一个数失败了，那么一定失败
+bool DFS(const int target, const int cur, const int k, 
+         const vector<int>& nums, vector<bool>& vis) {
+  if (!k) {
+    return true;
+  }
+  if (cur == target) {
+    return DFS(target, 0, k-1, nums, vis);
+  }
+  for (int i = 0; i < nums.size(); ++i) {
+    if (vis[i]) {
+      continue;
+    }
+    if (cur + nums[i] <= target) {
+      vis[i] = true;
+      if (DFS(target, cur + nums[i], k, nums, vis)) {
+        return true;
+      }
+      vis[i] = false;
+    }
+    while (i + 1 < nums.size() && nums[i+1] == nums[i]) {
+      ++i;
+    }
+    if (!cur || cur + nums[i] == target) {
+      return false;
+    }
+  }
+  return false;
+}  
+bool canPartitionKSubsets(vector<int>& nums, int k) {
+  const int sum = accumulate(begin(nums), end(nums), 0);
+  if (sum % k) return false;
+  vector<bool> vis(nums.size(), false);
+  const int target = sum / k;
+  sort(begin(nums), end(nums), greater<int>());
+  return DFS(target, 0, k, nums, vis);
+}
 
 // 351. Android Unlock Patterns 
 int m_ = 0;
