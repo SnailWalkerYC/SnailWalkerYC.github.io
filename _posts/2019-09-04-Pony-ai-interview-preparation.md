@@ -678,21 +678,96 @@ int maxProfit(vector<int>& prices, int fee) {
 
 // 309. Best Time to Buy and Sell Stock with Cooldown
 
-// 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
-// 1239. Maximum Length of a Concatenated String with Unique Characters
-
-// 1922. Count Good Numbers
 // 1923. Longest Common Subpath
 
 // 1235. Maximum Profit in Job Scheduling
 
-// 1915. Number of Wonderful Substrings
+// 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+
+// 1239. Maximum Length of a Concatenated String with Unique Characters
 
 // 1916. Count Ways to Build Rooms in an Ant Colony
 
 // 786. K-th Smallest Prime Fraction
 
+
+// 1922. Count Good Numbers
+long long MOD = 1e9 + 7;  
+long long Quick(long long num, long long t) {
+  long long res = 1;
+  while (t) {
+    if (t & 1) res = res * num % MOD;
+    num = num * num % MOD;
+    t >>= 1;
+  }
+  return res;
+}  
+int countGoodNumbers(long long n) {
+  return Quick(5, (n+1)/2) * Quick(4, n/2) % MOD;
+}
+
+// 1915. Number of Wonderful Substrings
+int s[100001][10] = {0};
+int cnt[1024] = {0};  
+long long wonderfulSubstrings(string str) {
+  ++cnt[0];
+  long long res = 0;
+  for (int i = 1; i <= str.size(); ++i) {
+    for (int j = 0; j < 10; ++j) {
+      if (str[i-1] - 'a' == j) {
+        s[i][j] = s[i-1][j] + 1;
+      } else {
+        s[i][j] = s[i-1][j];
+      }
+    }
+    int state = 0;
+    for (int j = 0; j < 10; ++j) {
+      state = state * 2 + s[i][j] % 2;
+    }
+    res += cnt[state];
+    for (int j = 0; j < 10; ++j) {
+      res += cnt[state ^ (1 << j)];
+    }
+    ++cnt[state];
+  }
+  return res;
+}
+
 // 291. Word Pattern II
+bool wordPatternMatch(string pattern, string s) {
+  unordered_map<char, string> mp;
+  unordered_set<string> in_mp;
+  return Pattern(pattern, 0, s, 0, mp, in_mp);      
+}
+bool Pattern(const string& p, const int p_idx, 
+             const string& s, const int s_idx, 
+             unordered_map<char, string>& mp,
+             unordered_set<string>& in_mp) {
+  if (p_idx == p.size() && s.size() == s_idx) {
+    return true;
+  } else if (p_idx == p.size() || s.size() == s_idx) {
+    return false;
+  }
+  for (int i = s_idx; i < s.size(); ++i) {
+    const string cur = s.substr(s_idx, i - s_idx + 1);
+    if (mp.count(p[p_idx]) > 0) {
+      if (mp[p[p_idx]] != cur) continue;
+      if (Pattern(p, p_idx+1, s, i+1, mp, in_mp)) {
+        return true;
+      }
+    } else {
+      if (in_mp.count(cur) > 0) continue;
+      mp[p[p_idx]] = cur;
+      in_mp.insert(cur);
+      if (Pattern(p, p_idx+1, s, i+1, mp, in_mp)) {
+        return true;
+      }
+      mp.erase(p[p_idx]);
+      in_mp.erase(cur);
+    }
+  }
+  return false;
+}  
 
 // 1349. Maximum Students Taking Exam
 // TLE
