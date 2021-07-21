@@ -689,7 +689,37 @@ int maxProfit(vector<int>& prices, int fee) {
 // 1916. Count Ways to Build Rooms in an Ant Colony
 
 // 786. K-th Smallest Prime Fraction
-
+bool Check(const double boundary, const vector<int>& arr, const int k,
+           vector<int>& res) {
+  int cnt = 0;
+  for (int i = 0, j = 0; i < arr.size(); ++i) {
+    while (j+1 <= i && 1.0*arr[j+1]/arr[i] <= boundary)
+      ++j;
+    if (1.0*arr[j]/arr[i] <= boundary)
+      cnt += j + 1;
+    if (abs(1.0*arr[j]/arr[i] - boundary) < 1.0e-8) {
+      res[0] = arr[j];
+      res[1] = arr[i];
+    }
+  }
+  return cnt >= k;
+}  
+vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
+  double l = 0.0;
+  double r = 1.0;
+  constexpr double eps = 1.0e-8;
+  vector<int> ans(2);
+  while (r - l > eps) {
+    const double mid = (r + l)/2.0;
+    if (Check(mid, arr, k, ans)) {
+      r = mid;
+    } else {
+      l = mid;
+    }
+  }
+  Check(r, arr, k, ans);
+  return ans;
+}
 
 // 1922. Count Good Numbers
 long long MOD = 1e9 + 7;  

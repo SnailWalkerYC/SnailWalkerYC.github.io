@@ -908,21 +908,223 @@ bool wordBreak(string s, vector<string>& wordDict) {
   return record[0][s.size() - 1];
 }
 
-// 313. Super Ugly Number  
-  
+// 269. Alien Dictionary
+bool SearchEdges(const vector<string>& words, const int index,
+                 unordered_map<char, unordered_set<char>>& edges) {
+  if (!words.size()) return true;  
+  char last = words[0][index];
+  vector<string> history;
+  for (int i = 0; i < words.size(); ++i) {
+    if (words[i][index] != last) {
+      edges[last].insert(words[i][index]);
+      last = words[i][index];
+      bool status = SearchEdges(history, index + 1, edges);
+      if (!status) return false;
+      history.clear();
+    } else {
+      if (edges.find(words[i][index]) == edges.end())
+        edges[words[i][index]] = {};
+    }
+    if (words[i].size() > index + 1) 
+      history.push_back(words[i]);
+    else {
+      if (history.size() > 0) return false;
+    }
+  }
+  bool status = true;
+  if (history.size() > 0) {
+    status = SearchEdges(history, index + 1, edges);
+  }
+  return status;
+}
+string alienOrder(vector<string>& words) {
+  unordered_map<char, unordered_set<char>> edges;
+  bool status = SearchEdges(words, 0, edges);
+  if (!status) return "";
+  vector<int> indegrees(26, 0);
+  vector<bool> ingraph(26, 0);
+  for (const auto& [node, edge] : edges) {
+    ingraph[node-'a'] = true;
+    for (const auto& v : edge) {
+      ++indegrees[v-'a'];
+      ingraph[v-'a'] = true;
+    }
+  }
+  queue<int> cur;
+  for (int i = 0; i < 26; ++i) {
+    if (ingraph[i] && !indegrees[i]) {
+      cur.push(i);
+    }
+  }
+  string ans;
+  while (!cur.empty()) {
+    const auto tp = cur.front();
+    ans += char(tp + 'a');
+    cur.pop();
+    for (const auto& edge : edges[tp+'a']) {
+      --indegrees[edge-'a'];
+      if (!indegrees[edge-'a']) {
+        cur.push(edge-'a');
+      }
+    }
+  }
+  for (int i = 0; i < 26; ++i) {
+    if (indegrees[i]) return "";
+  }
+  return ans;
+}  
+
+// 76. Minimum Window Substring
+string minWindow(string s, string t) {
+  unordered_map<char, int> cnt;
+  unordered_set<char> ts;
+  for (const auto& c:t) { 
+    --cnt[c];
+    ts.insert(c);
+  }
+  int diff = cnt.size();
+  int res = INT_MAX;
+  int stt_idx = 0;
+  for (int i = 0, j = 0; i < s.size(); ++i) {
+    ++cnt[s[i]];
+    if (ts.count(s[i])) {
+      if (!cnt[s[i]]) {
+        --diff;
+      } 
+      while(!ts.count(s[j]) || 
+            (ts.count(s[j]) && cnt[s[j]] > 0)) {
+        --cnt[s[j]];
+        ++j;
+      }
+    }
+    if (!diff) {
+      if (i - j + 1 < res) {
+        res = i - j + 1;
+        stt_idx = j;
+      }
+    }
+  }
+  return res == INT_MAX?"":s.substr(stt_idx, res);
+}  
+
+// 1047. Remove All Adjacent Duplicates In String
+string removeDuplicates(string s) {
+  string cur;
+  for (const auto& c : s) {
+    if (!cur.empty() && c == cur.back()) {
+      cur.pop_back();
+    } else {
+      cur.push_back(c);
+    }
+  }
+  return cur;
+}
+
+// 313. Super Ugly Number
+int nthSuperUglyNumber(int n, vector<int>& primes) {
+  priority_queue<long long, vector<long long>, greater<long long>> pq;
+  pq.push(1);
+  unordered_set<long long> his({1});
+  while (--n) {
+    const auto tp = pq.top();
+    // cout << tp << endl;
+    pq.pop();
+    for (const auto& p : primes) {
+      if (!his.count(static_cast<long long>(p)*tp)) {
+        pq.push(p * tp);
+        his.insert(p * tp);
+      }
+    }
+  }
+  return pq.top();
+}  
+
+// 227. Basic Calculator II
+int calculate(string s) {
+  int s_len = s.size();      
+  int cur_res = 0;
+  int fin_res = 0;
+  char ope = '+';
+  int cur_num = 0;      
+  for (int idx = 0; idx < s_len; ++idx) {
+    if (isdigit(s[idx])) {
+      cur_num = cur_num*10 + (s[idx] - '0');
+    }
+    if (s[idx] == '*' || s[idx] == '/' || s[idx] == '+' 
+       || s[idx] == '-' || idx == s_len - 1) {
+      switch(ope) {
+        case '+': cur_res += cur_num; break;
+        case '-': cur_res -= cur_num; break;
+        case '*': cur_res *= cur_num; break;
+        case '/': cur_res /= cur_num; break;    
+      }         
+      if (s[idx] == '-' || s[idx] == '+' || s_len - 1 == idx) {
+        fin_res += cur_res;
+        cur_res = 0;           
+      }         
+      cur_num = 0;
+      ope = s[idx];
+    }
+  }        
+  return fin_res;
+}  
+    
+// 1428. Leftmost Column with at Least a One  
+int leftMostColumnWithOne(BinaryMatrix &bm) {
+  const auto& dims = bm.dimensions();     
+  const int row = dims[0];
+  const int col = dims[1];
+  int l = 0;
+  int r = col - 1;
+  unordered_map<int, int> record;
+  while (l + 1 < r) {
+    const int mid = l + (r - l)/2;
+    int cnt = 0;
+    for (int i = 0; i < row; ++i) {
+      if (bm.get(i, mid)) {
+        ++cnt;
+      }
+    }
+    record[mid] = cnt;
+    if (cnt >= 1) {
+      r = mid;
+    } else {
+      l = mid;
+    }
+  }
+  if (record.find(l) == record.end()) {
+    for (int i = 0; i < row; ++i) {
+      if (bm.get(i, l)) {
+        ++record[l];
+      }
+    }
+  }
+  if (record.find(r) == record.end()) {
+    for (int i = 0; i < row; ++i) {
+      if (bm.get(i, r)) {
+        ++record[r];
+      }
+    }
+  }
+  if (record[l] >= 1) return l;
+  if (record[r] >= 1) return r;
+  return -1;
+}
+
 // 152. Maximum Product Subarray  
+  
+
+// 523. Continuous Subarray Sum
   
 // 621. Task Scheduler
 
-// 523. Continuous Subarray Sum
 
-// 227. Basic Calculator II
 
 // 560. Subarray Sum Equals K
 
 // 973. K Closest Points to Origin
 // Quick-select
-// Priority-queu
+// Priority-queue
 
 // 301. Remove Invalid Parentheses
 
@@ -935,23 +1137,16 @@ bool wordBreak(string s, vector<string>& wordDict) {
 // 691. Stickers to Spell Word
 
 // 1091. Shortest Path in Binary Matrix
-// 158
-// 1428. Leftmost Column with at Least a One
-
-// Alien dictionary.
-
+// 158  
+  
 // 919
 
 // 921
 
-// 1541
-
-// 76
-
-// 126
-
-// 1047
-
+// 1541  
+  
+// 126  
+  
 // 286. Walls and Gates
 ```
 
