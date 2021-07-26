@@ -8,88 +8,132 @@ tags: [coding]
 comments: false
 ---
 
-
-
-1. 点云聚类，使用union find，按轴排序，也可以使用KD tree进行搜索
+1. 点云聚类，使用union find，按轴排序，也可以使用KD tree进行搜索（https://en.wikipedia.org/wiki/K-d_tree）
 2. alien dictionary/string multiplication(multiply two numbers. number 是 string)
 3.  conv2D，自定义kernel，如果想根据内容删除8领域联通的一行，又希望删掉的这一行重要性最小怎么做。（简单的DP）
    问了一些基础的 性能优化的问题。
 4. 已知各个数字的概率，求get_num()获取随机数字。
-5. lc 1235 profit为1的情况。bring top和create shape。
+5. lc 1235 profit为1的情况。
 6. closest neighbors in a map，怎么存，grid/quadtree的比较，怎么sharding，grid id还是partition id的比较
+7. sparse vector的加和乘，自己实现数据结构。之后问了问DL的知识什么是overfitting，underfitting。
+8. 1 producer 1 consumer concurrent queue，要求自己写 data structure，没要求我加 condition variable，我就写了一个很基本的带锁的 linked list，写完之后分析了不 上锁会出现什么情况。答完之后还讨论了怎么无锁实现，面试官告诉我可以用一 个 dummy head。
+9. 先问了很基本的转置矩阵然后是加上 concurrency，假设给 k 个 processor，问应 该怎样给第 i 个 processor 分配
+10. 多线程安全 queue。 C++ rvalue 相关. C++ move:  std::move does nothing but cast its argument to an rvalue。https://www.zhihu.com/question/277908001
+
+```c++
+template<typename T>
+T&& move(T& v) { 
+ return static_cast<T&&>(v); 
+}
+```
 
 
 
-sparse vector的加和乘，自己实现数据结构。之后问了问DL的知识什么是overfitting，underfitting
+1. 实现一个数据结构，keep 最新的 k 个 streaming data，拿到平均数和众数。拿平均数和 众数的复杂度要求均为 O(1)。
 
+   ```c++
+   // All O(1) data structure
+   class AllOne {
+    private:
+     struct Node {
+       int count = 0;
+       unordered_set<string> keys;
+       Node(const int cnt, const string& key) {
+         count = cnt;
+         keys.insert(key);
+       }
+     };
+     list<Node> data_;
+     unordered_map<string, list<Node>::iterator> record_;
+     
+    public:  
+     /** Initialize your data structure here. */
+     AllOne() {}
+       
+     /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+     void inc(string key) {
+       if (record_.find(key) == record_.end()) {
+         auto it = data_.insert(data_.begin(), Node(0, key));
+         record_[key] = it;
+       }
+       
+       auto next = record_[key];
+       auto cur = next++;
+       if (next == data_.end() || next->count > cur->count + 1) {
+         next = data_.insert(next, Node(cur->count+1, key));
+       }
+       next->keys.insert(key);
+       cur->keys.erase(key);
+       if (cur->keys.empty()) {
+         data_.erase(cur);
+       }
+       record_[key] = next;
+     }
+       
+     /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+     void dec(string key) {
+       if (record_.find(key) == record_.end())
+         return;
+       
+       auto prev = record_[key];
+       auto cur = prev--;
+       if (cur == data_.begin() || prev->count + 1 < cur->count) {
+         prev = data_.insert(cur, Node(cur->count-1, key));
+       }
+       prev->keys.insert(key);
+       cur->keys.erase(key);
+       if (cur->keys.empty()) {
+         data_.erase(cur);
+         record_.erase(key);
+       }
+       if (prev->count <= 0) {
+         data_.erase(prev);
+         record_.erase(key);
+       } else {
+         record_[key] = prev;
+       }
+     }
+       
+     /** Returns one of the keys with maximal value. */
+     string getMaxKey() {
+       return data_.size() > 0? *(data_.back().keys.begin()) :  "";
+     }
+       
+     /** Returns one of the keys with Minimal value. */
+     string getMinKey() {
+        return data_.size() > 0? *(data_.front().keys.begin()) :  "";
+     }
+   };
+   ```
 
+2. 大概是一堆堆集的不同颜色的方块，你通过左右互换的方式交换他们的位置。然后如果相邻 （上下左右）的相同颜色的方块超过或者等于 3 个，你就需要消掉他们。问 5 步以内是否 可以完成？如果能，输出解，不能的话，输出-1。可以看下图理解一下。
 
-1 producer 1 consumer concurrent queue，要求自己写 data structure，没要求我加 condition variable，我就写了一个很基本的带锁的 linked list，写完之后分析了不 上锁会出现什么情况。答完之后还讨论了怎么无锁实现，面试官告诉我可以用一 个 dummy head。
+3. 求两数组相差多少次shift
+   A = [1,3,4,5,2]
+   B = [4,5,2,1,3]
+   比如这里A两次shift可得到B
+   array中所有数值不同
+   直接要求time complexity < O(N), N = len(A); 给出的解法是 O(sqrt(N))
+   取 M = sqrt(N)
+   hashmap A[:M], value to index
+   遍历查看 B[0], B[M], B[2M], .... 是否在hashmap中
 
+4. 实现一个SparseMatrix的类
+   支持 set, get, transpose, add, multiply set, get, transpose, add, multiply
+   类似励筘傘药药
+   具体看 https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=657461&highlight=nuro
 
+5. Given a list of 3-d points [(1,2,5), (5,3,2), ...., ] and a distance K
+   If point A and point B are within K distance, group them together. If distance(A, B) <= K and distance (B,C) <= K, group A, B, C together.
+   Return a list of groups.
 
-先问了很基本的转置矩阵然后是加上 concurrency，假设给 k 个 processor，问应 该怎样给第 i 个 processor 分配
+6. system programming给了我一段cache的代码。如果value不再cache里就要跑一个time consuming function。然后要我implement concurrency using locks and cv。比如两个thread同时access cache应该怎么处理.
 
+7. 数据存储压缩，需要对cpp STL和bit manipultion有深刻的理解才行。bit_set class。count, size, test, any, none, all.
 
+8. RANSAC: https://zhuanlan.zhihu.com/p/62238520 
 
-多线程安全 queue。 C++ rvalue 相关
-
-
-
-实现一个数据结构，keep 最新的 k 个 streaming data，拿到平均数和众数。拿平均数和 众数的复杂度要求均为 O(1)。
-
-
-
-大概是一堆堆集的不同颜色的方块，你通过左右互换的方式交换他们的位置。然后如果相邻 （上下左右）的相同颜色的方块超过或者等于 3 个，你就需要消掉他们。问 5 步以内是否 可以完成？如果能，输出解，不能的话，输出-1。可以看下图理解一下。
-
-
-
-1：求两数组相差多少次shift
-A = [1,3,4,5,2]
-B = [4,5,2,1,3]
-比如这里A两次shift可得到B
-array中所有数值不同
-直接要求time complexity < O(N), N = len(A)
-
-给出的解法是 O(sqrt(N))
-取 M = sqrt(N)
-hashmap A[:M], value to index
-遍历查看 B[0], B[M], B[2M], .... 是否在hashmap中
-
-2：实现一个SparseMatrix的类
-支持 set, get, transpose, add, multiply set, get, transpose, add, multiply
-类似励筘傘药药
-具体看 https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=657461&highlight=nuro
-
-又一轮algorithms。
-Given a list of 3-d points [(1,2,5), (5,3,2), ...., ] and a distance K
-If point A and point B are within K distance, group them together. If distance(A, B) <= K and distance (B,C) <= K, group A, B, C together.
-Return a list of groups.
-
-我是用建graph + DFS来做的
-可以参考number of islands思路
-之后面试官问我能不能小于O(n^2)，讨论了一下nlogn的思路
-
-system programming给了我一段cache的代码。如果value不再cache里就要跑一个time consuming function。然后要我implement concurrency using locks and cv。
-比如两个thread同时access cache应该怎么处理...这题没有完全写出来
-
-
-
-数据存储压缩，需要对cpp STL和bit manipultion有深刻的理解才行
-
-
-
-RANSAC
-
-
-
-写了一个图像转化的class
-
-
-
-Nuro pdf on Desktop
-
-
+使用模型尽可能多match点。
 
 ------------------------------------
 
