@@ -32,7 +32,81 @@ comments: false
 
 
 
+See the videos [here](https://www.youtube.com/watch?v=bUHFg8CZFws&t=23s)
+
+
+
 ![cherimola](../images/sapi.png)
+
+System API design
+
+
+
+![cherimola](../images/db1.png)
+
+![cherimola](../images/db2.png)
+
+![cherimola](../images/db3.png)
+
+![cherimola](../images/db4.png)
+
+![cherimola](../images/db5.png)
+
+Database design
+
+
+
+![cherimola](../images/sql1.png)
+
+![cherimola](../images/sql2.png)
+
+![cherimola](../images/sql3.png)
+
+![cherimola](../images/sql4.png)
+
+![cherimola](../images/sql5.png)
+
+![cherimola](../images/sql6.png)
+
+
+
+![cherimola](../images/image1.png)
+
+
+
+Replication: leader replication(SQLO); multi-leader replication; leaderless replication(Cassandra).
+
+**Ingestion path components**
+
+
+
+![cherimola](../images/image2.png)
+
+**Data retrieval Path**
+
+
+
+![cherimola](../images/image3.png)
+
+**Data flow simulation**
+
+
+
+![cherimola](../images/tech1.png)
+
+**Tools**
+
+
+
+![cherimola](../images/bottleneck.png)
+
+**Bottleneck, trade-offs**: monitor(latency, traffic, errors, saturation). Tests: weak audit test; strong tests.
+
+
+
+![cherimola](../images/systemsd.png)
+
+**Summary**
 
 
 
@@ -208,7 +282,7 @@ Multi-process inter-communication: **Pipe:** 管道（单向，需要父子进�
 
 
 
-**SQL vs NOSQL**: relational databases are structured & predefined schemas(MySQL, Oracle, MS SQL, SQLite, Postgres, Maria DB). NoSQL are unstructured, distributed.
+**SQL vs NOSQL**: relational databases are structured & predefined schemas(MySQL, Oracle, MS SQL, SQLite, Postgres, Maria DB). NoSQL are unstructured, distributed. Four types of NoSQL -> column, documents, key-value, graph.
 
 - key-value stores: LevelDB, Redis, Voldemort, Dynamo.
 - document databses: MongoDB, CouchDB. Data is stored in documents.
@@ -489,6 +563,20 @@ Timeline service: user timeline; how timeline; tweets.
 
 
 Cache sharding; performance; caching policy.
+
+
+
+# Course
+
+```c++
+Grokking the Advanced System Design Interview
+```
+
+
+
+```c++
+Grokking the System Design Interview
+```
 
 
 
