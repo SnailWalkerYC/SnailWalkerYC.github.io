@@ -10,6 +10,68 @@ comments: false
 
 
 ```c++
+// Onsite preparation
+// 26
+// 297
+// 695
+// 958
+// 20
+// 34
+// 31
+// left most one
+// verify alien ditionary
+// Trapping rain water
+// 42
+// permutation
+// next permutation
+// find common elements in two array, 
+// convert the tree to a flat list
+// 162
+// 567
+// 给定一个list of commits, 找到最初的bug的那个commit
+// LC1464的变种题目，找到maximum product in an array，可以是有negative integer
+// Find value from bitonic array
+4. System Design
+Design a system that returns nearby places (similar to Yelp Design)
+
+5. ML System Design
+Design a ML system for delecting / hiding violent posts
+
+6. System Design (Shadow Interview)
+Design a system that crawls websites
+  
+// 246 不过输入是整数 给出数字 判断旋转180度后是不是还一样。 follow up 是给出一个长度，输出所有这么长的 旋转180读不变的数字
+// 347, 37 二叉树iterator
+// 297
+// minimum meeting rooms
+// 270, 76
+// string to digits;   163
+  
+// 1. 给一个包含自然数的数组，要求找出数组内所有的连续数字序列，加起来等于给定的一个目标数字。
+2. 给一个包含字符串的数组，然后要求找到这个数组里面所有符合某个pattern的字符串， pattern是"A.B.C.", 这里面每个“.”对应任意一个字符，字符串“ADBECF"符合，但是“ABECF”就不符合。
+  
+// 138 copy list with random ptr,
+// LC 734 string similarity  LC 839, similar String Groups
+// 设计一个Auto search suggestion +  top K 常见题目 用Trie + hashMap 存prefix 解决
+// 1. coding: Minimum local, return index, best solution, binary search to see which side is guaranteed with an answer [hide==100]
+2. Design simplified tweeter that supports post and search with exact match. for search, we can utilize trie structure for space-efficient search
+3. Binary tree to doubly linked list
+4. behavior, 外加一个简单的coding： add two numbers in string format
+[/hide]
+5. Find famous Facebook user in a group that 1. Does not follow anyone 2. Every one else is ollowing him/her 3. May be 0 or 1 famous person 这个应该是拓扑排序  
+```
+
+
+
+
+
+
+
+------------------
+
+
+
+```c++
 // 97. Interleaving String
 
 // 25. Reverse Nodes in k-Group
@@ -1112,15 +1174,45 @@ int leftMostColumnWithOne(BinaryMatrix &bm) {
 }
 
 // 152. Maximum Product Subarray  
-  
+int maxProduct(vector<int>& nums) {
+  long long max_cur = nums[0];
+  long long min_cur = nums[0];
+  long long res = nums[0];
+  for (int i = 1; i < nums.size(); ++i) {
+    if (!nums[i]) {
+      max_cur = min_cur = nums[i];
+    } else {
+      const int num1 = max_cur*nums[i];
+      const int num2 = min_cur*nums[i];
+      max_cur = max(max(num1, num2), nums[i]); 
+      min_cur = min(min(num1, num2), nums[i]); 
+    }
+    res = max(res, max_cur);
+  } 
+  return res;
+}  
 
 // 523. Continuous Subarray Sum
+  
   
 // 621. Task Scheduler
 
 
-
 // 560. Subarray Sum Equals K
+int subarraySum(vector<int>& nums, int k) {
+  vector<int> record(nums.size() + 1, 0);
+  for (int i = 1; i <= nums.size(); ++i) {
+    record[i] += record[i-1] + nums[i-1];
+  }
+  unordered_map<int, int> his;
+  his[0] = 1;
+  int cnt = 0;
+  for (int i = 1; i <= nums.size(); ++i) {
+    cnt += his[record[i] - k];
+    ++his[record[i]];
+  }
+  return cnt;
+}  
 
 // 973. K Closest Points to Origin
 // Quick-select

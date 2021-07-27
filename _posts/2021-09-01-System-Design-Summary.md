@@ -122,6 +122,14 @@ Multi-process inter-communication: **Pipe:** 管道（单向，需要父子进�
 
 
 
+Gateway: a gateway is a network node that connects two networds using different protocols together. It also acts as a "gate" between two networks, it may be a router, firewall, server or other device enables traffic to flow in & out of the network. 连接两个网络，也叫做protocal converter。两个网络协议不一样。
+
+
+
+Session service: 用户来自于哪个gateway，要发给哪个gateway。send使用http，receive with websocket。
+
+
+
 [HTTP](https://www.cnblogs.com/ranyonsue/p/5984001.html) : HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写,是用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。
 
 -  Get：
@@ -585,6 +593,8 @@ Grokking the System Design Interview
 
 
 # Github
+
+https://github.com/donnemartin/system-design-primer
 
 https://github.com/sunyd1006/ssp
 
