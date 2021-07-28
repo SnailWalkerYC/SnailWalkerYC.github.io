@@ -1026,32 +1026,140 @@ string decode(string shortUrl) {
   return shortToLong[shortUrl];
 }
 
-// 265
-650
+// 256. Paint House
+int minCost(vector<vector<int>>& costs) {
+  if (!costs.size()) {
+    return 0;
+  }
+  vector<int> rec = costs[0];
+  for (int idx = 1; idx < costs.size(); ++idx) {
+    vector<int> rec2(3, INT_MAX);
+    auto &cost = costs[idx];
+    for (int idx = 0; idx < 3; ++idx) {
+      int idx_1 = (idx + 1)%3;
+      int idx_2 = (idx + 2)%3;          
+      rec2[idx] = min(rec2[idx], min(rec[idx_1], rec[idx_2]) + cost[idx]);
+    }
+    swap(rec, rec2);
+  }
+  return *min_element(rec.begin(), rec.end());
+}
+// 265. Paint House II
+int minCostII(vector<vector<int>>& costs) {
+  vector<int> cur_min = costs[0];
+  for (int i = 1; i < costs.size(); ++i) {
+    vector<int> prev_min(cur_min.size(), INT_MAX);
+    vector<int> prev_min2(cur_min.size(), INT_MAX);
+    for (int j = 0; j < cur_min.size() - 1; ++j) {
+      prev_min[j+1] = min(prev_min[j], cur_min[j]);
+    }
+    for (int j = cur_min.size() - 1; j > 0; --j) {
+      prev_min2[j-1] = min(prev_min2[j], cur_min[j]);
+    }
+    for (int j = 0; j < cur_min.size(); ++j) {
+      prev_min[j] = min(prev_min[j], prev_min2[j]);
+    }
+    for (int j = 0; j < cur_min.size(); ++j) {
+      cur_min[j] = costs[i][j] + prev_min[j];
+    }
+  }
+  return *min_element(begin(cur_min), end(cur_min));
+}
+
+// 636. Exclusive Time of Functions
+void splitString(int& id, int& tv, bool& flag, string str) {
+  const string stt="start";
+  const string fin="end";
+  const string splt = ":";
+  flag = str.find(stt)==-1?false:true;
+  int pos1=str.find(splt);
+  int pos2=str.find(splt, pos1+2);
+  int len = str.size();
+  id=atoi(str.substr(0,pos1).c_str());
+  tv=atoi(str.substr(pos2+1,len).c_str());
+}
+void combineStartToEnd(stack<tuple<int,int,int>>& rec, int id, int tv) {
+  stack<tuple<int,int,int>> tmp;
+  int intv = 0;
+  while(!rec.empty()) {
+    tuple<int,int,int> cur = rec.top();
+    rec.pop();
+    if(get<0>(cur)==id && !get<1>(cur)) {
+      rec.push(make_tuple(id,1,tv-intv-get<2>(cur)+1));
+      break;
+    } else {
+      tmp.push(cur);
+      intv += get<2>(cur);
+    }
+  }
+  while(!tmp.empty()) {
+    rec.push(tmp.top());
+    tmp.pop();
+  }
+} 
+vector<int> exclusiveTime(int n, vector<string>& logs) {
+  assert(n>0);
+  stack<tuple<int,int,int>> rec;
+  for(auto ele:logs) {
+    int id, tv;
+    bool flag;
+    splitString(id,tv,flag, ele);
+    // end, update interval time.
+    if(!flag) {
+      combineStartToEnd(rec,id,tv);
+    }
+    // start, insert it into map.
+    else {
+      rec.push(make_tuple(id,0,tv));
+    }
+  }
+  vector<int> ans(n,0);
+  map<int,int> score;
+  while(!rec.empty()){
+    tuple<int,int,int> cur = rec.top();
+    score[get<0>(cur)]+=get<2>(cur);
+    rec.pop();
+  }
+  for(auto ele:score)
+    ans[ele.first]=ele.second;
+  return ans;
+}
+
+// 650. 2 Keys Keyboard
+struct Node {
+  int num;
+  int paste;
+  int copy;
+  Node(const int n, const int p, const int c):
+    num(n), paste(p), copy(c) {} 
+};  
+int minSteps(int n) {
+  queue<Node> pq;
+  pq.push(Node(0, 1, 0));
+  unordered_set<int> visited;
+  visited.insert(1000);
+  while (!pq.empty()) {
+    const auto tp = pq.front();
+    pq.pop();
+    if (tp.paste == n) return tp.num;
+    if (tp.copy > 0) {
+      if (tp.copy + tp.paste > n) continue;
+      const auto [it, s] = visited.insert(1000*(tp.copy + tp.paste) + tp.copy);
+      if (!s) continue;
+      pq.push(Node(tp.num+1, tp.copy + tp.paste, tp.copy));
+    }
+    const auto [it, s] = visited.insert(1000*tp.paste + tp.paste);
+    if (!s) continue;
+    if (2*tp.paste > n) continue;
+    pq.push(Node(tp.num+1, tp.paste, tp.paste));
+  }
+  return n;
+}
+
   // 636
   // // finding isomorphic groups
   
-2. Calendar system, like outlook.
-5. 给一个 isMaliciousIP api, design a system to catch malicious IP
-6. 设计领英主页面，包括comments
-7. 设计一个health monitoring system
-8. 设计一个聊天室
-9. 设计shorten url， tiny url 常见问题 简单讨论eventually consistency， cache， regional data center
-10. 设计一个图书馆
-第五轮：infra design（complex system）
-设计一个用户行为收集和查询系统，可以收集各种event，比如click/view/like...
-可以根据时间、行为类型等等进行查询
-给出high level设计后基本全在讨论kafka的各种细节，领英真的很喜欢问kafka，面他家infra最好看看kafka的论文和最近的update
-infra design (algo & ds)
-建立倒排索引，本来以为要写代码，结果全在讨论数据如何存储如何scale
-  
 
-  
-System Design:
-1. LinkedIn System https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=556281&highlight=%C1%EC%D3%A2
-2. // System Design: 设计LinkedIn Home Page包括comments.
-// sysem design： monitor system System Design. 设计一个activity/health monitoring system for data center
-// Design Blacklist service， 提供一个isMalicious(ip)的API，设计系统防止恶意攻击。主要难点在于sync各个server的blacklist，initialize new added server... functional/non-functional requirements 假设一天1Billion访问量，5%是malicious ip造成的，估算下QPS和storage，可以跟面试官negotiate.  High level  LB layer, app server layer 然后request manager，ip要是没见过直接调用api，然后存进数据库。后面优化app servers本地存blacklist, 用kafka sync，backup可以让request manager去初始化
 ```
 
 
@@ -1121,14 +1229,89 @@ System Design:
 
 
 ```
-# 
+# 2. Calendar system, like outlook.
+5. 给一个 isMaliciousIP api, design a system to catch malicious IP
+6. 设计领英主页面，包括comments
+7. 设计一个health monitoring system
+8. 设计一个聊天室
+9. 设计shorten url， tiny url 常见问题 简单讨论eventually consistency， cache， regional data center
+10. 设计一个图书馆
+第五轮：infra design（complex system）
+设计一个用户行为收集和查询系统，可以收集各种event，比如click/view/like...
+可以根据时间、行为类型等等进行查询
+给出high level设计后基本全在讨论kafka的各种细节，领英真的很喜欢问kafka，面他家infra最好看看kafka的论文和最近的update
+infra design (algo & ds)
+建立倒排索引，本来以为要写代码，结果全在讨论数据如何存储如何scale
+  
+System Design:
+1. LinkedIn System https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=556281&highlight=%C1%EC%D3%A2
+2. // System Design: 设计LinkedIn Home Page包括comments.
+// sysem design： monitor system System Design. 设计一个activity/health monitoring system for data center
+// Design Blacklist service， 提供一个isMalicious(ip)的API，设计系统防止恶意攻击。主要难点在于sync各个server的blacklist，initialize new added server... functional/non-functional requirements 假设一天1Billion访问量，5%是malicious ip造成的，估算下QPS和storage，可以跟面试官negotiate.  High level  LB layer, app server layer 然后request manager，ip要是没见过直接调用api，然后存进数据库。后面优化app servers本地存blacklist, 用kafka sync，backup可以让request manager去初始化
 ```
-
-
 
 
 
 ```
 # 设计一个KV store，包含文件存储格式.
+
+// https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=556281&highlight=%C1%EC%D3%A2
+
+Short url:
+短地址设计, 主要关注下面四个方面
+   1. 怎么生成短地址
+   2. 怎么存储 - 主要是分析Sql和Nosql的优劣
+   3. Redirect
+   4. 如何统计被访问最多的地址
+
+shorten url的各种变种，比如新添feature：click stats，就是统计每个short url被read多少次。反正把自己能说的都说了，也不知道感觉怎么样。
+tiny url设计，而且对于每个url被访问了多少次，能够输出过去24小时之内的总访问量以及给定一个时间范围的总访问量；先画设计图讲了大概的思路，然后面试官会针对设计的各种部分提问，比如pre-generator怎么保证新的url不和已经被用过的重复，url expire的policy怎么设计，统计访问量在有多个server的时候怎么实现，需不需要cache，如果某个server down了怎么保证访问量的数据没有丢失等等
+
+Document index:
+inverted index 以及不同的distribution sharding 方法的优劣讨论。楼主自己的onsite是这个，传送门 https://www.1point3acres.com/bbs/thread-556189-1-1.html
+blacklist service
+设计一个全球范围内的blacklist service，就是有很多恶意ip会发来ddos攻击，你要设计一个blacklist的服务，能够ban掉之前已经诊断为malicious ip发过来的请求。这里不要求你设计怎么样判断一个ip是否是恶意ip，给了个isMalicious()的api signature。难点在于不同data center之间怎么sync数据，availability和consistency怎么取舍。哪里会有single point of failure，然后怎么设计能解决。最后folowup就是结合你的工作经验问这个服务上线之后你最想加一个什么功能，不一定是functional的，可以是logistics上的。面试官比较期待的答案是support和monitoring之类的。
+注意ipv4 和ipv6的存储上的区别
+
+
+calender
+1. 创建一个event
+2. 看自己的events
+3. 发notifications 给attendees
+就是怎么建表更快查询其他人schedule面试官提出异议，
+给了个方案，就是再建一个表，只存meeting id和user id，然后说这样join少。我也不太懂，平时不摆弄sql和table这些，点头称是，讨论完这个时间到了
+
+top k exception.
+我靠。跟地理的面筋相差很大，好么！地里都说是搞什么loosy counting 和各种 approximation. 然而，面试官跟我说，
+  一个cluster有很多server, 每个server 会时不时发出一些exception. 需要我搭建一个设计系统， 它要提供一个api : getTopExceptions(int K, Long t1, Long t2).
+  =>整个cluster 在 [t1, t2] 区间里 top K 的 exception的信息，包括stack trace什么的。
+  这里 t1, t2 都是以秒为单位， 而且 t2-t1 可以是好几年那么长。这个K呢？我再三向他确认，他说可以是10, 100, 甚至是 100000. 我就跟他说，
+  这个api是不是太flexible了。一般不是过去 5分钟，1小时，一天，一个月么。而且谁会看top 100000 的 exception 呢？ 他说我们不能更改要求，必须按照要求来。。。。
+Design log system. You have a lot of servers and each is producing thousands of logs per second. You have unlimited resources. Design a system that will aggregate all the logs from all the systems, for a given window of 24 hours. And need to return the top N exceptions.
+Top K 地里的讨论帖：https://www.1point3acres.com/bbs/thread-461654-1-1.html
+
+Trending Post
+套了壳的top K exception，面试官想知道过去5分钟，一小时，一天里LinkedIn member转发最多的content，（URL），如何设计。楼主用的sqs + aggregation service(write) + reading services三层做的。中间讨论了很多数据的size和design的tradeoff，聊的还是挺顺的。
+用了地里面和网上九章的解法，就是用bucket的那种，但一开始bucket大小没讨论好，后来那个拉丁裔白人就抓住不放了，说要不同长度的时间怎么办啊，我说换不同的bucket大小，然后他就一脸懵逼，不知道具体要什么答案，也没有给有效的引导和提示。死扣细节然后就没时间了。后来shadow的国人小哥给了提示，提示就是换不同的bucket然后sum up起来，可是之前我说的时候那白人又不接话，让我一度以为这不是他想要的思路。不懂这一轮怎么搞的，最后也是挂一轮。
+
+Others:
+给定可用内存的 mini Kafka， 重点考察内存中数据怎么存
+Espresso database设计过程中怎么处理hot point的问题，和key的rebalance有关系
+
+你们是怎么处理GDPR的
+
+假设他是副主席，我是他的打手，他现在要迭代一个老的管登陆的服务，没有任何文档，可能有几个人有一些了解，给我一些资源。问我怎么把这个事情弄完。说了十五分钟，讲了流程和可能会碰到的各种情况，然后怎么处理。
+
+你有alexa，go through Amazon，连到fb，要求你实现功能，例如：说一句，把我fb account上最近5条信息读出来。然后，第二句，回复第二条信息。这个怎么实现。要多少时间实现。怎么判断第二句话跟前面一句话有关系。这时候我只能祭出ML两个字...无奈...没get到到底考什么。
+
+
+4- sys design 设计key value store，value体积比较大需要放在硬盘里面 另外随机写到硬盘会比较慢所以assume你要appending only k-v store。high level聊了了consistent hashing，以及如何加减virtual node。single machine聊了memcache的一些知识点，比如lru， slab allocation。
+着重聊了kv store的log structured database，如何insert，update， invalidate。因为平时工作接触的data base就是log structured database，所以答得比较顺利。
+5 - sys design 设计monitoring system监控100个server，需要从display到存储到采集数据整个stack都涉及到 类似地理说的Kafka加上aggregator的设计方式。
+6 - sys design 设计用户activity收集系统 这个系统需要回答一些analytical的问题 觉得本质就是OLAP系统
+.系统设计 statistics aggregation system 我这轮知无不言 但无奈所知实在有限
+IDI之一，要求设计一个系统，存储在线用户的在网站上的活动。假定每次用户登录都能用一个UUID来跟踪，用户没走一步会有一些Payload数据（假定是一个100K以内的文本字符串），设计一个系统来存贮这些数据。
+IDI之二，Delayed Task Scheduler，要求实现写代码。
+设计一个系统监督和管理领英第三方API的流量
 ```
 
