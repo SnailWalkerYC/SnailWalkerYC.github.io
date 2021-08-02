@@ -11,26 +11,1095 @@ comments: false
 
 ```c++
 // Onsite preparation
-// 26
-// 297
-// 695
-// 958
-// 20
-// 34
-// 31
-// left most one
-// verify alien ditionary
-// Trapping rain water
-// 42
-// permutation
-// next permutation
-// find common elements in two array, 
-// convert the tree to a flat list
-// 162
-// 567
-// 给定一个list of commits, 找到最初的bug的那个commit
-// LC1464的变种题目，找到maximum product in an array，可以是有negative integer
+// 26. Remove Duplicates from Sorted Array
+int removeDuplicates(vector<int>& nums) {
+  int slow = 0;
+  int fast = 1;
+  while (fast < nums.size()) {
+    if (nums[fast] != nums[slow]) {
+      ++slow;
+      nums[slow] = nums[fast];
+    }
+    ++fast;
+  }
+  return nums.empty()?0:slow + 1;
+}
+
+// 297. Serialize and Deserialize Binary Tree
+class Codec {
+ public:
+  string serialize(TreeNode* root) {
+    queue<TreeNode*> que({root});
+    string str;
+    while (!que.empty()) {
+      int size = que.size();
+      for (int i = 0; i < size; ++i) {
+        const auto tp = que.front();
+        que.pop();
+        if (tp) {
+          que.push(tp->left);
+          que.push(tp->right);
+          str += to_string(tp->val) + ",";  
+        } else {
+          str += "n,";
+        }
+      }
+    }
+    return str;
+  }
+
+  // Decodes your encoded data to tree.
+  TreeNode* deserialize(string data) {
+    if (data.empty()) return nullptr;
+    TreeNode* root = nullptr;
+    queue<TreeNode*> que;
+    int cur = 0;
+    int count = 0;
+    bool neg = false;
+    for (int i = 0; i < data.size(); ++i) {
+      if (data[i] == ',') {
+        TreeNode* tmp = cur < -1000? nullptr:new TreeNode(neg?-cur:cur);
+        if (!root) {
+          root = tmp;
+        } else {
+          while (!que.empty()) {
+            auto tp = que.front();
+            if (!tp) {
+              que.pop();
+              continue;
+            }
+            if (!count) tp->left = tmp;
+            else tp->right = tmp;
+            ++count;
+            if (count == 2) {
+              count = 0;
+              que.pop();
+            }
+            break;
+          }
+        }
+        que.push(tmp);
+        cur = 0;
+        neg = false;
+      } else if (data[i] == 'n') {
+        cur = -1001;
+      } else if (data[i] == '-') {
+        neg = true;
+      } else {
+        cur = cur*10 + data[i] - '0';
+      }
+    }
+    return root;
+  }
+};
+
+// 695. Max Area of Island
+int maxAreaOfIsland(vector<vector<int>>& grid) {
+  if (!grid.size() || !grid[0].size()) {
+    return 0;
+  }
+  int row = grid.size();
+  int col = grid[0].size();
+  priority_queue<int> cur_island; 
+  int cnt_res = 0;
+  const int MAX_SIZE = 50;
+  int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  const int NUM_DIR = 4;
+  for (int r = 0; r < row; ++r) {
+    for (int c = 0; c < col; ++c) {
+      if (!grid[r][c]) {
+        continue;
+      }
+      cur_island.push(r*MAX_SIZE + c);
+      grid[r][c] = 0;
+      int cnt = 1;
+      while (!cur_island.empty()) {
+        int tp = cur_island.top();
+        cur_island.pop();
+        for (int idx = 0; idx < NUM_DIR; ++idx) {
+          int cur_r = tp/MAX_SIZE + dirs[idx][0];
+          int cur_c = tp%MAX_SIZE + dirs[idx][1];
+          if (cur_r < 0 || cur_c < 0 || 
+              cur_r >= row || cur_c >= col ||
+              !grid[cur_r][cur_c]) {
+            continue;
+          }
+          ++cnt;
+          cur_island.push(cur_r*MAX_SIZE + cur_c);
+          grid[cur_r][cur_c] = 0;
+        }
+      }
+      cnt_res = max(cnt_res, cnt);  
+    }
+  }
+  return cnt_res;
+}
+
+// 20. Valid Parentheses
+bool isValid(string s) {
+  stack<char> record;
+  unordered_map<char, char> pattern;
+  pattern[')'] = '('; 
+  pattern[']'] = '[';
+  pattern['}'] = '{';      
+  for (auto c:s) {
+    if (c == '(' || c == '[' || c == '{') {
+      record.push(c);
+    } else {
+      if (record.empty() || record.top() != pattern[c]) {
+        return false;
+      }
+      record.pop();
+    }
+  }
+  return record.empty();
+}
+
+// 31. Next Permutation
+void nextPermutation(vector<int>& nums) {
+  int index = nums.size() - 1;
+  while (index - 1 >= 0 && nums[index - 1] >= nums[index]) 
+    --index;
+  --index;
+  if (index < 0) {
+    reverse(nums.begin(), nums.end());
+    return;
+  }
+  int k = index + 1;
+  while (k < nums.size() && nums[k] > nums[index]) 
+    ++k;
+  --k;
+  swap(nums[k], nums[index]);
+  reverse(nums.begin() + index + 1, nums.end());
+}
+
+// 34. Find First and Last Position of Element in Sorted Array
+int BinarySearch(vector<int>& nums, int target, bool status) {
+  if (!nums.size()) return -1;
+  int stt_idx = 0;
+  int fin_idx = nums.size() - 1;
+  int mid = -1;
+  while (stt_idx + 1 < fin_idx) {
+    mid = stt_idx + (fin_idx - stt_idx) / 2;
+    if (nums[mid] > target) fin_idx = mid;
+    else if (nums[mid] < target) stt_idx = mid;
+    else if (!status) fin_idx = mid;
+    else stt_idx = mid;
+  }
+  bool stt_status = nums[stt_idx] == target;
+  bool fin_status = nums[fin_idx] == target;
+  if (!status) {
+    if (stt_status) return stt_idx;
+    if (fin_status) return fin_idx;  
+  } else {
+    if (fin_status) return fin_idx;
+    if (stt_status) return stt_idx;
+  }
+  return -1;
+}  
+vector<int> searchRange(vector<int>& nums, int target) {
+  int left_idx = BinarySearch(nums, target, 0);
+  int right_idx = BinarySearch(nums, target, 1);
+  return {left_idx, right_idx};
+}
+
+// 1428. Leftmost Column with at Least a One
+int leftMostColumnWithOne(BinaryMatrix &bm) {
+  const auto& dims = bm.dimensions();     
+  const int row = dims[0];
+  const int col = dims[1];
+  int l = 0;
+  int r = col - 1;
+  unordered_map<int, int> record;
+  while (l + 1 < r) {
+    const int mid = l + (r - l)/2;
+    int cnt = 0;
+    for (int i = 0; i < row; ++i) {
+      if (bm.get(i, mid)) {
+        ++cnt;
+      }
+    }
+    record[mid] = cnt;
+    if (cnt >= 1) {
+      r = mid;
+    } else {
+      l = mid;
+    }
+  }
+  if (record.find(l) == record.end()) {
+    for (int i = 0; i < row; ++i) {
+      if (bm.get(i, l)) {
+        ++record[l];
+      }
+    }
+  }
+  if (record.find(r) == record.end()) {
+    for (int i = 0; i < row; ++i) {
+      if (bm.get(i, r)) {
+        ++record[r];
+      }
+    }
+  }
+  if (record[l] >= 1) return l;
+  if (record[r] >= 1) return r;
+  return -1;
+}
+
+// 953. Verifying an Alien Dictionary
+bool isAlienSorted(vector<string>& words, string order) {
+  unordered_map<char, int> order_map;
+  for (int i = 0; i < order.size(); ++i)
+    order_map[order[i]] = i;
+  for (int i = 1; i < words.size(); ++i) {
+    if (Bigger(words[i-1], words[i], order_map))
+      return false;
+  }
+  return true;
+}
+bool Bigger(const string& s1, const string& s2, 
+            unordered_map<char, int>& order_map) {
+  for (int i = 0; i < s1.size(); ++i) {
+    if (s2.size() <= i) return true;
+    if (order_map[s1[i]] > order_map[s2[i]])
+      return true;
+    else if (order_map[s1[i]] < order_map[s2[i]])
+      return false;
+  }
+  return false;
+}  
+
+// 42. Trapping Rain Water
+int trap(vector<int>& heights) {
+  if (heights.empty()) return 0;
+  stack<int> record;
+  int count = 0;
+  for (int i = 0; i < heights.size(); ++i) {
+    while (!record.empty() && heights[i] >= heights[record.top()]) {
+      const int mid = record.top();
+      record.pop();
+      if (record.empty()) break;
+      const int left = record.top();
+      count += (min(heights[left], heights[i]) - heights[mid])*
+               (i - left - 1);
+    }
+    if(record.empty() || heights[record.top()] > heights[i]) {
+      record.push(i);
+    } 
+  }
+  return count;
+}
+
+// 46. Permutations
+void Permutate(const vector<int>& nums, vector<vector<int>>& ans,
+              vector<int>& record, vector<int> tmp, idx) {
+  if (tmp.size() == nums.size()) {
+    ans.push_back(tmp);
+    return;
+  }
+  for (int i = 0; i < nums.size(); ++i) {
+    if (!record[i]) {
+      tmp.push_back(nums[i]);
+      record[i] = true;
+      Permutate(nums, ans, record, tmp);
+      record[i] = false;
+      tmp.pop_back();
+    }
+  }
+}  
+vector<vector<int>> permute(vector<int>& nums) {
+  vector<vector<int>> ans;
+  vector<int> record(nums.size() + 1, false);
+  vector<int> tmp;
+  Permutate(nums, ans, record, tmp, idx);
+  return ans;
+}
+
+// 47. Permutations II
+void Permutate(vector<int>& nums, vector<vector<int>>& ans, 
+               const int idx) {
+  if (idx == nums.size()) {
+    ans.emplace_back(nums);
+    return;
+  }
+  for (int i = idx; i < nums.size(); ++i) {
+    if (nums[i] != nums[idx] || i == idx) {
+      swap(nums[i], nums[idx]);
+      Permutate(nums, ans, idx+1);
+      swap(nums[i], nums[idx]);
+    }
+  }
+}  
+vector<vector<int>> permuteUnique(vector<int>& nums) {
+  vector<vector<int>> ans;
+  Permutate(nums, ans, 0);
+  return ans;
+}
+
+// 1198. Find Smallest Common Element in All Rows
+int smallestCommonElement(vector<vector<int>>& mat) {
+  if (!mat.size() || !mat[0].size()) {
+    return -1;
+  }
+  int rows = mat.size();
+  int cols = mat[0].size();
+  vector<int> idxs(rows, 0);
+  int cur_com = mat[0][0];
+  int num_com = 0;
+  while (true) {
+    for (int idx = 0; idx < rows; ++idx) {
+       bool meet = true;
+       while (idxs[idx] < cols && mat[idx][idxs[idx]] < cur_com) {
+         ++idxs[idx];
+       }
+       if (idxs[idx] < cols && mat[idx][idxs[idx]] == cur_com) {
+         ++num_com;
+         ++idxs[idx];
+       } else {           
+         if (idxs[idx] < cols) {
+           if (mat[idx][idxs[idx]] == cur_com) {
+             ++num_com;
+             ++idxs[idx];
+           } else {
+             num_com = 1;
+             cur_com = mat[idx][idxs[idx]];
+             ++idxs[idx];
+          }
+        } else {
+           meet = false;
+        }
+      }
+      if (num_com == rows) {
+        return cur_com;
+      }
+      if (idxs[idx] == cols && !meet) {
+        return -1;
+      }
+    }
+  }     
+  return num_com;
+}
+
+// 246. Strobogrammatic Number
+bool isStrobogrammatic(string num) {
+  unordered_map<char, char> num_mp;
+  num_mp['1'] = '1';
+  num_mp['0'] = '0';
+  num_mp['8'] = '8';
+  num_mp['6'] = '9';
+  num_mp['9'] = '6';      
+  int fin_idx = num.size() - 1;
+  int stt_idx = 0;
+  while (stt_idx <= fin_idx) {
+    if (num_mp.find(num[stt_idx])==num_mp.end() 
+     || num_mp[num[stt_idx]] != num[fin_idx]) {
+      return false;
+    }
+    ++stt_idx;
+    --fin_idx;
+  }
+  return true;
+}
+
+// 347. Top K Frequent Elements
+void QuickSelect(vector<pair<int, int>>& freqs, const int k, const int l,
+                 const int r) {
+  if (l >= r) return;
+  int i = l - 1;
+  int j = r + 1;
+  const int mid = freqs[(r - l)/2 + l].second;
+  while (i < j) {
+    do {
+      ++i;
+    } while (freqs[i].second > mid);
+    do {
+      --j;
+    } while (freqs[j].second < mid);
+  
+    if (i < j) {
+      swap(freqs[i], freqs[j]);
+    }
+  }
+  return j+1 >= k? QuickSelect(freqs, k, l, j) : QuickSelect(freqs, k, j + 1, r);
+}  
+vector<int> topKFrequent(vector<int>& nums, int k) {
+  unordered_map<int, int> cnt;
+  for (const auto& num : nums) {
+    ++cnt[num];
+  }
+  vector<pair<int, int>> freqs;
+  for (const auto& val : cnt) {
+    freqs.emplace_back(val);
+  }
+  QuickSelect(freqs, k, 0, freqs.size() - 1);
+
+  if (!freqs.empty()) {
+    freqs.erase(freqs.begin() + k, freqs.end());
+  }
+  vector<int> ans;
+  for (const auto& f : freqs) {
+    ans.emplace_back(f.first);
+  }
+  return ans;
+}
+
+// 958. Check Completeness of a Binary Tree
+// Method 1: bfs
+bool isCompleteTree(TreeNode* root) {
+  queue<TreeNode*> record;
+  if (root)
+    record.push(root);
+  bool prev = false;
+  while (!record.empty()) {
+    int size = record.size();
+    for (int i = 0; i < size; ++i) {
+      auto tp = record.front();
+      record.pop();
+      if (!tp) {
+        prev = true;
+      } else {
+        if (prev) return false;
+        record.push(tp->left);
+        record.push(tp->right);
+      }
+    }
+  }
+  return true;
+}
+// Method 2: 
+pair<int, bool> CountNodes(TreeNode* root) {
+  if (!root) return {0, true};
+  auto left = root->left;
+  int depth_left = 0;
+  while (left) {
+    ++depth_left;
+    left = left->left;
+  }
+  auto right = root->right;
+  int depth_right = 0;
+  while (right) {
+    ++depth_right;
+    right = right->right;
+  }
+  if (depth_left == depth_right) {
+    return {pow(2, depth_left + 1) -1, true};
+  } else {
+    if (depth_left < depth_right || depth_left > depth_right + 1) return {0, false};
+    
+    auto left = CountNodes(root->left);
+    auto right = CountNodes(root->right);
+    if (!left.second || !right.second || left.first < right.first) 
+      return {0, false};
+    else 
+      return {left.first + right.first + 1, true};
+  }
+}  
+bool DFS(TreeNode* node, int idx, vector<bool>& record) {
+  if (!node) return true;
+  if (idx > record.size()) return false;
+  record[idx] = true;
+  auto left = DFS(node->left, 2*idx, record);
+  auto right = DFS(node->right, 2*idx+1, record);
+  return left && right;
+}    
+bool isCompleteTree(TreeNode* root) {
+  const auto [count, status] = CountNodes(root);
+  if (!status) return false;
+  vector<bool> record(count + 1, false);
+  
+  auto s = DFS(root, 1, record);
+  if (!s) return false;
+  for (int i = 1; i <= count; ++i)
+    if (!record[i]) return false; 
+  return true;
+}
+
+// 567. Permutation in String
+bool checkInclusion(string s1, string s2) {
+  unordered_map<int, int> record;
+  for (const auto& c : s1) {
+    ++record[c];
+  }
+  int i = 0; 
+  int j = 0;
+  int cnt = record.size();
+  for (; i < s2.size(); ++i) {
+    --record[s2[i]];
+    if (!record[s2[i]]) {
+      --cnt;
+      if (!cnt) return true;
+    } else {
+      while (record[s2[i]] < 0) {
+        ++record[s2[j]];
+        if (record[s2[j]] == 1)
+          ++cnt;
+        ++j;
+      }
+    }
+  }
+  return false;
+}
+
+// 162. Find Peak Element
+int findPeakElement(vector<int>& nums) {
+  int stt_idx = 0;
+  int fin_idx = nums.size() - 1;
+  while (stt_idx + 1 < fin_idx) {
+    int mid_idx = stt_idx + (fin_idx - stt_idx) / 2;
+    if (nums[mid_idx] < nums[mid_idx+1]) stt_idx = mid_idx;
+    else if (nums[mid_idx] < nums[mid_idx-1]) fin_idx = mid_idx;
+    else return mid_idx;
+  }
+  return nums[fin_idx] > nums[stt_idx]?fin_idx:stt_idx;
+}
+
+// 1464. Maximum Product of Two Elements in an Array
+int maxProduct(vector<int>& nums) {
+  pair<int, int> max_nums = make_pair(INT_MIN, INT_MIN);
+  pair<int, int> min_nums = make_pair(INT_MAX, INT_MAX);
+  for (const auto& num : nums) {
+    if (max_nums.first < num) {
+      max_nums = make_pair(
+        min(max_nums.second, num), 
+        max(max_nums.second, num));
+    }
+    if (min_nums.first > num) {
+      min_nums = make_pair(
+        max(min_nums.second, num),
+        min(min_nums.second, num));
+    }
+  }
+  return max((max_nums.first-1)*(max_nums.second-1),
+             (min_nums.first-1)*(min_nums.second-1));
+}
+
+// 278. First Bad Version
+int firstBadVersion(int n) {
+  int stt_idx = 1;
+  int fin_idx = n;
+  while (stt_idx + 1 < fin_idx) {
+    int mid_idx = stt_idx + (fin_idx - stt_idx) / 2;
+    if (isBadVersion(mid_idx)) fin_idx = mid_idx;
+    else stt_idx = mid_idx;
+  }
+  if (isBadVersion(stt_idx)) return stt_idx;
+  if (isBadVersion(fin_idx)) return fin_idx;
+  return -1;
+}
+
+// 37. Sudoku Solver
+__inline void findCandidates(vector<vector<char>> & candidates, vector<vector<char>> &board) {
+  vector<int> tmp(9, 0);
+  for(int i = 0, m = board.size(); i < m; i++) {
+    for(int j = 0, n = board[0].size(); j < n; j++) {
+      if(board[i][j] != '.') tmp[board[i][j]-'1'] = 1;
+    }
+    for(int j = 0, n = board[0].size(); j < n; j++) {
+      if(tmp[j] == 0)    candidates[i].push_back(char('1' + j)); 
+      else   tmp[j] = 0;
+    }
+  }
+}
+bool isQualify(vector<vector<char>> & board, int i, int j) {
+  vector<int> tmp(9, 0);
+  for(int c = 0; c < 9; c++) 
+    if(board[i][c] != '.')  tmp[board[i][c]-'1']++;
+  for(int c = 0; c < 9; c++) {
+    if(tmp[c] > 1)    return false;   else tmp[c] = 0;
+  }    
+  for(int r = 0; r < 9; r++)
+    if(board[r][j] != '.') tmp[board[r][j]-'1']++;
+  for(int r = 0; r < 9; r++) {
+    if(tmp[r] > 1)   return false;   else tmp[r] = 0;
+  }
+  for(int r = i/3*3; r < i/3*3+3; r++) {
+    for(int c = j/3*3; c < j/3*3+3; c++) 
+      if(board[r][c] != '.') tmp[board[r][c]-'1']++;
+  }
+  for(int r = 0; r < 9; r++) {
+    if(tmp[r] > 1) return false;  else tmp[r] = 0;
+  }        
+  return true;
+}
+void fillSudoku(vector<vector<char>>&board, 
+                vector<vector<char>>&candidates, 
+                int row, int col, bool &isFind) {
+  if(row == 9 && col == 0) {
+    isFind = true;    
+  }
+  if(isFind) return;
+  if(board[row][col] == '.') {
+    for(int k = 0; k < candidates[row].size(); k++) {
+      if(isFind) return;
+      board[row][col] = candidates[row][k];
+      if(isQualify(board, row, col) && !isFind) {
+        fillSudoku(board, candidates, row+(col>>3), (col+1)%9, isFind);
+      }    
+      if(isFind) return;
+      board[row][col] = '.';
+    }
+  } else {
+    if(isQualify(board, row, col) && !isFind) 
+      fillSudoku(board, candidates, row+(col>>3), (col+1)%9, isFind); 
+  }
+}
+void solveSudoku(vector<vector<char>>& board) {
+  vector<vector<char>> candidates(9);
+  findCandidates(candidates, board);
+  bool isFind = false;
+  fillSudoku(board, candidates, 0, 0, isFind);
+}
+
+// 734. Sentence Similarity
+bool areSentencesSimilar(vector<string>& words1, 
+                         vector<string>& words2, 
+                         vector<pair<string, string>> pairs) {
+  int len1=words1.size();
+  int len2=words2.size();
+  if(len1!=len2){
+    return false;
+  }
+  unordered_map<string,unordered_set<string>> rec;
+  for(auto p:pairs){
+    rec[p.first].insert(p.second);
+    rec[p.second].insert(p.first);
+  }
+  for(int i=0;i<len1;i++){
+    if(words1[i]==words2[i]){
+      continue;
+    }
+    if(rec.find(words1[i])!=rec.end() && rec[words1[i]].count(words2[i])>0){
+      continue;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
+// 270. Closest Binary Search Tree Value
+void Search(TreeNode* root, const double target,
+            double& cur_diff, int& cur_num) {
+  if (!root) return;
+  const auto diff = abs(root->val - target);
+  if (diff < cur_diff) {
+    cur_diff = diff;
+    cur_num = root->val;
+  }
+  if (target < root->val) {
+    Search(root->left, target,
+            cur_diff, cur_num);
+  } else {
+    Search(root->right, target,
+            cur_diff, cur_num);
+  }
+}  
+int closestValue(TreeNode* root, double target) {
+  double cur_diff = INT_MAX; 
+  int cur_num = 0;
+  Search(root, target, cur_diff, cur_num);
+  return cur_num;
+}
+
+// 252. Meeting Rooms
+bool canAttendMeetings(vector<vector<int>>& intervals) {
+  map<int, int> intervals_mp;
+  for (const auto& interval : intervals) {
+    ++intervals_mp[interval[0]];
+    --intervals_mp[interval[1]];
+  }
+  int count = 0;
+  for (const auto& interval : intervals_mp) {
+    count += interval.second;
+    if (count > 1) return false;
+  }
+  return true;
+}
+// 253. Meeting Rooms II
+int minMeetingRooms(vector<vector<int>>& intervals) {
+  map<int, int> record;
+  for (const auto& interval : intervals) {
+    ++record[interval[0]];
+    --record[interval[1]];
+  }
+  int count = 0;
+  int max_count = 0;
+  for (const auto& interval : record) {
+    count += interval.second;
+    max_count = max(max_count, count);
+  }
+  return max_count;
+}
+
+// 173. Binary Search Tree Iterator
+class BSTIterator {
+ public:
+  stack<TreeNode*> record;
+  BSTIterator(TreeNode* root) {
+    while (root != nullptr)  {
+      record.push(root);
+      root = root->left;
+    }      
+  }  
+  /** @return the next smallest number */
+  int next() {
+    const auto tpr = record.top();
+    const int tpr_val = tpr->val;
+    record.pop();
+    auto tpr_right = tpr->right;
+    while (tpr_right != nullptr) {
+      record.push(tpr_right);
+      tpr_right = tpr_right->left;
+    }
+    return tpr_val;
+  }  
+  /** @return whether we have a next smallest number */
+  bool hasNext() {
+    return record.size() > 0;    
+  }
+};
+
+// 138. Copy List with Random Pointer
+// Method 1
+Node* copyRandomList(Node* head) {
+  unordered_map<Node*, Node*> record;
+  record[nullptr] = nullptr;
+  Node* new_head = new Node(0);
+  auto copy_cur = new_head;
+  auto cur = head;
+  while (cur) {
+    copy_cur->next = new Node(cur->val);
+    copy_cur = copy_cur->next;
+    record[cur] = copy_cur;
+    cur = cur->next;
+  }
+  cur = head;
+  copy_cur = new_head->next;
+  while (cur) {
+    copy_cur->random = record[cur->random];
+    copy_cur = copy_cur->next;
+    cur = cur->next;
+  }
+  return new_head->next;
+}
+// Method 2
+unordered_map<Node*, Node*> record_;
+Node* CopyRandomList(Node* head) {
+  if (record_.find(head) != record_.end()) {
+    return record_[head];
+  }
+  Node* cur = new Node(head->val);
+  record_[head] = cur;
+  cur->random = CopyRandomList(head->random);
+  Node* next = CopyRandomList(head->next);
+  cur->next = next;
+  return cur;
+}  
+Node* copyRandomList(Node* head) {
+  record_[nullptr] = nullptr;
+  CopyRandomList(head);
+  return record_[head];
+}
+
+// 839. Similar String Groups
+int FindSet(const int num, vector<int>& record) {
+  if (record[num] != num) {
+    record[num] = FindSet(record[num], record);
+  }
+  return record[num];
+}  
+bool Similar(const string s1, const string s2) {
+  int diff = 0;
+  vector<int> idx;
+  for (int i = 0; i < s1.size(); ++i) {
+    if (s1[i] != s2[i]) {
+      ++diff;
+      idx.push_back(i);
+    }
+    if (diff > 2) return false;
+  }
+  return (diff == 2 && (s1[idx[0]] == s2[idx[1]] && s1[idx[1]] == s2[idx[0]])) || !diff;
+}  
+void Union(const int n1, const int n2, vector<int>& record,
+           vector<int>& rank) {
+  if (rank[n1] > rank[n2]) {
+    record[n2] = n1;
+  } else {
+    record[n1] = n2;
+    if (rank[n1] == rank[n2]) {
+      ++rank[n2];
+    }
+  }
+}
+int numSimilarGroups(vector<string>& strs) {
+  vector<int> record(strs.size(), 0);
+  vector<int> rank(strs.size(), 0);
+  for (int i = 0; i < strs.size(); ++i) 
+    record[i] = i;
+  int num_group = strs.size();
+  for (int i = 0; i < strs.size(); ++i) {
+    for (int j = 0; j < i; ++j) {
+      if (Similar(strs[i], strs[j])) {
+        const auto p_j = FindSet(j, record);
+        const auto p_i = FindSet(i, record);
+        if (p_i != p_j) {
+          Union(p_i, p_j, record, rank);
+          --num_group;
+        }
+      }
+    }
+  }
+  return num_group;
+}
+
+// 114. Flatten Binary Tree to Linked List
+TreeNode* GetRightMostNode(TreeNode* root) {
+  if (!root) return nullptr;
+  while (root->right != nullptr) {
+    root = root->right;
+  }  
+  return root;  
+}    
+void flatten(TreeNode* root) {
+  if (!root) return;
+  if (!root->left) {
+    flatten(root->right);
+    return;
+  }    
+  TreeNode* right_most_node = GetRightMostNode(root->left);
+  TreeNode* tmp_left = root->left;
+  root->left = nullptr;
+  TreeNode* tmp_right = root->right;
+  root->right = tmp_left;
+  right_most_node->right = tmp_right;
+  flatten(root->right);  
+}
+
+// 163. Missing Ranges
+string produceString(int stt, int fin) {
+  string str=to_string(stt);
+  if(fin-1>stt) 
+    str += "->"+to_string(fin-1);
+  return str;
+}    
+vector<string> findMissingRanges(vector<int>& nums, int lower, int upper) {
+  int nums_len = nums.size();
+  vector<string> ans;
+  if(!nums_len) {
+    ans.push_back(produceString(lower, upper+1));
+    return ans;
+  }
+  if(lower<nums[0]) {
+    ans.push_back(produceString(lower, nums[0]));
+  }
+  int ind = 0;
+  long long int last = 0;
+  for(ind=1; ind<nums_len; ind++) {
+    if(nums[ind]>upper)
+      break;
+    last = nums[ind];
+    last--;
+    if(last>nums[ind-1]) {
+      ans.push_back(produceString(nums[ind-1]+1, nums[ind]));
+    }
+  }
+  if(ind>=1 && nums[ind-1]<upper) {
+    ans.push_back(produceString(nums[ind-1]+1, upper+1));
+  }      
+  return ans;
+}
+
 // Find value from bitonic array
+
+// 1. 给一个包含自然数的数组，要求找出数组内所有的连续数字序列，加起来等于给定的一个目标数字。
+// 2. 给一个包含字符串的数组，然后要求找到这个数组里面所有符合某个pattern的字符串， pattern是"A.B.C.", 这里面每个“.”对应任意一个字符，字符串“ADBECF"符合，但是“ABECF”就不符合。
+
+// 314. Binary Tree Vertical Order Traversal
+vector<vector<int>> verticalOrder(TreeNode* root) {
+  unordered_map<int, vector<int>> record;
+  int min_idx = 0;
+  int max_idx = 0;
+  queue<pair<TreeNode*, int>> cur_level;
+  if (root) {
+    cur_level.push({root, 0});
+  }
+  while (!cur_level.empty()) {
+    const int num = cur_level.size();
+    for (int i = 0; i < num; ++i) {
+      const auto tp = cur_level.front();
+      cur_level.pop();
+      record[tp.second].emplace_back(tp.first->val);
+      const auto tp_node = tp.first;
+      if (tp_node->left) {
+        cur_level.push({tp_node->left, tp.second - 1});
+        min_idx = min(tp.second - 1, min_idx);
+      }
+      if (tp_node->right) {
+        cur_level.push({tp_node->right, tp.second + 1});
+        max_idx = max(tp.second + 1, max_idx);
+      }
+    }
+  }
+  vector<vector<int>> ans;
+  if (!record.empty()) {
+    for (int i = min_idx; i <= max_idx; ++i) {
+      ans.emplace_back(record[i]);
+    }
+  }
+  return ans;
+}
+
+// 523. Continuous Subarray Sum
+  
+  
+// 621. Task Scheduler
+
+// 973. K Closest Points to Origin
+// Quick-select
+// Priority-queue
+
+// 301. Remove Invalid Parentheses
+
+// 140. Word Break II
+
+
+
+// 282. Expression Add Operators
+
+// 691. Stickers to Spell Word
+
+// 1091. Shortest Path in Binary Matrix
+// 158  
+  
+// 919
+
+// 921
+
+// 1541  
+  
+// 126  
+  
+// 286. Walls and Gates
+```
+
+
+
+### Facebook
+
+```
+设计 Facebook NewsFeed
+Design Facebook News Feed:
+In the Design Facebook News Feed question, design the following key features and their APIs.
+1. Facebook users should see the news feed containing posts and statuses from their friends and pages that they have followed.
+2. They can post and like statuses that may contain text, images, and videos.
+3. They can send friend requests to other users and follow other pages.
+
+
+设计 Facebook 状态搜索
+Design Facebook Status Search:
+Facebook provides a search bar at the top of its page to enable its users to search posts, statuses, videos, and other forms of content posted by their friends and the pages they follow. In this question,
+1. Develop a service to enable the users to search the statuses posted on Facebook by their friends and followed pages.
+2. Consider that these statuses will only contain text for this particular question.
+Search status，或者叫twitter search，一般要求real time，仅限text post
+、、 https://blog.twitter.com/engineering/en_us/a/2011/the-engineering-behind-twitter-s-new-search-experience
+
+
+设计实时评论
+Design Live Commenting:
+This question is not related to Live Videos. This question is related to the active real-time feed of comments at the bottom of each post. Thus, in this question,
+1. Design the backend of a system that can enable real-time commenting on Facebook posts.
+2. The users should be able to see the new comments in real-time for the posts visible in front of their screen.
+Live commenting system，个人感觉这个地方偏重考database;KV store，经典题，主要靠怎么满足三高
+
+设计 Facebook Messenger 或 WhatsApp. Design WhatsApp crash log collection and analytic system
+Design Facebook Messenger or WhatsApp:. 1point3acres
+Develop the backend of a messenger system that can,
+1. Support 1:1 conversations between two users.
+2. Track the online or offline status of the users.
+3. If time remains, discuss more complex features like Group conversations and Push notifications.
+Design Facebook Messenge，要求能做到group chat
+
+设计 Instagram, Instagram (Photo uploading, build timeline, followers, this is a read heavy system)
+Design Instagram:
+Design a simpler version of Instagram.
+1 . Users can upload and share photos.
+2. They can follow other users.
+3. Like the photos posted on Instagram.
+4. Instagram users should get a scrollable feed of photos that are posted by the users they follow.
+
+Aggregation system，一般会考虑到fast和slow两种cases
+
+设计 TypeAhead 建议
+设计提前建议. check 1point3acres for more.
+Google会根据我们已经在搜索框中输入的字符来预测并建议自动完成查询列表。这些建议称为提前输入建议，它们有助于增强用户体验并更好地表达其搜索查询。因此，在这个问题上：
+1.开发一项服务，根据用户已经在搜索框中键入的字符来建议前十名搜索查询。
+2.为简单起见，假设查询的受欢迎程度可以由过去搜索查询的频率来确定。
+Design typeahead suggestions，也就是autocomplete，经典题
+// 设计一个Auto search suggestion +  top K 常见题目 用Trie + hashMap 存prefix 解决
+
+设计隐私设置
+Facebook的设计隐私设置
+在Facebook上，我们可以为发布的帖子设置不同的隐私级别，以仅对特定用户群（例如公共，朋友，朋友的朋友等）可见。
+1.开发一项服务，使用户可以为帖子指定不同级别的隐私，以使其仅对Facebook上的特定用户可见。
+2.为了使讨论简单，请针对此问题实施两个级别的隐私，即“公共”和“朋友”。
+3.如果时间允许，可以在面试结束时讨论更复杂的级别，例如朋友的朋友和自定义组。
+Design privacy settings at Facebook，几个privacy类型，比如说public可见，只能朋友看，只能朋友和朋友的朋友看，只能自己看
+
+设计邻近服务器
+设计邻近服务器
+Design Yelp, Point of interests, Nearby Friends (Use Quadtree.  This is a read heavy system)
+在Facebook上，邻近服务器用于发现附近的景点，例如地点和事件，然后将其推荐给用户。在这个问题中，开发具有以下功能的服务后端：
+1.用户可以添加，更新和删除位置。
+2.给定以纬度和经度表示的位置，用户可以查询给定距离内的所有附近地点。
+3.对该问题的一种可选的后续措施是还查询特定时间在给定位置附近的事件。这基本上将时间的第三个维度添加到了问题上。
+Design Yelp，经典题目，quadtree或者grid，geohash我自己没多看，觉着重点不在这里
+- Proximity server backend，参考design Yelp
+- Design load balancer，要求包含balance servers的workload的功能
+
+Design a system to return top hashtag of the feeds with a week (or some period)
+设计前N首歌曲
+设计前N首歌曲
+这个问题与为“前N大趋势”主题设计系统非常相似。在这个问题上：
+1.开发服务的后端，以在过去X天内为用户获得前N首歌曲。
+2.为简单起见，假定一首歌曲的受欢迎程度可以由过去收听该歌曲的频率来确定。
+Hashtag trend，类似于topK，YouTube上有个视频讲的挺好
+
+设计网络爬虫
+设计网络爬虫
+像许多搜索引擎一样，Google使用名为Web Crawler的软件程序来扫描万维网。它下载并索引所有网页，以供用户提交的搜索查询使用。
+1.设计Web爬网程序的后端。给定种子网页的列表，它应该下载所有网页并将它们编入索引以供将来检索。
+2.该服务应处理重复的网页，以便存储唯一的URL。
+
+# Design Leetcode website, 面的是design刷题网站，出乎意料，没准备过，但给出了可行的solution，面试官告诉了要做什么features，根据这些要求给出了需要的components, components的 apis, db 设计，db的选择 sql vs nosql, 算了capacity, 面试官问了几个问题，都答上来了，大概是加了更多的application servers, 然后怎么load balancing
+# Design Spotify
+
+Collaborative doc editing，就是设计个google doc
+
+Crawler: Crawl by 10k hacked machines with minimum communication between machines, no duplicate crawl, and evenly distribute the load.  (A blog explains it in details. )
+http://zhentao-li.blogspot.com/2020/10/design-web-crawler-using-10k-hacked.html
+Web crawler，看到大家提到的都是需要跑在botnet上，我自己能想到的就是中控server负责存储、判重，还有负责给bot们发命令，命令里面包括url。Bots们接收命令，下载网页，解析文字和urls，然后把网页文字内容和URLs发回给中控server。另外中控server要能做到三高。
+
+Design a translation system (I guess this Product/API design)
+ranslation syste，两种思路，一个是google translate这种，你可以assume已经有一个现成可用的translation service，然后你要设计一个系统满足三高。另外一个思路可以借鉴一下airbnb的翻译系统
+https://medium.com/airbnb-engineering/building-airbnbs-internationalization-platform-45cf0104b63c
+
+Design craigslist (User, product catalog, scaling)
+
+machine learning design: find out who is likely to attend an event
+
+Design system for ad click count
+Ad click counter，参考前面的hashtag trend，只是有相似之处并不完全相同，考虑slow和fast两种实现可能都需要
+
+Design Dropbox
+
+Design a job scheduler
+https://engineering.fb.com/2020/08/17/production-engineering/async/
+
+图片浏览器 (not sure what this means, but most likely it is Product/API design)
+
+
+
+Design Youtube/Netflix. Subscription system，比如说youtube的subscription
+
 4. System Design
 Design a system that returns nearby places (similar to Yelp Design)
 
@@ -39,31 +1108,14 @@ Design a ML system for delecting / hiding violent posts
 
 6. System Design (Shadow Interview)
 Design a system that crawls websites
-  
-// 246 不过输入是整数 给出数字 判断旋转180度后是不是还一样。 follow up 是给出一个长度，输出所有这么长的 旋转180读不变的数字
-// 347, 37 二叉树iterator
-// 297
-// minimum meeting rooms
-// 270, 76
-// string to digits;   163
-  
-// 1. 给一个包含自然数的数组，要求找出数组内所有的连续数字序列，加起来等于给定的一个目标数字。
-2. 给一个包含字符串的数组，然后要求找到这个数组里面所有符合某个pattern的字符串， pattern是"A.B.C.", 这里面每个“.”对应任意一个字符，字符串“ADBECF"符合，但是“ABECF”就不符合。
-  
-// 138 copy list with random ptr,
-// LC 734 string similarity  LC 839, similar String Groups
-// 设计一个Auto search suggestion +  top K 常见题目 用Trie + hashMap 存prefix 解决
-// 1. coding: Minimum local, return index, best solution, binary search to see which side is guaranteed with an answer [hide==100]
+
 2. Design simplified tweeter that supports post and search with exact match. for search, we can utilize trie structure for space-efficient search
-3. Binary tree to doubly linked list
-4. behavior, 外加一个简单的coding： add two numbers in string format
-[/hide]
 5. Find famous Facebook user in a group that 1. Does not follow anyone 2. Every one else is ollowing him/her 3. May be 0 or 1 famous person 这个应该是拓扑排序  
 ```
 
 
 
-
+> conflict, difficult temamate, why fb, why leaving, project and role.
 
 
 
@@ -1192,12 +2244,6 @@ int maxProduct(vector<int>& nums) {
   return res;
 }  
 
-// 523. Continuous Subarray Sum
-  
-  
-// 621. Task Scheduler
-
-
 // 560. Subarray Sum Equals K
 int subarraySum(vector<int>& nums, int k) {
   vector<int> record(nums.size() + 1, 0);
@@ -1213,32 +2259,5 @@ int subarraySum(vector<int>& nums, int k) {
   }
   return cnt;
 }  
-
-// 973. K Closest Points to Origin
-// Quick-select
-// Priority-queue
-
-// 301. Remove Invalid Parentheses
-
-// 140. Word Break II
-
-// 314. Binary Tree Vertical Order Traversal
-
-// 282. Expression Add Operators
-
-// 691. Stickers to Spell Word
-
-// 1091. Shortest Path in Binary Matrix
-// 158  
-  
-// 919
-
-// 921
-
-// 1541  
-  
-// 126  
-  
-// 286. Walls and Gates
 ```
 

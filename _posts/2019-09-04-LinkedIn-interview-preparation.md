@@ -116,7 +116,22 @@ vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInter
   return intervals;
 }
 
-// 41
+// 41. First Missing Positive    
+int firstMissingPositive(vector<int>& nums) {
+  unordered_set<int> record;
+  for (const auto& num : nums) {
+    if (num <= 0) {
+      continue;
+    } 
+    record.insert(num);
+  }
+  for (int i = 1; i <= record.size(); ++i) {
+    if (!record.count(i)) {
+      return i;
+    }
+  }
+  return record.size() + 1;
+}
 
 // 69. Sqrt(x)
 
@@ -1156,8 +1171,36 @@ int minSteps(int n) {
   return n;
 }
 
-  // 636
-  // // finding isomorphic groups
+// finding isomorphic groups
+// https://leetcode.com/problems/isomorphic-strings/discuss/57830/Follow-up%3A-group-isomorphic-strings-together/265654/
+public Collection<List<String>> groupIsomorphicStrings(List<String> strings) {
+  if (strings == null || strings.isEmpty())
+    return Collections.EMPTY_LIST;
+  Map<String, List<String>> hashToList = new HashMap<>();
+  for (String string : strings) {
+    String hash = hash(string);
+    if(!hashToList.containsKey(hash))
+      hashToList.put(hash, new ArrayList<>());
+    hashToList.get(hash).add(string);
+  }
+  return hashToList.values();
+}
+private String hash(String s) {
+  if (s.isEmpty())
+    return "";
+  int count = 1;
+  StringBuilder hash = new StringBuilder();
+  Map<Character, Integer> map = new HashMap<>();
+  for (char c : s.toCharArray()) {
+    if (!map.containsKey(c)) {
+      map.put(c, count++);
+    }
+    hash.append(map.get(c) + ","); 
+    //for cases like when counter=12 then 12 and actual 12(1 for a, 2 for b) should be different
+  }
+  hash.deleteCharAt(hash.length()-1);
+  return hash.toString();
+}
   
 
 ```

@@ -122,6 +122,11 @@ Multi-process inter-communication: **Pipe:** 管道（单向，需要父子进�
 
 
 
+- TPS (Transactions Per Second)每秒事务数
+- QPS（Query Per Second）每秒查询数等。
+
+
+
 Gateway: a gateway is a network node that connects two networds using different protocols together. It also acts as a "gate" between two networks, it may be a router, firewall, server or other device enables traffic to flow in & out of the network. 连接两个网络，也叫做protocal converter。两个网络协议不一样。
 
 
@@ -265,7 +270,70 @@ Session service: 用户来自于哪个gateway，要发给哪个gateway。send使
 
 
 
+[Scalibility:](https://www.youtube.com/watch?v=-W9F__D3oY4&t=6s)
+
+- Vertical scaling
+- Horizontal scaling
+- Caching
+- Load balancing
+- Database replication
+- Database partitioning
+- Using NoSQL instead of scaling a relational database
+- Being asynchronous
+
+
+
 **Distributed system:** (1) scalability(horizontal vs vertical scaling, horizontal: add machines; vertical: add CPU/memory) ; Cassandra/MongoDB -> horizontal scaling. MySQL -> vertical scaling.  (2) reliability, replica; (3) availability; (4) efficiency, for the latency; network topology, the network load, and its variation. (5) serviceability & manageability. 
+
+1. High performance
+
+- CDN content ditributed network.
+- Pooling
+- Cluster
+- Cache
+
+2. High availability
+
+- Hardwared redundancy; load balance.
+- 负载均衡技术，软硬件负载均衡
+- 限流隔离降级技术
+- 应用层容灾，资源隔离熔断
+- 异地多活
+
+为什么会出现分布式？随着业务的体量不断增长，单个节点的处理能力无法满足日益增长的计算、存储任务的时候，且硬件的提升（加内存、加磁盘、使用更好的CPU）高昂到得不偿失的时候，应用程序也不能进一步优化的时候，我们才需要考虑分布式系统。
+
+> 分布式系统是由一组通过网络进行通信、为了完成共同的任务而协调工作的计算机节点组成的系统。分布式系统的出现是为了用廉价的、普通的机器完成单个计算机无法完成的计算、存储任务。其目的是利用更多的机器，处理更多的数据。
+>
+> 分布式系统要解决的问题本身就是和单机系统一样的，而由于分布式系统多节点、通过网络通信的拓扑结构，会引入很多单机系统没有的问题，为了解决这些问题又会引入更多的机制、协议。这里需要学习的内容包括：
+>
+> 分布式一致性算法：PAXOS、Raft、Zab
+>
+> 分布式事务：2PC、3PC、TCC
+>
+> 分布式唯一 ID 生成：雪花算法、UUID、淘宝 TDDL SEQUENCE方案、美团 Leaf
+>
+> 一致性HASH算法
+>
+> 扩展性设计，设计可扩展的软件架构
+>
+> 分布式文件系统：HDFS、FastDFS
+>
+> 微服务架构设计，服务注册、服务发现、服务路由
+
+[Ref here](https://www.zhihu.com/question/24952874)
+
+
+
+**Design pattern:**
+
+- 开闭原则：对扩展开放，对修改关闭，多使用抽象类和接口
+- 里氏替换原则：基类可以被子类替换，使用抽象类继承,不使用具体类继承
+- 依赖倒转原则：要依赖于抽象，不要依赖于具体，针对接口编程,不针对实现编程
+- 接口隔离原则：使用多个隔离的接口，比使用单个接口好，建立最小的接口
+- 迪米特法则：一个软件实体应当尽可能少地与其他实体发生相互作用，通过中间类建立联系
+- 合成复用原则：尽量使用合成/聚合，而不是使用继承
+
+
 
 [**Load balancing:**](https://lethain.com/introduction-to-architecting-systems-for-scale/)  [2](https://en.wikipedia.org/wiki/Load_balancing_(computing)) [3](https://avinetworks.com/what-is-load-balancing/)Load Balancer (LB) is another critical component of any distributed system. It helps to spread the traffic across a cluster of servers to improve responsiveness and availability of applications, websites or databases. LB also keeps track of the status of all the resources while distributing requests. If a server is not available to take new requests or is not responding or has elevated error rate, LB will stop sending traffic to such a server. Benefits: less downtime and higher throughput. Even a full server failure won’t affect the end user experience as the load balancer will simply route around it to a healthy server.
 
@@ -606,27 +674,56 @@ https://github.com/frank-lam/fullstack-tutorial
 
 # Framework
 
+## Computation Framework
 
-
-## K8s
-
-
-
-## Django
-
-
-
-## Redis
+1. Storage: Hadoop, HDFS, HBase, YARN, Kudu
+2. Batch computation: Hive, MapReduce, Spark
+3. Streaming: Flink, [Kafka Stream](https://zhuanlan.zhihu.com/p/74063251)（[订阅系统](https://kafka.apache.org/)。subscribe各种消息，publish给其他的。）, [Spark Stream]((https://zhuanlan.zhihu.com/p/22427880))
 
 
 
-## REST
+## Virtualization
+
+1. VM: KVM，Xen，OpenVZ, managed by OpenStack.
+2. Container: Dockr, managed by k8s.
 
 
 
-## Kafka
+## Search Engine
 
-[订阅系统](https://kafka.apache.org/)。subscribe各种消息，publish给其他的。
+Based on Luene. The Elasticsearch & Solr.
+
+
+
+## Monitor & Evaluate
+
+Logging collection(记录程序的调试信息或错误信息，对系统和各个服务的运行状态进行监控), metrics evaluate(比如累加量，对系统和各个服务的性能进行监控), tracing(追踪服务请求是如何在各个分布的组件中进行处理的细节).
+
+**Framework:** Prometheus, Zabbix, Open-Falcon. 
+
+
+
+## Security
+
+1. web安全：CSRF、SQL注入、XSS
+2. DDos防范
+3. 加解密算法：对称加密、哈希算法、非对称加密
+4. 网络隔离：内外网分离、跳板机
+5. 授权认证算法：OAuth2.0、OIDC、2FA、单点登录SSO
+
+
+
+## Web Application
+
+1. 什么是socket套接字
+2. 套接字选项
+3. TCP/UDP 套接字编程
+4. Unix domain 协议和编程
+5. IO多路复用：select 、poll、epoll、kqueue
+6. 序列化技术
+7. 零拷贝技术
+8. 原始套接字编程
+9. 开源网络库：muduo、libevent
 
 
 
@@ -636,7 +733,33 @@ Distributed key-value storage system.
 
 
 
-Ref:
+## Dataflow
+
+Dataflow模型从流处理的角度重新审视数据处理过程，将批和流处理的数据抽象成数据集的概念，并将数据集划分为无界数据集和有界数据集，认为流处理是批处理的超集。模型定义了时间域（time domain）的概念，将时间明确的区分为事件时间（event-time）和处理时间（process-time），给出构建一个正确、稳定、低时延的流处理系统所会面临的四个问题及其解决办法：
+
+- 计算的结果是什么（What results are calculated）？ 通过transformations操作
+- 在事件时间中的哪个位置计算结果（Where in event time are results calculated）？ 使用窗口（windowing）的概念
+- 在处理时间中的哪个时刻触发计算结果（When in processing time are results materialized）？ 使用triggers + watermarks进行触发计算
+- 如何修正结果（How do refinements of results relate）？通过accumulation的类型修正结果数据
+
+1. 件时间（Event time）和处理时间（processing time）
+   流处理中最重要的问题是事件发生的时间（事件时间）和处理系统观测到的时间（处理时间）存在延迟。
+2. 窗口（Windowing）
+   为了合理地计算无界数据集地结果，所以需要沿时间边界切分数据集（也就是窗口）。
+3. 触发器（Triggers）
+   触发器是一种表示处理过程中遇上某种特殊情况时，此刻的输出结果可以是精确的，有意义的机制。
+4. 水印（Watermarks）
+   水印是针对事件时间的概念，提供了一种事件时间相对于处理时间是乱序的系统中合理推测无界数据集里数据完整性的工具。
+5. 累计类型（Accumulation）
+   累计类型是处理单个窗口的输出数据是如何随着流处理的进程而发生变化的。
+
+[Ref](https://www.zhihu.com/question/30151872)
+
+
+
+
+
+**Ref:**
 
 1. [一文解决System design](https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=559285&extra=page%3D1%26filter%3Dtypeid%26typeid%3D1025%26typeid%3D1025)
 
