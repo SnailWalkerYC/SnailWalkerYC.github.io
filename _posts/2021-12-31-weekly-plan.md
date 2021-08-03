@@ -13,13 +13,7 @@ comments: false
 
 ## General coding
 
-More leetcode problems
-
 DP & Knapsack
-
-Apple VCV team onsite
-
-LinkedIn onsite reschedule
 
 
 
@@ -44,7 +38,9 @@ LinkedIn onsite reschedule
 
 # Life
 
-Buy-back of BST option 31th/July 10:00 AM, Description:2290 N 1st St. STE100 San Jose CA 95131. 
+Bst buy option check, should be in 08/09.
+
+Apple 2nd pencil Monday, 08/02.
 
 Cancel the CMB card
 

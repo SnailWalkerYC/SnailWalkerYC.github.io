@@ -13,8 +13,7 @@ comments: false
 
 ### Life
 
-1. Buy guns after July 1st.
-2. June 25th,  Make appoints with clinic Injection Clinic  Location:  1721 Technology Dr, 4th Floor, Dept 430 San Jose, CA 95110; Hours: Monday through Friday, 9 to 11:30 a.m. and 2 to 4:30 p.m.; Phone numbers  408-436-4475
+1. Buy guns after July 1st
 3. 挖币 https://linuxconfig.org/ethereum-mining-on-ubuntu-18-04-and-debian 
 
 ### Study
