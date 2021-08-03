@@ -18,7 +18,7 @@ comments: false
    2.  **scal(read & write)** 
    3. **performance(latency)** : traffic peak. 
    4. **costs**: design to minimize cost/cost of maintainance.
-2. What scale is expected from the system. How much storage will we need
+2. What scale is expected from the system. How much storage will we need. based on the requirements, estimate storage size, QPS, read-heavy or write-heavy, and etc.  This step might not apply to product design, but you can ask if the calculation is needed or not
 3. System API: define APIs expected from the system.
    1. with requirements to make generalized API.
    2. Non functional requirements: scalable(tens of thousands of video views per second); high performant(few tens of millionseconds to return total views count for a video); highly available(survives hardware/network failures, no single point of failure). CPA.  
@@ -116,6 +116,12 @@ Replication: leader replication(SQLO); multi-leader replication; leaderless repl
 
 **server & service** difference: server is more hardware, hundred of service is the process on the server.
 
+
+
+**Push/Pull:** push is between clients and servers, but pull is from the message queues with servers.Pull is that clients will wait for the request from servers.
+
+
+
 Multi-process inter-communication: **Pipe:** 管道（单向，需要父子进程）; **IPC**; **Socket:** RPC；semophore（lock）；message queue (system V message queue); signal notify; shared memory; [socket](https://blog.csdn.net/gatieme/article/details/50908749). RPC是在Socket的基础上实现的,它比socket需要更多的网络和系统资源.另外,在对程序优化时,程序员虽然可以直接修改由rpcgen产生的令人费解的源程序,但对于追求程序设计高效率的RPC而言,获得的简单性则被大大削弱. [Comparing](https://zhuanlan.zhihu.com/p/48760074)
 
 **守护进程：**监控指标 -> CPU load, memory uasge, disk usage, network bandwidth. 
@@ -163,6 +169,20 @@ Session service: 用户来自于哪个gateway，要发给哪个gateway。send使
 
 
 **Message queue:** producer/consumer. Fix synchronous communication problem.
+
+
+
+**Scalibility:**
+
+1. [clones](https://www.lecloud.net/post/7295452622/scalability-for-dummies-part-1-clones): every server contains exactly the same codebase and does not store any user-related data, like sessions or profile pictures, on local disc or memory. 
+2. [Database](https://www.lecloud.net/post/7994751381/scalability-for-dummies-part-2-database): **Path #1** is to stick with MySQL and keep the “beast” running. Hire a database administrator (DBA,) tell him to do master-slave replication (read from slaves, write to master) and upgrade your master server by adding RAM, RAM and more RAM. In some months, your DBA will come up with words like “sharding”, “denormalization” and “SQL tuning” and will look worried about the necessary overtime during the next weeks. At that point every new action to keep your database running will be more expensive and time consuming than the previous one. You might have been better off if you had chosen Path #2 while your dataset was still small and easy to migrate. **Path #2** means to denormalize right from the beginning and include no more Joins in any database query. You can stay with MySQL, and use it like a NoSQL database, or you can switch to a better and easier to scale NoSQL database like MongoDB or CouchDB. Joins will now need to be done in your application code. The sooner you do this step the less code you will have to change in the future. But even if you successfully switch to the latest and greatest NoSQL database and let your app do the dataset-joins, soon your database requests will again be slower and slower. You will need to introduce a cache.
+3. [Cache](https://www.lecloud.net/post/9246290032/scalability-for-dummies-part-3-cache): **#1 - Cached Database Queries**That’s still the most commonly used caching pattern. Whenever you do a query to your database, you store the result dataset in cache. A hashed version of your query is the cache key. The next time you run the query, you first check if it is already in the cache. The next time you run the query, you check at first the cache if there is already a result. This pattern has several issues. The main issue is the expiration. It is hard to delete a cached result when you cache a complex query (who has not?). When one piece of data changes (for example a table cell) you need to delete all cached queries who may include that table cell. You get the point?  **#2 - Cached Objects**
+   That’s my strong recommendation and I always prefer this pattern. In general, see your data as an object like you already do in your code (classes, instances, etc.). Let your class assemble a dataset from your database and then store the complete instance of the class or the assembed dataset in the cache. Sounds theoretical, I know, but just look how you normally code. You have, for example, a class called “Product” which has a property called “data”. It is an array containing prices, texts, pictures, and customer reviews of your product. The property “data” is filled by several methods in the class doing several database requests which are hard to cache, since many things relate to each other. Now, do the following: when your class has finished the “assembling” of the data array, directly store the data array, or better yet the complete instance of the class, in the cache! This allows you to easily get rid of the object whenever something did change and makes the overall operation of your code faster and more logical. 
+4. [Asynchnonism](https://www.lecloud.net/post/9699762917/scalability-for-dummies-part-4-asynchronism): A user comes to your website and starts a very computing intensive task which would take several minutes to finish. So the frontend of your website sends a job onto a job queue and immediately signals back to the user: your job is in work, please continue to the browse the page. The job queue is constantly checked by a bunch of workers for new jobs. If there is a new job then the worker does the job and after some minutes sends a signal that the job was done. The frontend, which constantly checks for new “job is done” - signals, sees that the job was done and informs the user about it. I know, that was a very simplified example. 
+
+
+
+[Write-back/write-through:](https://www.geeksforgeeks.org/write-through-and-write-back-in-cache/) write through will update the memory/cache same time/ write back only set the dirty bit.
 
 
 
@@ -639,6 +659,16 @@ Timeline service: user timeline; how timeline; tweets.
 
 
 Cache sharding; performance; caching policy.
+
+
+
+# Video
+
+[Facebook](https://www.1point3acres.com/bbs/interview/facebook-software-engineer-680958.html)
+
+[Facebook SD1](https://www.youtube.com/watch?v=hykjbT5Z0oE) [Summary1](https://dev.to/theinterviewsage/top-facebook-system-design-interview-questions-31np)
+
+[Facebook SD2](https://dev.to/theinterviewsage/top-facebook-system-design-interview-questions-part-2-1844) [Summary2](https://www.youtube.com/watch?v=Hq8pZ8G2Lm8&t=3s)
 
 
 

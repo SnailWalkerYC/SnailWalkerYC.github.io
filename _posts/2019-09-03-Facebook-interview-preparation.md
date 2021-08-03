@@ -929,7 +929,7 @@ vector<vector<int>> verticalOrder(TreeNode* root) {
       cur_level.pop();
       record[tp.second].emplace_back(tp.first->val);
       const auto tp_node = tp.first;
-      if (tp_node->left) {
+      if (tp_node->left) {5
         cur_level.push({tp_node->left, tp.second - 1});
         min_idx = min(tp.second - 1, min_idx);
       }
@@ -949,7 +949,18 @@ vector<vector<int>> verticalOrder(TreeNode* root) {
 }
 
 // 523. Continuous Subarray Sum
-  
+bool checkSubarraySum(vector<int>& nums, int k) {
+  unordered_set<int> record;
+  for (int i = 1; i < nums.size(); ++i) {
+    nums[i] += nums[i-1];
+    const auto tp = nums[i] % k;
+    if (record.count(tp) > 0 || !tp) {
+      return true;
+    }
+    record.insert(nums[i-1]%k);
+  }
+  return false;
+}  
   
 // 621. Task Scheduler
 
@@ -984,6 +995,24 @@ vector<vector<int>> verticalOrder(TreeNode* root) {
 
 
 ### Facebook
+
+#### News Feed
+
+![cherimola](../images/news_feed.png)
+
+
+
+#### Search bar
+
+![cherimola](../images/search_bar.png)
+
+![cherimola](../images/search_bar2.png)
+
+#### Live Comments
+
+![cherimola](../images/live_comments.png)
+
+
 
 ```
 设计 Facebook NewsFeed
