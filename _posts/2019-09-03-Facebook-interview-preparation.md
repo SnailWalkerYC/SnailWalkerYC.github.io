@@ -103,7 +103,7 @@ int maxAreaOfIsland(vector<vector<int>>& grid) {
   priority_queue<int> cur_island; 
   int cnt_res = 0;
   const int MAX_SIZE = 50;
-  int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  int dirs[4][2] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1} };
   const int NUM_DIR = 4;
   for (int r = 0; r < row; ++r) {
     for (int c = 0; c < col; ++c) {
