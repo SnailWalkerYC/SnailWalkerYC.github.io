@@ -13,7 +13,7 @@ comments: false
 
 ### Life
 
-1. Buy guns after July 1st
+1. Buy guns after September 1st
 3. 挖币 https://linuxconfig.org/ethereum-mining-on-ubuntu-18-04-and-debian 
 
 ### Study

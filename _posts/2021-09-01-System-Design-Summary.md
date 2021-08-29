@@ -787,6 +787,8 @@ Dataflow模型从流处理的角度重新审视数据处理过程，将批和流
 
 
 
+![cherimola](../images/server1000.png)
+
 
 
 **Ref:**

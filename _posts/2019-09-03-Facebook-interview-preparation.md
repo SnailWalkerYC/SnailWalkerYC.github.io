@@ -1014,6 +1014,24 @@ bool checkSubarraySum(vector<int>& nums, int k) {
 
 
 
+![cherimola](../images/webapp.png)
+
+
+
+# Chat Server
+
+![cherimola](../images/chat1.png)
+
+
+
+![cherimola](../images/chat2.png)
+
+
+
+
+
+
+
 ```
 设计 Facebook NewsFeed
 Design Facebook News Feed:
@@ -1141,6 +1159,10 @@ Design a system that crawls websites
 2. Design simplified tweeter that supports post and search with exact match. for search, we can utilize trie structure for space-efficient search
 5. Find famous Facebook user in a group that 1. Does not follow anyone 2. Every one else is ollowing him/her 3. May be 0 or 1 famous person 这个应该是拓扑排序  
 ```
+
+
+
+[An Unorthodox Approach To Database Design : The Coming Of The Shard](http://highscalability.com/blog/2009/8/6/an-unorthodox-approach-to-database-design-the-coming-of-the.html) 
 
 
 
