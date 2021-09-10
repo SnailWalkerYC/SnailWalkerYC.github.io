@@ -18,12 +18,15 @@ comments: false
 
 # Life 
 
-1. 推荐系统继续完成第二章第二节 
-2. 09/02 Cancel the CMB 会员
-3. 办理国内身份证
-4. 09/11 DMV address update
-5. 10/05 buy glock 17
-6. Cancel the CMB card
+1. 拿墨镜/DMV address update/寄保健品
+2. 办理国内身份证
+3. 搭建书柜
+
+
+
+1. 09/14 新的package Amazon
+2. 09/14 labor day出行报销Chu
+3. 10/05 buy glock 17
 
 
 
