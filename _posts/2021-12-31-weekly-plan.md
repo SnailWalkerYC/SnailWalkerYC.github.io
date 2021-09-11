@@ -18,7 +18,7 @@ comments: false
 
 # Life 
 
-1. 拿墨镜/DMV address update/寄保健品
+1. DMV address update/寄保健品
 2. 办理国内身份证
 3. 搭建书柜
 
