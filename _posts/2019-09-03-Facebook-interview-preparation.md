@@ -981,7 +981,48 @@ bool checkSubarraySum(vector<int>& nums, int k) {
 // 1091. Shortest Path in Binary Matrix
 // 158  
   
-// 919
+// 919. Complete Binary Tree Inserter
+class CBTInserter {
+ public:
+  CBTInserter(TreeNode* root) {
+    queue<TreeNode*> tmp;
+    tmp.push(root);
+    while (!tmp.empty()) {
+      const auto tp = tmp.front();
+      if (!tp->left || !tp->right) {
+        que_.push(tp);
+      }
+      tmp.pop();
+      if (tp->left) {
+        tmp.push(tp->left);
+      } 
+      if (tp->right) {
+        tmp.push(tp->right);
+      }
+    }
+    root_ = root;
+  }  
+  int insert(int val) {
+    auto tp = que_.front();
+    auto node = new TreeNode(val);
+    if (!tp->left) {
+      tp->left = node;
+    } else {
+      tp->right = node;
+      que_.pop();
+    }
+    que_.push(node);
+    return tp->val;
+  }
+    
+  TreeNode* get_root() {
+    return root_;    
+  }
+ 
+ private:
+  queue<TreeNode*> que_;
+  TreeNode* root_ = nullptr;
+};
 
 // 921
 

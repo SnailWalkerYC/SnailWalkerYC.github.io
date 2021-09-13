@@ -714,6 +714,36 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
   return ans;
 }
 
+// 436. Find Right Interval
+vector<int> findRightInterval(vector<vector<int>>& intervals) {
+  unordered_map<int, int> record;
+  vector<int> keys;
+  int cnt = 0;
+  for (const auto& interval : intervals) {
+    record[interval[0]] = cnt;
+    keys.emplace_back(interval[1]);
+    ++cnt;
+  }
+  sort(begin(intervals), end(intervals));
+  vector<pair<int, int>> intervals2;
+  for (const auto& interval:intervals) {
+    intervals2.emplace_back(make_pair(interval[0], interval[1]));
+  }
+  vector<int> ans(intervals.size(), -1);
+  for (int i = 0; i < intervals2.size(); ++i) {
+    auto it = lower_bound(begin(intervals2), end(intervals2), 
+                                make_pair(keys[i], keys[i]), 
+                                [](const pair<int, int>& v1, 
+                                   const pair<int, int>& v2) {
+      return v1.first < v2.first;
+    });
+    if (it != end(intervals2)) {
+      ans[i] = record[it->first];
+    }
+  }
+  return ans;
+}
+
 // Like 317.
 // a. given an array with 0/1, return the minimal distance between two '1';
 // b. given an array with 0/1, return a new array, each field is the distance to closet '1';
