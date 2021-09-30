@@ -75,8 +75,57 @@ With zip code, cities, regions
 
 
 
+专有词汇：
+
+### Google Display Network (GDN)
+
+The GDN is Google’s network of sites and apps. **Google has agreements with millions of websites and applications**, wherein the site receives revenue for allowing Google to advertise there. The GDN is where your display ads appear to users throughout the internet.
+
+### Retargeting
+
+This is the practice of showing your ads to users who have previously visited your site, and are now being shown the ads in your display campaign through cookie tracking.
+
+### Audiences
+
+Your audiences are built by you, to tell Google which users you want to show your ads to. There are a few types of audiences:
+
+#### In-market
+
+Pretty straightforward. A user had broken their normal behavior online, sending a signal to Google saying “I’m in the market for something”
+
+#### Affinity
+
+These audiences are people who have a predisposed interest in your product or service, like “landscaping” or “video production”
+
+#### Custom intent
+
+These audiences are defined by you, the ads manager. They usually consist of giving Google some specific webpages and saying: *“Show an ad to everyone that has been to one of these pages.”* 
+
+### Bid modifications
+
+Bid modifications allow you to automatically adjust your bids if/when certain conditions are met. Some advertisers like to bid up on mobile devices, or on certain aspects of the audiences that they’ve built.
+
+### Placements
+
+Where you tell Google you want you ads to show.
+
+OK, now that you've got those terms jangling around in the ol' noggin, let's talk about Google display ads.
+
+
+
 Ref：
 
 1. [Google Ads](https://ads.google.com/home/#!/step/2?substep=5)
 2. [Procedure](https://zhuanlan.zhihu.com/p/76964972)
 3. [Step](https://ads.google.com/home/how-it-works/)
+4. [SEO](https://zhuanlan.zhihu.com/p/404100405)
+5. [Zhihu AdWords](https://www.zhihu.com/topic/19582245/top-answers)
+6. [Display Ads](https://ads.google.com/home/campaigns/display-ads/)
+7. [Display Ads blog](https://blog.google/products/ads-commerce/display-campaigns-made-easy/)
+8. [Display Ads Intro](https://www.wordstream.com/blog/ws/2019/05/23/google-display-ads)
+9. [Display Ads Intro 2](https://www.impactplus.com/blog/what-are-google-display-ads)
+10. [How to use Google Ads](https://support.google.com/google-ads/answer/172627?hl=en)
+11. [New Campaign](https://ads.google.com/home/campaigns/display-ads/#!#%3Fmodal_active=none)
+12. [When to use](https://support.google.com/google-ads/answer/7020281?hl=en)
+13. [Google Ads Help](https://support.google.com/google-ads/?hl=en#topic=9803759)
+
