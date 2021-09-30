@@ -1031,6 +1031,91 @@ class CBTInserter {
 // 126  
   
 // 286. Walls and Gates
+int dir[2][4] = {{0,1,0,-1}, {-1,0,1,0}}; 
+int num_dir = 4;     
+void wallsAndGates(vector<vector<int>>& rooms) {
+  int row = rooms.size();
+  int col = !row?0:rooms[0].size();
+  if (!row || !col) {
+    return;
+  }
+  int INF = 2147483647;
+  vector<vector<int>> dis(row, vector<int>(col, INF));
+  for (int r = 0; r<row; r++) {
+    for (int c = 0; c<col; c++) {
+      if (rooms[r][c] == INF || rooms[r][c] == -1) {
+        continue;
+      }
+      queue<pair<int,int>> que;
+      que.push(make_pair(r,c));
+      int cur_dis = 0;
+      dis[r][c] = 0;
+      while (!que.empty()) {
+        const int size = que.size();
+        for (int i = 0; i < size; ++i) {
+          const auto tp = que.front();
+          que.pop();
+          for (int j = 0; j < num_dir; ++j) {
+            const auto new_r = dir[1][j] + tp.first;
+            const auto new_c = dir[0][j] + tp.second;
+            if (new_r < 0 || new_r >= row || new_c < 0 || new_c >= col ||
+                dis[new_r][new_c] <= cur_dis + 1 || rooms[new_r][new_c] == -1) {
+              continue;
+            }
+            dis[new_r][new_c] = cur_dis + 1;
+            que.push(make_pair(new_r, new_c));
+          }
+        }
+        cur_dis++;
+      }
+    }
+  }
+  for (int r = 0; r < row; r++) {
+    for (int c = 0; c < col; c++) {
+      if (rooms[r][c] == -1) {
+        dis[r][c] = -1;
+      }
+    }
+  }
+  rooms.swap(dis);
+}
+// Add all gates firstly then BFS
+private static final int EMPTY = Integer.MAX_VALUE;
+private static final int GATE = 0;
+private static final List<int[]> DIRECTIONS = Arrays.asList(
+        new int[] { 1,  0},
+        new int[] {-1,  0},
+        new int[] { 0,  1},
+        new int[] { 0, -1}
+);
+
+public void wallsAndGates(int[][] rooms) {
+    int m = rooms.length;
+    if (m == 0) return;
+    int n = rooms[0].length;
+    Queue<int[]> q = new LinkedList<>();
+    for (int row = 0; row < m; row++) {
+        for (int col = 0; col < n; col++) {
+            if (rooms[row][col] == GATE) {
+                q.add(new int[] { row, col });
+            }
+        }
+    }
+    while (!q.isEmpty()) {
+        int[] point = q.poll();
+        int row = point[0];
+        int col = point[1];
+        for (int[] direction : DIRECTIONS) {
+            int r = row + direction[0];
+            int c = col + direction[1];
+            if (r < 0 || c < 0 || r >= m || c >= n || rooms[r][c] != EMPTY) {
+                continue;
+            }
+            rooms[r][c] = rooms[row][col] + 1;
+            q.add(new int[] { r, c });
+        }
+    }
+}
 ```
 
 
