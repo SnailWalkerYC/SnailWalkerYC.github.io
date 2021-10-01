@@ -1183,7 +1183,7 @@ vector<vector<string>> findLadders(string begin_word, string end_word,
 }
   
 // 286. Walls and Gates
-int dir[2][4] = {{0,1,0,-1}, {-1,0,1,0}}; 
+int dir[2][4] = { {0,1,0,-1}, {-1,0,1,0} }; 
 int num_dir = 4;     
 void wallsAndGates(vector<vector<int>>& rooms) {
   int row = rooms.size();
