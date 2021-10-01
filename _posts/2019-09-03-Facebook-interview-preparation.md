@@ -969,6 +969,54 @@ bool checkSubarraySum(vector<int>& nums, int k) {
 // Priority-queue
 
 // 301. Remove Invalid Parentheses
+void RemoveInvalidParentheses(const int num_left, const int idx,
+                              string cur, const string& s, 
+                              vector<string>* ans) {
+  if (idx >= s.size()) {
+    if (!num_left) {
+      if (ans->empty() || ans->back().size() < cur.size()) {
+        ans->clear();
+        ans->emplace_back(cur);
+      } else if (ans->back().size() == cur.size()) {
+        ans->emplace_back(cur);
+      }
+    }
+    return;
+  }
+  if (num_left < 0 || num_left > s.size() - cur.size()) {
+    return;
+  }
+  int same_ope = 0;
+  int cnt = 1;
+  if (s[idx] == '(' || s[idx] == ')') {
+    while (idx + cnt < s.size()) {
+      if (s[idx] == s[idx + cnt]) {
+        ++cnt;
+      } else {
+        break;
+      }
+    }
+  }
+  RemoveInvalidParentheses(num_left, idx + cnt,
+                      cur, s, ans);
+  for (int i = 0; i < cnt; ++i) {
+    cur += s[i+idx];
+    RemoveInvalidParentheses(num_left + (i+1) * (s[idx] == ')'?-1:
+      (s[idx] == '('?1:0)), idx + cnt,
+                            cur, s, ans);
+      
+  }
+} 
+vector<string> removeInvalidParentheses(string s) {
+  vector<string> ans;
+  RemoveInvalidParentheses(0, 0, "", s, &ans);
+  unordered_set<string> st(ans.begin(), ans.end());
+  ans.clear();
+  for (const auto w : st) {
+    ans.emplace_back(w);
+  }
+  return ans;
+}
 
 // 140. Word Break II
 
@@ -1028,7 +1076,111 @@ class CBTInserter {
 
 // 1541  
   
-// 126  
+// 126. Word Ladder II
+unordered_map<string, vector<string>> record_;
+int cur_dis_ = INT_MAX;
+
+int Distance(const string& a, const string& b) {
+  int cnt = 0;
+  for (int i = 0; i < a.size(); ++i) {
+    if (a[i] != b[i]) {
+      cnt++;
+    }
+  }
+  return cnt;
+}  
+bool CountDis(const vector<string>& word_list, const string begin_word, const string end_word) {
+  unordered_set<string> st(word_list.begin(), word_list.end());
+  if (!st.count(end_word)) {
+    return false;
+  }
+  st.erase(begin_word);
+  record_[begin_word] = {};
+  unordered_set<string> level;
+  level.insert(begin_word);
+  while (!level.empty()) {
+    const int size = level.size();
+    unordered_set<string> tmp;
+    for (const auto& it : level) {
+      st.erase(it);
+    }
+    for (const auto& it : level) {
+      const auto tp = it;
+      if (tp == end_word) {
+        return true;
+      }
+      for (const auto& it2 : st) {
+        if (Distance(it2, tp) == 1) {
+          record_[tp].emplace_back(it2);
+          tmp.insert(it2);
+        }
+      }
+    }
+    level.swap(tmp);
+  }
+  return false;
+}    
+bool BuildGraph(const string begin_word, const string end_word, 
+                unordered_set<string>& dict) {
+  unordered_set<string> todo;
+  todo.insert(begin_word);
+  while (!todo.empty()) {
+    if (todo.find(end_word) != todo.end()) {
+      return true;
+    }
+    for (const auto& word : todo) {
+      dict.erase(word);
+    }
+    unordered_set<string> temp;
+    for (auto word : todo) {
+      const string parent = word;
+      for (int i = 0; i < word.size(); i++) {
+        char c = word[i];
+        for (int j = 0; j < 26; j++) {
+          word[i] = 'a' + j;
+          if (dict.find(word) != dict.end()) {
+            temp.insert(word);
+            record_[parent].push_back(word);
+          }
+        }
+        word[i] = c;
+      }
+    }
+    swap(todo, temp);
+  }
+  return false;
+}
+void FindAllPaths(const string& cur_word, const string& end_word, 
+                  vector<string> cur,
+                  vector<vector<string>>* ans) {
+  if (cur_word == end_word) {
+    ans->emplace_back(cur);
+    return;
+  }
+  const auto list = record_[cur_word];
+  for (const auto& w : list) {
+    cur.emplace_back(w);
+    FindAllPaths(w, end_word, cur, ans);
+    cur.pop_back();
+  }
+}  
+vector<vector<string>> findLadders(string begin_word, string end_word, 
+                                   vector<string>& word_list) {
+  vector<vector<string>> ans;
+  unordered_set<string> dict(word_list.begin(), word_list.end());
+  if (dict.find(end_word) == dict.end()) {
+    return {};
+  }
+  bool found = CountDis(word_list, begin_word, end_word);
+    // BuildGraph(beginWord, endWord, dict);
+  if (!found) {
+    return {};
+  }  
+  vector<string> cur;
+  cur.emplace_back(begin_word);
+  FindAllPaths(begin_word, end_word, cur, &ans);
+  return ans;
+}
   
 // 286. Walls and Gates
 int dir[2][4] = {{0,1,0,-1}, {-1,0,1,0}}; 
